@@ -1,0 +1,284 @@
+<section class=" banner-pic servicemanaged">
+    <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+            <ol class="breadcrumb">
+                <li class="active" style="font-weight: 600">服务商管理</li>
+            </ol>
+        </div>
+
+        <div class="banner-list">
+            <ul class="nav nav-tabs nav-banner" id='banner_nav' role="tablist">
+                <li role="presentation">
+                    <a href="#divTag" role="tab" data-toggle="tab"  ng-click="vm.Event.GetTagList()">服务商标签</a>
+                </li>
+                <li role="presentation"  class="active">
+                    <a href="#divInfo" role="tab" data-toggle="tab" >服务商管理</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tab-content deptTabs">
+            <div role="tabpanel" class="tab-pane banner_Tabs" id="divTag">
+                <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+                    <div class="clearfix">
+                        <form class="form-inline pull-left ng-pristine ng-valid" role="form">
+                            <div class="form-group input-margin">
+                                <input class="form-control input-sm" placeholder="请输入要添加的标签" ng-model="vm.ViewData.InputTagValue" />
+                            </div>
+                        </form>
+                        <div>
+                            <button type="button" class="btn btn-success btn-sm" ng-click="vm.Event.AddTag()">
+                                <span class="glyphicon glyphicon-plus"></span>&nbsp;添加
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-inline" style="margin-left:20px;">
+                    <span class="instition-list" ng-repeat="item in vm.ViewData.TagList" style="position:relative;">
+                       <span ng-bind="item"></span>
+                       <img ng-click="vm.Event.BeforeDeleteTag(item)" data-toggle="modal" data-target="#deleteModel" style="width: 20px;height: 20px;" src="./img/p_close.png"></img>
+                    </span>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane banner_Tabs active" id="divInfo">
+                <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+                    <div class="clearfix">
+                        <form class="form-inline pull-left" role="form">
+                            <div class="form-group">
+                                <span>服务商名称：</span>
+                                <input class="form-control input-sm" ng-model="vm.ViewData.InputSearchSupplierName" placeholder="请输入服务商名称">
+                            </div>
+                            <div class="form-group input-margin">
+                                <span>服务商编号：</span>
+                                <input class="form-control input-sm" ng-model="vm.ViewData.InputSearchSupplierCode" placeholder="请输入服务商编号">
+                            </div>
+                            <button type="button" class="btn btn-success btn-sm" ng-click="vm.Event.SearchList()">
+                                    <span class="glyphicon glyphicon-search"></span>&nbsp;搜索
+                            </button>
+                        </form>
+                        <div class="pull-right">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" ng-click="vm.Event.ShowAddSupplierPannel()">
+                                <span class='glyphicon glyphicon-plus'></span>&nbsp;添加体检中心
+                            </button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-content answers_pane">
+                        <!--全部-->
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>服务商名称</th>
+                                <th>服务商编号</th>
+                                <th>服务商分类</th>
+                                <th>对接人姓名</th>
+                                <th>对接人联系方式</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr ng-repeat='(index,listItem) in vm.ViewData.SearchList'>
+                                <td>{{listItem.SupplierName}}</td>
+                                <td>{{listItem.SupplierCode}}</td>
+                                <td>{{listItem.Type}}</td>
+                                <td>{{listItem.ContactName}}</td>
+                                <td>{{listItem.ContactPhone}}</td>
+                                <td>
+                                    <button class="btn btn-xs btn-info" data-toggle="modal" ng-click="vm.Event.GetItemDetail(listItem.SupplierCode)" type="button">
+                                        <i class="glyphicon glyphicon-edit"></i>编辑
+                                    </button>
+                                    <button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#deleteItemModel" ng-click="vm.Event.BeforeDeleteSupplier(listItem.SupplierCode)" type="button">
+                                        <i class="glyphicon glyphicon-remove"></i>删除
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                        <tm-pagination class="pull-right" conf="searchListPaginationConf"></tm-pagination>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--添加体检中心-->
+<!--staffAdd-->
+<div class="modal fade serviceManagedAdd" id="serviceManagedAdd" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="btnCloseAddPannel" type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                <h4 class="modal-title">体检中心类型服务商</h4>
+            </div>
+            <div class="modal-body clearfix">
+                <div class="dialog-title">基础信息</div>
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>服务商机构编号: </label>
+                    <!--<select class="form-control supperDoctor" ng-model="vm.ViewData.DepartSelectValue" ng-disabled="vm.ViewData.CurrentSupplierCode" ng-options="s.value as s.text for s in vm.ViewData.DepartList"></select>-->
+                    <select id="deptSelect" class="form-control" ></select>
+                </div>
+
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>服务商名称：</label>
+                    <input type="text" class="form-control" placeholder="请输入服务商名称" ng-model="vm.ViewData.SuplierName" />
+                </div>
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>等级: </label>
+                    <select class="form-control" style="width:256px;" ng-model="vm.ViewData.RankSelectValue" ng-options="s as s for s in vm.ViewData.RankList"></select>
+                </div>
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>服务商标签：</label>
+                    <select id="supplierTagSelecter" class="form-control" multiple="multiple" style="width:256px;"></select>
+                    </select>
+                </div>
+
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>城市选择：</label>
+                    <!--<select id="provinceSelect" name="province" class="province form-control" style="width:135px;" ng-change="vm.Event.ChangeProvince()" ></select>-->
+                    <!--<select id="citySelect" name="province" class="province form-control" style="width:110px;" ></select>-->
+                    <select id="provinceSelect" name="province" class="province form-control" style="width:135px;" ng-model="vm.ViewData.ProvinceSelectValue" ng-change="vm.Event.ChangeProvince()" ng-options="s.ID as s.Name for s in vm.ViewData.OriginProvinceList">
+                        <option ng-if="value = null"></option>
+                    </select>
+                    <select id="citySelect" name="province" class="province form-control" style="width:110px;" ng-model="vm.ViewData.CitySelectValue" ng-options="s.ID as s.Name for s in vm.ViewData.OptionCityList">
+                        <option ng-if="value = null"></option>
+                    </select>
+                </div>
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>高德城市选择：</label>
+                    <select id="gaodeProvinceSelect" name="gaodeProvince" class="province form-control" style="width:135px;" 
+                            ng-model="vm.ViewData.GaoDeProvinceSelectValue" ng-change="vm.Event.ChangeGaoDeProvince()"
+                            ng-options="s.ID as s.Name for s in vm.ViewData.OriginGaoDeProvinceList">
+                        <option ng-if="value = null"></option>
+                    </select>
+                    <select id="gaodeCitySelect" name="gaodeProvince" class="province form-control" style="width:110px;" 
+                            ng-model="vm.ViewData.GaoDeCitySelectValue" 
+                            ng-options="s.ID as s.Name for s in vm.ViewData.OptionGaoDeCityList">
+                        <option ng-if="value = null"></option>
+                    </select>
+                    <!-- <label><span class="red">*</span>高德城市选择：</label>
+                    <select id="gaodeProvinceSelect" class="province form-control" style="width:135px;" ng-model="vm.ViewData.GaoDeProvinceSelectValue" ng-change="vm.Event.ChangeGaoDeProvince()">
+                        <option ng-if="value = null"></option>
+                        <option ng-repeat="x in vm.ViewData.OriginGaoDeProvinceList" value="{{x.ID}}">{{x.Name}}</option>
+                    </select>
+                    <select id="gaodeCitySelect" class="province form-control" style="width:110px;" ng-model="vm.ViewData.GaoDeCitySelectValue">
+                        <option ng-if="value = null"></option>
+                        <option ng-repeat="y in vm.ViewData.OptionGaoDeCityList" value="{{y.ID}}">{{y.Name}}</option>
+                    </select> -->
+                </div>
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>对接人(职务)：</label>
+                    <input type="text" class="form-control" ng-model="vm.ViewData.ContactMember" placeholder="请输入内容" />
+                </div>
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>邮箱：</label>
+                    <input type="text" class="form-control" ng-model="vm.ViewData.Email" placeholder="请输入邮箱" />
+                </div>
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>联系方式：</label>
+                    <input type="text" class="form-control" ng-model="vm.ViewData.Telephone" placeholder="请输入手机号" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group">
+                    <label><span class="red">*</span>工作时间：</label>
+                    <input type="text" style="width:86%" ng-model="vm.ViewData.Worktime" class="form-control" placeholder="请输入工作时间" />
+                </div>
+                <div class="form-group">
+                    <label><span class="red">*</span>地址：</label>
+                    <input type="text" style="width:86%" ng-model="vm.ViewData.Address" class="form-control" placeholder="请输入医院地址" />
+                </div>
+                <div class="form-group">
+                    <label><span class="red"></span>乘车路线：</label>
+                    <input type="text" style="width:86%" ng-model="vm.ViewData.BusLine" class="form-control" placeholder="请输入乘车路线" />
+                </div>
+                <div class="form-group pull-left">
+                    <label>车位：</label>
+                    <input type="text" ng-model="vm.ViewData.ParkSpace" class="form-control" placeholder="请输入内容" />
+                </div>
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>地图：</label>
+                    <input type="text" ng-model="vm.ViewData.Longitude" class="form-control" placeholder="请输入经度" style="width:125px;" />
+                    <input type="text" ng-model="vm.ViewData.Latitude" class="form-control" placeholder="请输入纬度" style="width:125px;" />
+                </div>
+                <div class="form-group pull-left" style="width:52%">
+                    <label style="width:120px;"><span class="red">*</span>提前预约（天）：</label>
+                    <input type="text" class="form-control" ng-model="vm.ViewData.BeforeDay" placeholder="请输入" maxlength="3" style="width:70px;"
+                    />
+                    <label style="width:140px;"><span class="red">*</span>最大提前预约（天）：</label>
+                    <input type="text" class="form-control" ng-model="vm.ViewData.MaxBeforeDay" placeholder="请输入" maxlength="3" style="width:70px;"
+                    />
+                </div>
+                <div class="form-group pull-right">
+                    <label><span class="red">*</span>每周工作日：</label>
+                    <select id="workDaySelecter" class="form-control" multiple="multiple" style="width:256px;" ></select>
+                </div>
+                <div class="form-group pull-left">
+                    <label><span class="red">*</span>权重：</label>
+                    <input type="text" ng-model="vm.ViewData.Index" class="form-control" placeholder="请输入内容"  style=" width: 120px" />（数字越大越靠前）
+                </div>
+                <div class="form-group pull-right">
+                  <label><span class="red">*</span>团检预约上限：</label>
+                  <input type="text" ng-model="vm.ViewData.GroupAppointLimit" class="form-control" placeholder="请输入内容"  style=" width: 120px" />
+                </div>
+                <div class="clearfix"></div>
+                <div class="clearfix">
+                    <div class="dialog-title">详细介绍信息</div>
+                    <div class="form-group">
+                        <label>提供WIFI：</label>
+                        <input type="radio" value="有" ng-value=true ng-model="vm.ViewData.HasWIFI" name="selectState" style="margin-right:5px;">有
+                        <input type="radio" value="无" ng-value=false ng-model="vm.ViewData.HasWIFI" name="selectState"> 无
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>Log图：</label>
+                        <input id="InputFileLog" type="file" class="form-control" placeholder="请录入Log图"  />
+                        <button type="button" class="btn btn-default" ng-click="vm.Event.UploadLogImage()">上传</button>
+                        <img id="ImgFileLog" ng-src="{{vm.ViewData.ImageLogSrc}}" alt="Log图：" style="width:60px;height:60px;" />
+                    </div>
+                    <div class="form-group">
+                        <label><span class="red">*</span>介绍背景图：</label>
+                        <input id="InputFileBackground" type="file" class="form-control" placeholder="请录入背景图"  />
+                        <button type="button" class="btn btn-default" ng-click="vm.Event.UploadBackgroundImage()">上传</button>
+                        <img id="ImgFileBackground" ng-src="{{vm.ViewData.ImageBackgroundSrc}}" alt="介绍背景图：" style="width:60px;height:60px;" />
+                    </div>
+                    <div class="form-group">
+                        <label>机构授权书：</label>
+                        <input id="InputFileAuthbook" type="file" class="form-control" placeholder="请录入机构授权书图"  />
+                        <button type="button" class="btn btn-default" ng-click="vm.Event.UploadAuthbookImage()">上传</button>
+                        <img id="ImgFileAuthbook" ng-src="{{vm.ViewData.ImageAuthbookSrc}}" alt="机构授权书图：" style="width:60px;height:60px;" />
+                    </div>
+                    <div class="form-group">
+                        <label style="vertical-align: top"><span class="red">*</span>医院介绍：</label>
+                        <div ng-model="vm.ViewData.Description" contenteditable="true"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"> 取消 </button>
+                <button type="button" class="btn btn-success" ng-click="vm.Event.Add()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除Tag model-->
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content disable">
+            <div class="modal-body text-center">
+                <h3 class="ng-binding inform-h3">确定要删除吗？</h3>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" ng-click="vm.Event.DeleteTag()" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除 Item model-->
+<div class="modal fade" id="deleteItemModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content disable">
+            <div class="modal-body text-center">
+                <h3 class="ng-binding inform-h3">确定要删除吗？</h3>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" ng-click="vm.Event.DeleteSupplier()" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

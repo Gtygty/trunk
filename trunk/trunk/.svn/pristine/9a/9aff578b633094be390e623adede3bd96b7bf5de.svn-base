@@ -1,0 +1,230 @@
+/**
+ * Created by hzguest3 on 2017/6/9.
+ */
+define(['indexApp', 'common/util', 'common/const','common/MallConst', 'model/mall/orderModel']
+  , function (app, util, config, mallConst, OrderModel) {
+    app.controller('orderCtrl', function ($scope, $http, signValid)   {
+
+      var _OrderCollection,
+        startDateTextBox, endDateTextBox;
+
+      //分页参数
+      $scope.pageConfig =  {
+        totalItems: 0,
+        currentPage: 1,    //当前所在的页
+        itemsPerPage: 10,  //每页展示的数据条数
+        pagesLength: 9,   //分页条目的长度（如果设置建议设置为奇数）
+        perPageOptions: [10, 30, 50, 100, 200, 500],    //可选择显示条数的数组
+        rememberPerPage: 'OrderPerPage',  //使用LocalStorage记住所选择的条目数的名称
+        onChange: function () {
+          if ($scope.pageConfig.currentPage != 0 ) {
+            _OrderCollection.GetList();
+          }
+        }
+      }
+
+      var BaseUrl = {
+        GetList : "BMSOrder/SearchOrderList",
+        OrderDetail: "BMSOrder/OrderFlowDetail",
+        OrderTicketDetail: "BMSInvoice/OrderTicketDetail",
+        SetTicketState: "BMSInvoice/SetOrderTicketState",
+        OrderFlowList: "BMSOrder/OrderFlowDetail"
+      };
+
+      ($scope.vm = {
+        OrderCollection:{
+          const:{
+            OrderTypeList:mallConst.OrderTypeOption,
+            OrderChildList:mallConst.OrderTicketOption
+          },
+
+          data:{
+            searchParams : {
+              OrderId : "",
+              Mobile : "",
+              OrderTypeOption : -1,
+              OrderTicketOption : -1,
+              State : -1
+            },
+            orderList:[],
+            currentOrderInfo:{},
+            currentOrderTicketInfo:{},
+            currentOrderFlowList:[]
+          },
+
+          //设置搜索预约状态
+          SetSearchState :function(State){
+            _OrderCollection.data.searchParams.State = State;
+            $scope.pageConfig.currentPage = 1;
+          },
+
+          //重设搜索相关参数
+          ResetSearchParams :function(){
+            _OrderCollection.data.searchParams  = {
+              OrderId : "",
+              Mobile : "",
+              OrderTypeOption : -1,
+              OrderTicketOption : -1,
+              State : _OrderCollection.data.searchParams.State
+            }
+            startDateTextBox[0].value = "";
+            endDateTextBox[0].value = "";
+          },
+
+          //获取订单列表
+          GetList:function(){
+            var params = {
+              "PageNum": $scope.pageConfig.currentPage,
+              "Count": $scope.pageConfig.itemsPerPage,
+              "Mobile": _OrderCollection.data.searchParams.Mobile,
+              "OrderId": _OrderCollection.data.searchParams.OrderId,
+              "State": _OrderCollection.data.searchParams.State,
+              "ChildState": _OrderCollection.data.searchParams.OrderTicketOption,
+              "Type": _OrderCollection.data.searchParams.OrderTypeOption,
+              "StartTime": startDateTextBox.val(),
+              "EndTime": endDateTextBox.val()?endDateTextBox.val()+" 23:59:59":endDateTextBox.val()
+            }
+            var url = BaseUrl.GetList;
+            util.showAjaxLoading();
+            util.ajaxMALLPost($http,url,params,function(result){
+              if (result.Code == 1 && result.Data != null){
+                _OrderCollection.data.orderList = [];
+                $scope.pageConfig.totalItems = result.Data.Count;
+                result.Data.OrderList.forEach(function(item ,idex, array){
+                  var orderModel = OrderModel.ConvertOrderInfo(item);
+                  _OrderCollection.data.orderList.push((orderModel));
+
+                });
+
+                console.log(_OrderCollection.data.orderList)
+
+              }else {
+                util.showFade(result.Message);
+              }
+              util.hideAjaxLoading();
+            },function(err){
+              util.hideAjaxLoading();
+              util.showFade(err);
+            })
+          },
+
+          //获取优惠券详情
+          GetOrderTicketDetail:function(OrderId){
+            var params = {
+              "OrderId" :OrderId
+            }
+            var url = BaseUrl.OrderTicketDetail;
+            util.showAjaxLoading();
+            util.ajaxMALLPost($http,url,params,function(result){
+              if(result.Code == 1 && result.Data != null){
+                _OrderCollection.data.currentOrderTicketInfo = OrderModel.ConvertOrderTicketInfo(result.Data);
+                $("#ticketDetail_"+_OrderCollection.data.currentOrderTicketInfo.Type).modal("show");
+              }else {
+                util.showFade(result.Message);
+              }
+              util.hideAjaxLoading();
+            },function(err){
+              util.hideAjaxLoading();
+              util.showFade(err);
+            })
+          },
+
+          //填写发票物流信息
+          SetTicketState:function(){
+            var params = {
+              "OrderId": _OrderCollection.data.currentOrderTicketInfo.OrderId,
+              "MailNumber":_OrderCollection.data.currentOrderTicketInfo.MailNumber
+            }
+            var url = BaseUrl.SetTicketState;
+            if (!params.MailNumber){
+              util.showFade("请先填写物流单号！");
+              return;
+            }
+            util.ajaxMALLPost($http, url, params, function(result){
+              if (result.Code == 1 && result.Data != null){
+                _OrderCollection.GetList();
+                $("#ticketDetail_"+_OrderCollection.data.currentOrderTicketInfo.Type).modal("hide");
+              }
+              util.hideAjaxLoading();
+              util.showFade(result.Message);
+            },function(err){util.hideAjaxLoading();util.showFade(err);})
+          },
+
+          OrderFlowList:function(OrderInfo){
+            var params = {
+              "OrderId": OrderInfo.OrderId
+            };
+            var url = BaseUrl.OrderFlowList;
+            util.showAjaxLoading();
+            util.ajaxMALLPost($http, url, params, function(result){
+              if (result.Code == 1 && result.Data != null ){
+                _OrderCollection.data.currentOrderFlowList = [];
+                result.Data.forEach(function(item,index,array){
+                  var orderFlowModel = OrderModel.ConvertOrderFlowInfo(item);
+                  _OrderCollection.data.currentOrderFlowList.push(orderFlowModel);
+                });
+                _OrderCollection.data.currentOrderInfo = OrderInfo;
+
+
+                $("#orderDetail").modal("show");
+              }else{
+                util.showFade(result.Message);
+              }
+              util.hideAjaxLoading();
+            },function(err){util.hideAjaxLoading();util.showFade(err);})
+          },
+
+          ExportCSV:function(){
+            var sourceData = [];
+            var columnNameList = ["订单编号","订单类型","订单总价","实付价格","买家手机号","下单时间", "订单状态", "发票状态", "修改时间"];
+            _OrderCollection.data.orderList.forEach(function(item, index, array){
+              sourceData.push({
+                "OrderId":item.OrderId+"\t",
+                "OrderTypeOption":item.OrderType,
+                "TotalAmount":item.TotalAmount,
+                "PayAmount":item.PayAmount,
+                "Mobile":item.Mobile,
+                "CreateTime":item.CreateDate,
+                "OrderState":item.ChildStateFormat,
+                "TicketState":item.InvoiceState,
+                "LastUpdateTime":item.LastUpdateDate
+              })
+            })
+            util.CreateCSV(columnNameList, sourceData);
+          },
+
+          Init:function(){
+            _OrderCollection.GetList();
+          }
+        },
+
+        Init :function(){
+          //缓存登录验证
+          signValid.ValidAccess("#/mallOrder");
+          //侧边栏样式
+          $(".navli:eq(5)").addClass("active").siblings().removeClass("active");
+          $('body').css('overflow', 'auto');
+
+          startDateTextBox = $('#startDate');
+          endDateTextBox = $('#endDate');
+          $.timepicker.dateRange(
+            startDateTextBox,
+            endDateTextBox,
+            {
+              changeMonth: true,
+              buttonImageOnly: true,
+              dateFormat: 'yy/mm/dd',
+              monthNamesShort: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+              dayNamesMin: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+              minInterval: (1000 * 60 * 60 * 24 * 0) // 0 days
+            }
+          );
+          _OrderCollection = $scope.vm.OrderCollection;
+          _OrderCollection.Init();
+        }
+
+      }).Init();
+
+    });
+    return app;
+  });

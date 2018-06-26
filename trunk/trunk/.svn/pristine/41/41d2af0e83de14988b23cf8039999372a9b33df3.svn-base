@@ -1,0 +1,772 @@
+<!-- DeptList OP -->
+<aside id="sidebar-menu" class="pull-left">
+	<h2><span id="state" class="clickbtn" ng-click="vm.DeptCollection.OnClickStartButton()">体检机构</span><small id="stop" ng-click="vm.DeptCollection.OnClickStopButton()">已停用</small><img class="pull-right" src="img/ico05.png" data-toggle="modal" data-target="#smsAddDept" ng-click="vm.DeptCollection.OnClickAddDeptDialog()"/></h2>
+	<div class="input-group">
+		<input type="text" class="form-control" placeholder="请输入搜索的机构" ng-model="vm.DeptCollection.SearchParam">
+		<span class="input-group-btn">
+			<button class="btn btn-default" type="button" ng-click='vm.DeptCollection.OnClickSearchDept()'>
+				<span class="glyphicon glyphicon-search"></span>
+			</button>
+		</span>
+	</div>
+	<div class="sidebar-nav clearfix">
+		<ul class="nav pull-left" >
+			<li ng-repeat="item in vm.DeptCollection.EnableDeptLists">
+				<div>
+					<span ng-bind="item.Name"></span>
+				    <img src="img/stop.png" data-toggle="modal" data-target="#onDisabledDeptDialog"
+					     ng-click="vm.DeptCollection.OnShowEnabledDeptDialog(item)"/>
+				</div>
+			</li>
+		</ul>
+		<!--作用？-->
+		<ul class="nav pull-right" >
+			<li ng-repeat="item in vm.DeptCollection.DisableDeptLists">
+				<div>
+					<span class="sidebar-text1" ng-bind="item.Name"></span>
+					<img src="img/start.png" data-toggle="modal" data-target="#onStartOrStopDialog"
+					     ng-click="vm.DeptCollection.OnShowEnabledDeptDialog(item)"/>
+				</div>
+			</li>
+
+		</ul>
+	</div>
+</aside>
+
+<!--serviceMain-->
+<section id="serviceMain">
+	<div class="searchBar">
+		<h2>短信推送<small>剩余&nbsp;&nbsp;<span class="navsider" ng-bind="vm.SMSTotal"></span>&nbsp;&nbsp;条信息可发送</small></h2>
+	</div>
+	<div id="massageList">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<span href="#frist" role="tab" data-toggle="tab" class="clickspan"
+				      ng-click='vm.TabCollection.Common.SenStatusTop("frist")'>自动发送</span>
+				<span href="#second" role="tab" data-toggle="tab"
+				      ng-click='vm.TabCollection.Common.SenStatusTop("second")'>二次发送记录</span>
+
+				<div class="tab-content">
+					<!-- 自动发送 -->
+					<div role="tabpanel" class="tableup tab-pane active" id="frist">
+						<div class="form-inline" id="inlines2">
+							<div>
+								<span>推广计划:</span>
+						        <select class="form-control input-sm" ng-model="vm.TabCollection.AutoSend.SelectPlan" ng-options="s.value as s.text for s in vm.TabCollection.AutoSend.Plans"></select>
+								<span>计划分类:</span>
+								<select class="form-control input-sm" ng-model="vm.TabCollection.AutoSend.SelectExecType" ng-options="s.value as s.text for s in vm.TabCollection.Common.ExecTypes"></select>
+								<span>推送机构:</span>
+						        <select id="AutoSend_SelectDeptDDL" class="multipleSelect" multiple="multiple" ng-model="vm.TabCollection.AutoSend.SelectDept"></select>
+								<span>执行状态:</span>
+						        <select class="form-control input-sm" ng-model="vm.TabCollection.AutoSend.SelectState" ng-options="s.value as s.text for s in vm.TabCollection.Common.States"></select>
+							</div>
+							<div>
+                <span>计划方式:</span>
+                  <select class="form-control input-sm" ng-model="vm.TabCollection.AutoSend.SelectPlanType" ng-options="s.value as s.text for s in vm.TabCollection.Common.PlanTypes"></select>
+								<span>开始时间:</span>
+					        	<input type="text" class="form-control input-sm datepicker" id="autoSend_StartDate" ng-model="vm.TabCollection.AutoSend.SelectStartDate"
+									   placeholder="请输入日期">
+								<span>结束时间:</span>
+					        	<input type="text" class="form-control input-sm datepicker" id="autoSend_EndDate" ng-model="vm.TabCollection.AutoSend.SelectEndDate"
+								       placeholder="请输入日期">
+						        <button class="btn btn-success btn-sm" ng-click="vm.TabCollection.AutoSend.OnClickSearch()">查询</button>
+								<button class="btn btn-default btn-sm" ng-click="vm.TabCollection.AutoSend.OnReset()">重置</button>
+								<button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#createFirstPlan" ng-click="vm.TabCollection.AutoSend.OnOpenFirstPlanDialog(2)">+创建方式二</button>
+								<span class="pull-right">&nbsp;</span>
+						        <button class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#createFirstPlan" ng-click="vm.TabCollection.AutoSend.OnOpenFirstPlanDialog(1)">+创建方式一</button>
+							</div>
+						</div>
+						<table class="table table-bordered">
+							<thead>
+							<tr>
+								<th><input type="checkbox" ng-model="vm.TabCollection.AutoSend.AllChecked"
+								           ng-click="vm.TabCollection.AutoSend.OnClickAllChecked()"/>
+								</th>
+								<th>创建方式</th>
+								<th>计划分类</th>
+
+                <th>体检者分类</th>
+								<th>计划名称</th>
+								<th width="200">短信内容</th>
+								<th>推送机构</th>
+								<th>日期(报告落地起止时间)</th>
+								<th>发送时间(执行时间)</th>
+								<th width="150">前置天数(总检时间与落地时间差)</th>
+								<th>推送状态</th>
+								<th>二次计划</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="item in vm.TabCollection.AutoSend.List">
+								<td><input type="checkbox" ng-model="item.isChecked"/></td>
+								<td ng-bind="item.SolutionType==2?'方式二':'方式一'"></td>
+								<td ng-bind="item.SendTypeName"></td>
+                <td ng-bind="item.HzExamtypeName"></td>
+								<td ng-bind="item.Title | stringSub:7" ng-attr-title='{{item.Title}}'></td>
+								<td ng-attr-title="{{ item.Content }}" ng-bind="item.Content | stringSub:10"></td>
+								<td ng-attr-title="{{ item.DeptName }}" ng-bind="item.DeptName | stringSub:7"></td>
+								<td>
+                  <span ng-bind="item.StartDate | clearTime"></span>~<span ng-bind="item.EndDate | clearTime"></span>
+                </td>
+								<td ng-bind="item.ReWeek"></td>
+								<td ng-bind="item.PreSendDays"></td>
+								<td>
+									<button type="button"
+											class="btn btn-sm btn-default disabled"
+											ng-bind="item.Status | fomartStatus"
+											ng-if="item.Status == 0"
+											></button>
+									<button type="button" data-toggle="modal" data-target="#onCKDisabledDeptDialog"
+											class="btn btn-sm btn-success"
+											ng-bind="item.Status | fomartStatus"
+											ng-if="item.Status == 1"
+											ng-click="vm.TabCollection.Common.OnOpenPlanStateDialog(item)"
+											></button>
+									<button type="button" data-toggle="modal" data-target="#onCKStartOrStopDialog"
+											class="btn btn-sm btn-warning"
+											ng-bind="item.Status | fomartStatus"
+											ng-if="item.Status == 2"
+											ng-click="vm.TabCollection.Common.OnOpenPlanStateDialog(item)"
+											></button>
+								</td>
+							    <td ng-if="item.SolutionType==2"></td>
+								<td ng-if="item.SolutionType!=2">
+									<button class="btn btn-sm btn-info" ng-if="!vm.TabCollection.Common.DecidePlan(item.IsReSendPlan, item.Status)"
+											ng-click='vm.TabCollection.AutoSend.SecondPlan.OnSettingPlan(item)'
+											>创建计划</button>
+									<button class="btn btn-sm btn-default" ng-if="vm.TabCollection.Common.DecidePlan(item.IsReSendPlan, item.Status)" disabled
+											ng-click='vm.TabCollection.AutoSend.SecondPlan.OnSettingPlan(item)'
+											>创建计划</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<!--<div ng-show="vm.TabCollection.AutoSend.List.length > 0">-->
+						<div class="footerinfo" ng-show="vm.TabCollection.AutoSend.List.length > 0">
+              <div class="dropup pull-left ml">
+								<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+									    ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.AutoSend.List, 1)"
+									    >执行</button>
+								<ul class="dropdown-menu Messdropdown">
+									<h3 class="text-center">你确定要执行此计划吗？</h3>
+									<div>
+										<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+										<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+												ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+									</div>
+								</ul>
+							</div>
+
+							<div class="dropup pull-left ml">
+                                <button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown"
+									    ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.AutoSend.List, 2)"
+									    >暂停</button>
+								<ul class="dropdown-menu Messdropdown">
+									<h3 class="text-center">你确定要暂停此计划吗？</h3>
+									<div>
+										<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+										<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+												ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+									</div>
+								</ul>
+							</div>
+
+							<div class="dropup pull-left ml">
+                                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"
+									    ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.AutoSend.List, 0)"
+									    >结束</button>
+								<ul class="dropdown-menu Messdropdown">
+									<h3 class="text-center">你确定要结束此计划吗？</h3>
+									<div>
+										<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+										<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+												ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+									</div>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- 二次发送记录 -->
+					<div role="tabpanel" class="tableup tab-pane" id="second">
+						<div class="form-inline" id="inlines">
+							<div>
+								<span >推广计划:</span>
+								<select  class="form-control input-sm" ng-model="vm.TabCollection.SecondSend.SelectPlan" ng-options="s.value as s.text for s in vm.TabCollection.SecondSend.Plans"></select>
+								<span>计划分类:</span>
+								<select class="form-control input-sm" ng-model="vm.TabCollection.SecondSend.SelectExecType" ng-options="s.value as s.text for s in vm.TabCollection.Common.ExecTypes"></select>
+								<span>推送机构:</span>
+								<select id="secondSend_SelectDeptDDL" class="multipleSelect" multiple="multiple" ng-model="vm.TabCollection.SecondSend.SelectDept"></select>
+								<span>执行状态:</span>
+								<select class="form-control input-sm" ng-model="vm.TabCollection.SecondSend.SelectState" ng-options="s.value as s.text for s in vm.TabCollection.Common.States"></select>
+							</div>
+							<div>
+								<span>开始时间:</span>
+								<input type="text" class="form-control input-sm datepicker" id="secondSend_StartDate" ng-model="vm.TabCollection.SecondSend.SelectStartDate"
+									placeholder="请输入日期">
+								<span>结束时间:</span>
+								<input type="text" class="form-control input-sm datepicker" id="secondSend_EndDate" ng-model="vm.TabCollection.SecondSend.SelectEndDate"
+									placeholder="请输入日期">
+								<button class="btn btn-success btn-sm" ng-click="vm.TabCollection.SecondSend.OnClickSearch()">查询</button>
+								<button class="btn btn-default btn-sm" ng-click="vm.TabCollection.SecondSend.OnReset()">重置</button>
+
+							</div>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th><input type="checkbox" ng-model="vm.TabCollection.SecondSend.AllChecked"
+										           ng-click="vm.TabCollection.SecondSend.OnClickAllChecked()"/>
+										</th>
+										<th>计划分类</th>
+                    <th>体检者分类</th>
+										<th>计划名称</th>
+										<th width="150">短信内容</th>
+										<th>推送机构</th>
+										<th>开始时间</th>
+										<th>结束时间</th>
+										<th>重复周期</th>
+										<th>前置发送天数</th>
+										<th>推送状态</th>
+										<th>二次计划</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="item in vm.TabCollection.SecondSend.List">
+										<td><input type="checkbox" ng-model='item.isChecked'/></td>
+										<td ng-bind="item.SendTypeName"></td>
+                    <td ng-bind="item.HzExamtypeName"></td>
+										<td ng-bind="item.Title | stringSub:7" ng-attr-title='{{item.Title}}'></td>
+										<td ng-attr-title="{{ item.Content }}" ng-bind="item.Content | stringSub"></td>
+										<td ng-attr-title="{{ item.DeptName }}" ng-bind="item.DeptName | stringSub:7"></td>
+										<td ng-bind="item.StartDate | clearTime"></td>
+										<td ng-bind="item.EndDate | clearTime"></td>
+										<td ng-bind="item.ReWeek"></td>
+										<td ng-bind="item.PreSendDays"></td>
+										<td>
+											<button type="button"
+													class="btn btn-sm btn-default disabled"
+													ng-bind="item.Status | fomartStatus"
+													ng-if="item.Status == 0"
+													></button>
+											<button type="button" data-toggle="modal" data-target="#onCKDisabledDeptDialog"
+													class="btn btn-sm btn-success"
+													ng-bind="item.Status | fomartStatus"
+													ng-if="item.Status == 1"
+													ng-click="vm.TabCollection.Common.OnOpenPlanStateDialog(item)"
+													></button>
+											<button type="button" data-toggle="modal" data-target="#onCKStartOrStopDialog"
+													class="btn btn-sm btn-warning"
+													ng-bind="item.Status | fomartStatus"
+													ng-if="item.Status == 2"
+													ng-click="vm.TabCollection.Common.OnOpenPlanStateDialog(item)"
+													></button>
+										</td>
+										<td>
+											<button type="button" class="btn btn-sm btn-info"
+											        ng-if="!vm.TabCollection.Common.DecidePlan(item.IsReSendPlan, item.Status)"
+													ng-click="vm.TabCollection.SecondSend.ThreePlan.OnSettingPlan(item)"
+													>补发</button>
+											<button type="button" class="btn btn-sm btn-default"
+											        ng-if="vm.TabCollection.Common.DecidePlan(item.IsReSendPlan, item.Status)" disabled
+													>补发</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="footerinfo" ng-show="vm.TabCollection.SecondSend.List.length > 0">
+
+								<div class="dropup pull-left ml">
+									<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+											ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.SecondSend.List, 1)"
+											>执行</button>
+									<ul class="dropdown-menu Messdropdown">
+										<h3 class="text-center">你确定要执行此计划吗？</h3>
+										<div>
+											<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+											<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+													ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+										</div>
+									</ul>
+								</div>
+
+								<div class="dropup pull-left ml">
+									<button type="button" class="btn btn-sm btn-warning dropdown-toggle" data-toggle="dropdown"
+											ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.SecondSend.List, 2)"
+											>暂停</button>
+									<ul class="dropdown-menu Messdropdown">
+										<h3 class="text-center">你确定要暂停此计划吗？</h3>
+										<div>
+											<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+											<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+													ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+										</div>
+									</ul>
+								</div>
+
+								<div class="dropup pull-left ml">
+									<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown"
+											ng-click="vm.TabCollection.Common.OnOpenPlanStatesDialog($event, vm.TabCollection.SecondSend.List, 0)"
+											>结束</button>
+									<ul class="dropdown-menu Messdropdown">
+										<h3 class="text-center">你确定要结束此计划吗？</h3>
+										<div>
+											<button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+											<button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+													ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+										</div>
+									</ul>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- createFirstPlan 创建计划 -->
+<div class="modal fade" id="createFirstPlan" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+
+				<h4>
+					<span ng-if="vm.TabCollection.AutoSend.FirstPlan.SolutionType==2">创建方式二</span>
+				<span ng-if="vm.TabCollection.AutoSend.FirstPlan.SolutionType==1">
+					创建方式一
+				<span>
+				<span ng-if="!vm.TabCollection.AutoSend.FirstPlan.SolutionType">
+					创建计划
+				<span>
+					</h4>
+			</div>
+			<div class="modal-body">
+          <form name="myformPlan" novalidate class="form-validation">
+              <table class="table" >
+                  <tr>
+                      <th width='120'><span class='red'>*</span>计划分类:</th>
+                      <td colspan="2" style="text-align: left;">
+                          <!--<select class="form-control" ng-model="vm.TabCollection.AutoSend.FirstPlan.SelectExecType" ng-options="s.value as s.text for s in vm.TabCollection.Common.ExecTypes"></select>-->
+                          <label class="radio-inline" ng-if="$index !== 0" ng-repeat="($index, item) in vm.TabCollection.Common.ExecTypes">
+                            <input type="radio" name="inlineRadioOptions2" value="{{item.value}}"
+                            ng-model="vm.TabCollection.AutoSend.FirstPlan.SelectExecType"> {{ item.text }}
+                          </label>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th width='120'><span class='red'></span>体检者分类:</th>
+                      <td colspan="2" style="text-align: left;">
+                          <label class="checkbox-inline" ng-repeat="($index, item) in vm.TabCollection.Common.PhysicalExamTypes">
+                            <input type="checkbox" name="inlineCheckBoxOptions2" value="{{item.value}}" ng-model="item.selected"
+                            ng-click="vm.TabCollection.AutoSend.ChangeExamType(item)"> {{ item.text }}
+                          </label>
+                          <!--<select class="form-control" ng-model="vm.TabCollection.AutoSend.FirstPlan.SelectPhysicalExamType" ng-options="s.value as s.text for s in vm.TabCollection.Common.PhysicalExamTypes"></select>-->
+                      </td>
+                  </tr>
+                  <tr>
+                      <th><span class='red'>*</span>名称:</th>
+                      <td colspan="2">
+                          <input name="planName" type="text" class="form-control" placeholder="请输入名称" ng-model="vm.TabCollection.AutoSend.FirstPlan.PlanName" required maxlength="20" />
+                      </td>
+                  </tr>
+                  <tr co>
+                      <th><span class='red'>*</span>内容:</th>
+                      <td colspan="4">
+                          <textarea name="planContent" class="form-control" ng-model="vm.TabCollection.AutoSend.FirstPlan.PlanContent" required maxlength="200"></textarea>
+                          <p class="text-right">您已输入<span class="navsider" ng-bind="vm.TabCollection.AutoSend.FirstPlan.PlanContent.length" ng-show="vm.TabCollection.AutoSend.FirstPlan.PlanContent.length"></span><span class="navsider" ng-hide="vm.TabCollection.AutoSend.FirstPlan.PlanContent.length">0</span>字</p>
+                      </td>
+                  </tr>
+                  <tr>
+                      <th></th>
+                      <td colspan="4">
+                          <button class="btn btn-info btn-sm pull-left" data-toggle="modal" data-target="#selectTemplate">选择模板</button>
+                          <button class="btn btn-warning btn-sm pull-right" ng-click="vm.TabCollection.Common.Template.OnSaveSmsTemplate(vm.TabCollection.AutoSend.FirstPlan.PlanContent)">另存为模板</button>
+                          <div class="clearfix"></div>
+                      </td>
+                  </tr>
+				  <!--修改内容-->
+                  <tr>
+                      <th><span class='red'>*</span>机构:</th>
+                      <td colspan="4">
+                          <div class="text-left">
+                              <select id="AutoSend_PlanDeptDDL" class="multipleSelect" multiple="multiple" ng-model="vm.TabCollection.AutoSend.FirstPlan.DeptName"></select>
+                          </div>
+                      </td>
+                  </tr>
+				  <!--结束-->
+
+				  <!--保存计划一（SolutionType=2）-->
+				  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==2">
+                      <th><span class='red'>*</span>日期:</th>
+                      <td>
+                          <input name="planDate" type="text" class="form-control datepicker" id="autoSend_Plan_Date" ng-model="vm.TabCollection.AutoSend.FirstPlan.Date" readonly required datetime
+                                  placeholder="请输入日期" style="background-color: #ffffff;" />
+                      </td>
+				  </tr>
+				  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==2">
+                      <th><span class='red'>*</span>执行时间:</th>
+                     <td>
+                          <input name="planExcuteTime" type="text" class="form-control datepicker" id="autoSend_Plan_ExcuteTime" ng-model="vm.TabCollection.AutoSend.FirstPlan.ExcuteTime" required
+                                  placeholder="请输入时间">
+                      </td>
+				  </tr>
+				  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==2">
+                      <th style="white-space: nowrap"><span class='red'>*</span>报告落地起止时间:</th>
+                      <td>
+                          <input name="planLandingStartDate" type="text" style="width:45%" class="form-control datepicker pull-left" id="autoSend_Plan_LandingStartDate" ng-model="vm.TabCollection.AutoSend.FirstPlan.LandingStartDate" required datetime
+                                  placeholder="请输入日期" style="background-color: #ffffff;" />
+						  <span style="display:inline-block;width:10%;text-align:center; height:34px;line-height:34px">~</span>
+                          <input name="planLandingEndDate" type="text" style="width:45%" class="form-control datepicker pull-right" id="autoSend_Plan_LandingEndDate" ng-model="vm.TabCollection.AutoSend.FirstPlan.LandingEndDate" required datetime
+                                  placeholder="请输入日期" style="background-color: #ffffff;" />
+                      </td>
+				  </tr>
+
+
+				  <!--保存计划一End-->
+
+				  <!--保存计划二（SolutionType=1）-->
+                  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==1">
+                      <th><span class='red'>*</span>开始时间:</th>
+                      <td>
+                          <input name="planStartDate" type="text" class="form-control datepicker" id="autoSend_Plan_StartDate" ng-model="vm.TabCollection.AutoSend.FirstPlan.StartDate" readonly required datetime
+                                  placeholder="请输入日期" style="background-color: #ffffff;" />
+                      </td>
+                  </tr>
+                  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==1">
+                      <th><span class='red'>*</span>结束时间:</th>
+                      <td>
+                          <input name="planEndDate" type="text" class="form-control datepicker" id="autoSend_Plan_EndDate" ng-model="vm.TabCollection.AutoSend.FirstPlan.EndDate" readonly required datetime
+                                  placeholder="请输入日期" style="background-color: #ffffff;" />
+                      </td>
+				  </tr>
+				  <!--保存计划二 End-->
+
+                  <tr ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==1">
+                      <th><span class='red'>*</span>每天重复:</th>
+                      <td>
+                          <input name="planTime" type="text" class="form-control datepicker" id="autoSend_Plan_Time" ng-model="vm.TabCollection.AutoSend.FirstPlan.Time" required
+                                  placeholder="请输入时间">
+                      </td>
+                  </tr>
+                  <tr>
+					<th ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==1"><span class='red'>*</span>前置发送天数:</th>
+					<th style="white-space: nowrap" ng-show="vm.TabCollection.AutoSend.FirstPlan.SolutionType==2"><span class='red'>*</span>总检与落地时间差:</th>
+                    <td class="mess-lable">
+                      <select class="form-control" id="AutoSend_PlanTimes" ng-model="vm.TabCollection.AutoSend.FirstPlan.SelectTimeitem" ng-options="s.value as s.text for s in vm.TabCollection.Common.Timeitems"></select>
+                      <span class="pull-left mess-col">
+                        <span ng-bind="vm.TabCollection.Common.Dates.OnLoadLocalTime()"></span>
+                      </span>
+                    </td>
+				  </tr>
+				<!--创建方式二End -->
+              </table>
+          </form>
+      </div>
+			<div class="modal-footer">
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.TabCollection.AutoSend.FirstPlan.OnSavePlan()" > 保存计划 </button>
+        <button type="button" class="btn btn-default btn-sm" ng-click="vm.TabCollection.AutoSend.FirstPlan.OnReset()"> 重置计划 </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- createSecondPlan 二次创建计划 -->
+<div class="modal fade" id="createSecondPlan" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+        <form name="myformPlan" novalidate class="form-validation">
+            <table class="table">
+                <tr>
+                    <th width='120'><span class="red">*</span>计划分类:</th>
+                    <td colspan="2" style="text-align: left;">
+                      <!--<input type="text" class="form-control"
+                          ng-model="vm.TabCollection.AutoSend.SecondPlan.SelectExecName" readonly required>-->
+                      <label class="radio-inline" ng-if="$index !== 0" ng-repeat="($index, item) in vm.TabCollection.Common.ExecTypes">
+                        <input type="radio" name="inlineRadioOptions" value="{{item.value}}" disabled
+                        ng-model="vm.TabCollection.AutoSend.SecondPlan.SelectExecType"> {{ item.text }}
+                      </label>
+                    </td>
+                </tr>
+                <tr>
+                      <th width='120'><span class='red'></span>体检者分类:</th>
+                      <td colspan="2" style="text-align: left;">
+                          <!--<select class="form-control" disabled
+                                  ng-model="vm.TabCollection.AutoSend.SecondPlan.SelectPhysicalExamType"
+                                  ng-options="s.value as s.text for s in vm.TabCollection.Common.PhysicalExamTypes"></select>-->
+                          <label class="checkbox-inline" ng-repeat="($index, item) in vm.TabCollection.Common.PhysicalExamTypes">
+                            <input type="checkbox" name="inlineCheckBoxOptions" value="{{item.value}}" ng-model="item.selected" disabled
+                            > {{ item.text }}
+                          </label>
+                      </td>
+                  </tr>
+                <tr>
+                    <th><span class="red">*</span>名称:</th>
+                    <td colspan="2">
+                        <input name="planName" type="text" class="form-control" placeholder="请输入名称" readonly required
+                ng-model="vm.TabCollection.AutoSend.SecondPlan.PlanName" required maxlength="20" />
+                    </td>
+                </tr>
+                <tr co>
+                    <th><span class="red">*</span>内容:</th>
+                    <td colspan="4">
+                        <textarea name="planContent" class="form-control"
+                                  ng-model="vm.TabCollection.AutoSend.SecondPlan.PlanContent" required maxlength="200">
+                        </textarea>
+                        <p class="text-right">您已输入<span class="navsider"
+                          ng-bind="vm.TabCollection.AutoSend.SecondPlan.PlanContent.length"
+                          ng-show="vm.TabCollection.AutoSend.SecondPlan.PlanContent.length"></span>
+                          <span class="navsider" ng-hide="vm.TabCollection.AutoSend.SecondPlan.PlanContent.length">0</span>字
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td colspan="4">
+                        <button class="btn btn-info btn-sm pull-left" data-toggle="modal" data-target="#selectTemplate">选择模板</button>
+                        <button class="btn btn-warning btn-sm pull-right"
+                ng-click="vm.TabCollection.Common.Template.OnSaveSmsTemplate(vm.TabCollection.AutoSend.SecondPlan.PlanContent)">另存为模板</button>
+                        <div class="clearfix"></div>
+                    </td>
+                </tr>
+                <tr>
+                  <th></th>
+                  <td class="pull-left">
+                    <input type="checkbox"
+                          ng-model='vm.TabCollection.AutoSend.SecondPlan.IsHead'>
+                      <span>使用系统添加的默认内容</span>
+                  </td>
+                </tr>
+                <tr>
+                    <th><span class="red">*</span>机构:</th>
+                    <td colspan="4">
+                        <div class="text-left">
+                            <!--<select id="AutoSend_SecondPlan" name="planDept"
+                                    class="multipleSelect" multiple="multiple"
+                                    ng-model="vm.TabCollection.AutoSend.SecondPlan.DeptName">
+                            </select>-->
+                            <input type="hidden" id="AutoSend_SecondPlan" ng-model="vm.TabCollection.AutoSend.SecondPlan.DeptName" />
+                            <input type="text" class="form-control" readonly ng-model="vm.TabCollection.AutoSend.SecondPlan.DeptNameDisplay" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="red">*</span>开始时间:</th>
+                    <td>
+                        <input type="text" id="autoSend_SecondPlan_StartDate" class="form-control datepicker"
+                              ng-model="vm.TabCollection.AutoSend.SecondPlan.StartDate" required
+                                placeholder="请输入日期" style="background-color: #ffffff;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="red">*</span>结束时间:</th>
+                    <td>
+                        <input type="text" id="autoSend_SecondPlan_EndDate" class="form-control datepicker"
+                              ng-model="vm.TabCollection.AutoSend.SecondPlan.EndDate" required
+                                placeholder="请输入日期" style="background-color: #ffffff;" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><span class="red">*</span>每天重复:</th>
+                    <td>
+                        <input name="planTime" type="text" class="form-control datepicker"
+                                id="autoSend_SecondPlan_Time" placeholder="请输入时间"
+                                ng-model="vm.TabCollection.AutoSend.SecondPlan.Time" required />
+                    </td>
+                </tr>
+                <tr>
+                  <th><span class="red">*</span>前置发送天数:</th>
+                  <td class="mess-lable">
+                    <select class="form-control" id="AutoSend_PlanTimes"
+                            ng-model="vm.TabCollection.AutoSend.SecondPlan.SelectTimeitem"
+                            ng-options="s.value as s.text for s in vm.TabCollection.Common.Timeitems"></select>
+                    <span class="pull-left mess-col">
+                      <span ng-bind="vm.TabCollection.Common.Dates.OnLoadLocalTime()"></span>
+                    </span>
+                  </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success btn-sm" ng-click="vm.TabCollection.AutoSend.SecondPlan.OnSavePlan()" > 保存计划 </button>
+    </div>
+		</div>
+	</div>
+</div>
+
+<!--smsAddDept-->
+<div class="modal fade" id="smsAddDept" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+				<h4 class="modal-title">添加</h4>
+			</div>
+			<div class="modal-body clearfix">
+				<form class="form-horizontal form-validation">
+					<div class="form-group">
+						<label for="lastname" class="col-sm-3 control-label"><h4>名称：</h4></label>
+						<div class="col-sm-9">
+							<select class="form-control" id="optionDeptId" ng-model="vm.DeptCollection.SelectAddDeptDialogByDepts" ng-options="s.Id as s.Name for s in vm.DeptCollection.AddDeptDialogByDepts">
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal"> 关闭 </button>
+				<button type="button" class="btn btn-success" ng-click="vm.DeptCollection.OnClickSaveAddDept()"> 保存 </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- onDeptStartOrStopDialog -->
+<div class="modal fade" id="onStartOrStopDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3>确认要启用吗？</h3>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+						ng-click="vm.DeptCollection.OnSaveEnabledDeptDialog()">确定
+				</button>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- onDeptDisabledDeptDialog-->
+<div class="modal fade" id="onDisabledDeptDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3>确认要禁用吗？</h3>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+						ng-click="vm.DeptCollection.OnSaveDiabledDeptDialog()">确定</button>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- onThirdPlanDialog -->
+<div class="modal fade" id="onThirdPlanDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3>您确认要补发此条计划吗？</h3>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+						ng-click="vm.TabCollection.SecondSend.ThreePlan.OnSavePlan()">确定</button>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- onCKStartOrStopDialog -->
+<div class="modal fade" id="onCKStartOrStopDialog" tabindex="-1" role="dialog"
+aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+	<div class="modal-content disable">
+		<div class="modal-body">
+			<h3 class="text-center">请选择你要执行的操作？</h3>
+			<div class="text-center" id='mess_modal_ck'>
+                <button type="button" class="btn btn-success" data-dismiss="modal"
+				        ng-click="vm.TabCollection.Common.OnChoosePlanstate(1)">执行</button>
+				<button type="button" class="btn btn-danger" data-dismiss="modal"
+				        ng-click="vm.TabCollection.Common.OnChoosePlanstate(0)">结束</button>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+
+<!-- onCKDisabledDeptDialog-->
+<div class="modal fade" id="onCKDisabledDeptDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body">
+				<h3 class="text-center">请选择你要执行的操作？</h3>
+				<div class="text-center" id='mess_modal_ck'>
+					<button type="button" class="btn btn-success" data-dismiss="modal"
+							ng-click="vm.TabCollection.Common.OnChoosePlanstate(2)">暂停</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal"
+							ng-click="vm.TabCollection.Common.OnChoosePlanstate(0)">结束</button>
+					<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- onCKDisableDialog -->
+<div class="modal fade" id="onDisableDialog" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body">
+				<h3 class="text-center">确认要禁用吗？</h3>
+				<div class="text-center" id='mess_modal_ck'>
+					<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-success" data-dismiss="modal"
+							ng-click="vm.TabCollection.Common.OnSavePlanStatesDialog()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--selectTemplate-->
+<div class="modal fade notes" id="selectTemplate" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+				<h4 class="modal-title">模板选择</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover">
+					<tr ng-repeat="item in vm.TabCollection.Common.Template.TemplateList">
+						<td ng-click="vm.TabCollection.Common.Template.OnClickTemplate(item)" >
+							<div class="clearfix">
+								<div >{{ $index+1 }}.{{ item.Content }}</div>
+								<span class="checks" >
+									<label for="checkbox1">
+										<img src="img/stop.png" ng-hide="item.Checked" alt="" ng-click="vm.TabCollection.Common.Template.OnClickTemplate(item)" />
+										<img src="img/start.png" ng-show="item.Checked" alt="" ng-click="vm.TabCollection.Common.Template.OnClickTemplate(item)" />
+									</label>
+								</span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<!--<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="vm.TabCollection.Common.Template.TemplateDialog_OnDeleteTemplateClick()"> 删除该模板 </button>-->
+				<button type="button" class="btn btn-primary"
+						ng-click="vm.TabCollection.Common.Template.OnClickDeleteTemplate()"
+						ng-disabled="vm.TabCollection.Common.Template.SelectTemplateId == 0"> 删除该模板 </button>
+				<button type="button" class="btn btn-success"
+						ng-click="vm.TabCollection.Common.Template.OnClickSelectedTemplate()"
+						ng-disabled="vm.TabCollection.Common.Template.SelectTemplateId == 0"> 确定选择 </button>
+			</div>
+		</div>
+	</div>
+</div>

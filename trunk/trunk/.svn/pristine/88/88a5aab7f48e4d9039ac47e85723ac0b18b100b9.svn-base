@@ -1,0 +1,57 @@
+<section class=" banner-pic">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <ol class="breadcrumb pull-left">
+        <li><a href="javascript:void(0);">掌上体检 </a></li>
+        <li class="active">意见反馈管理</li>
+      </ol>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body panel-up">
+      <div class="form-inline examination-top">
+        <div class="form-group">
+          <span>服务机构：</span>
+          <input class="form-control input-sm" ng-model="vm.data.searchData.ServiceDeptName" id="serviceDept" placeholder="请输入服务机构">
+        </div>
+        <div class="form-group input-margin">
+          <span>日期:</span>
+          <input type="text" class="form-control input-sm" id="startDate" ng-model="startDate">
+        </div>↔
+        <div class="form-group">&emsp;
+          <input type="text" class="form-control input-sm" id="endDate" ng-model="endDate">
+        </div>
+        <div class="form-group input-margin">
+          <span>是否标记:</span>
+          <select class="form-control input-sm" ng-options="item.value as item.text for item in vm.data.selectData" ng-model="vm.data.selected" >
+          </select>
+        </div>
+        <button class="btn btn-success btn-sm input-margin" ng-click="vm.SearchFeedBack()">查询</button>
+      </div>
+
+      <div class="information-list">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th class="textLeft textWidth">服务机构</th>
+              <th class="textLeft textWidth">姓名</th>
+              <th class="textLeft">手机号</th>
+              <th class="textLeft">反馈内容</th>
+              <th class="textLeft textWidth">时间</th>
+              <th class="textLeft">是否标记</th>
+            </tr>
+          </thead>
+          <tbody ng-repeat="item in vm.data.InitData">
+            <tr>
+              <td class="textLeft textWidth">{{item.DepartName}}</td>
+              <td class="textLeft textWidth">{{item.RealName}}</td>
+              <td class="textLeft">{{item.Mobile}}</td>
+              <td class="textLeft">{{item.FeedBackContent}}</td>
+              <td class="textLeft textWidth">{{item.CreateDate}}</td>
+              <td class="textLeft"><input type="checkbox" ng-change="vm.CheckedClick(item)" ng-true-value="1" ng-false-value="0" ng-model="item.RebackMethod"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

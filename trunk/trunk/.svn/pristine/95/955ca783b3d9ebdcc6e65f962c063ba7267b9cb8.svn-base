@@ -1,0 +1,111 @@
+<section class="excel" id="root">
+  <div class="panel panel-default rootpanel">
+    <div class="panel-heading">
+      <h3>短信效果分析<small>剩余&nbsp;&nbsp;<span class="navsider" ng-bind="smsMargin"></span>&nbsp;&nbsp;条信息可发送</small>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <!-- Nav tabs -->
+      <ul class="roottablist" role="tablist">
+        <li class="active"><span href="#root-a" data-toggle="tab">机构汇总统计</span> </li>
+        <li><span href="#root-b" data-toggle="tab">各个机构统计</span></li>
+        <!--<li><span href="#root-c" data-toggle="tab">计划统计</span></li>-->
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="root-a">
+          <div class="form-inline clearfix">
+            <span ng-bind=""></span>
+            <input type="text" id="startDate_a" class="form-control input-sm " ng-model="total.viewDate.startDate" readonly style="background: #FFFFFF"
+            /> →
+            <input type="text" id="endDate_a" class="form-control input-sm " ng-model="total.viewDate.endDate" readonly style="background: #FFFFFF" />
+            <button class="btn btn-success btn-sm" ng-click="total.OnClickSearch()">查询</button>
+
+              <button class="btn btn-success btn-sm" ng-click="total.OnClickExport()">导出</button>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <table id="table1" class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>服务机构</th>
+                    <th>发送量（成功）</th>
+                    <th>点击量</th>
+                    <th>注册量</th>
+                    <th>点击率</th>
+                    <th>注册率</th>
+                  </tr>
+                </thead>
+
+                <tbody ng-repeat="dataItem in total.data">
+                  <tr>
+                    <td ng-bind="dataItem.ServiceDeptName"></td>
+                    <td ng-bind="dataItem.SendCount"></td>
+                    <td ng-bind="dataItem.ClickCount"></td>
+                    <td ng-bind="dataItem.RegistCount"></td>
+                    <td ng-bind="dataItem.ClickRate"></td>
+                    <td ng-bind="dataItem.RegistrationRate"></td>
+                  </tr>
+                </tbody>
+
+
+                <!-- <tfoot align="center">
+								<tr>
+									<td>总计</td>
+									<td>123567</td>
+									<td>11000</td>
+									<td>1100</td>
+									<td>220</td>
+									<td>80%</td>
+									<td>40%</td>
+									<td>10%</td>
+								</tr>
+							</tfoot> -->
+              </table>
+
+
+            </div>
+              <div class="root-chart">
+                  <div id="container1" class="rootimg" style="margin-top:20px;"></div>
+              </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="root-b">
+          <div class="form-inline clearfix">
+            <select class="form-control input-sm selectinput" ng-model="deptID" ng-options="s.Id as s.Name for s in deptList" palceholder="请选择要查询的机构"></select>
+            <input type="text" id="startDate" class="form-control input-sm " ng-model="startDate" readonly style="background: #FFFFFF" />
+            <span>至</span>
+            <input type="text" id="endDate" class="form-control input-sm " ng-model="endDate" readonly style="background: #FFFFFF"  />
+            <button class="btn btn-success btn-sm" ng-click="QuerySubmit()">查询</button>
+          </div>
+          <div class="root-chart">
+              <div id="container" class="rootimg" style="margin-top:20px;"></div>
+          </div>
+          <div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>发送量（成功）</th>
+                  <th>点击量</th>
+                  <th>注册量</th>
+                  <th>点击率</th>
+                  <th>注册率</th>
+                </tr>
+              </thead>
+              <tbody ng-repeat="dataItem in dataList">
+                <tr>
+                  <td ng-bind="dataItem.Date"></td>
+                  <td ng-bind="dataItem.SendCount"></td>
+                  <td ng-bind="dataItem.ClickCount"></td>
+                  <td ng-bind="dataItem.RegistCount"></td>
+                  <td ng-bind="dataItem.ClickRate"></td>
+                  <td ng-bind="dataItem.RegistrationRate"></td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+    </div>
+</section>

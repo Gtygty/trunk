@@ -1,0 +1,456 @@
+<section class="enterpriseAppointment">
+	<div class="panel panel-default banner-paneller">
+		<!-- heading -->
+		<div class="panel-heading" >
+			<ul class="breadcrumb">
+				<li><a href="#">掌上体检</a></li>
+				<li class="active">团检企业管理</li>
+			</ul>
+		</div>
+		<!-- body -->
+		<div class="panel-body answers_pane">
+		    <!-- search -->
+			<div class="clearfix">
+			    <div class="form-inline">
+			    	<form class="pull-left form-inline">
+			    		<div class="form-group">
+			    			<span>企业团检名称：</span>
+			    			<input type="text" class="form-control input-sm" ng-model="vm.EnterpriseAppointment.Search.Name" placeholder="请输入" />
+			    		</div>
+			    		<!-- <div class="form-group">
+			    			<span>体检中心：</span>
+			    			<input type="text" class="form-control input-sm" ng-model="vm.EnterpriseAppointment.Search." placeholder="请输入" />
+			    		</div> -->
+			    		<div class="form-group">
+			    			<span>体检时间段：</span>
+			    			<div class="input-group input-group-sm">  
+			                   <input type="text" id="EnterpriseAppointmentStartTime" class="form-control" placeholder="请选择起始时间" 
+			                          style="width:110px; border-right:0;" />
+			                   <span class="input-group-addon">-</span>
+			                   <input type="text" id="EnterpriseAppointmentEndTime" class="form-control" placeholder="请选择结束时间" 
+			                          style="width:110px; border-left: 0;" />
+			                </div>
+			    		</div>
+			    	</form>
+			    	<div class="pull-right">
+						<div class="form-group" style="margin-top: 5px;">
+			    	    	<label ng-bind="vm.EnterpriseAppointment.pageModel.totalItems"></label>条
+			    	    </div>
+			    		<div class="form-group">
+			    			<button class="btn btn-sm btn-info" ng-click="vm.EnterpriseAppointment.OnSearchEnterpriseClick()">
+			    				<span class="glyphicon"></span>
+			    				搜索
+			    			</button>
+			    		</div>
+			    		<div class="form-group">
+			    			<button class="btn btn-sm btn-info" ng-click="vm.EnterpriseAppointment.ShowAddEnterpriseModelDialog()">
+			    				<span class="glyphicon"></span>
+			    				添加团检企业
+			    			</button>
+			    		</div>
+			    	</div>
+			    </div>
+			</div>
+			<!-- table -->
+			<br />
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>企业订单号</th>
+						<th>企业名称</th>
+						<th>体检中心</th>
+						<th>体检时间段</th>
+						<th>联系人姓名</th>
+						<th>联系人电话</th>
+						<th>单位地址</th>
+						<th>员工列表</th>
+						<th>报告寄送方式</th>
+						<th>是否出具总检报告</th>
+						<th>添加时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in vm.EnterpriseAppointment.GroupAppointmentEnterpriseList track by $index">
+						<td>{{$index + 1}}</td>
+						<td ng-bind="item.Id"></td>
+						<td ng-bind="item.Name"></td>
+						<td ng-bind="item.AppointmentAgency"></td>
+						<td ng-bind="item.AppointmentTimeRange"></td>
+						<td ng-bind="item.ConnectName"></td>
+						<td ng-bind="item.ConnectMobile"></td>
+						<td ng-bind="item.Address"></td>
+						<td>
+		                    <button type="button" class="btn btn-success btn-xs"
+		                    		ng-click="vm.EnterpriseAppointment.OnManagementStaff(item)">
+		                      	 管理
+		                    </button>
+						</td>
+						<td ng-bind="item.ConvertReportSendType"></td>
+						<td ng-bind="item.ConvertReportSummary"></td>
+						<td ng-bind="item.CreateTime"></td>
+						<td>
+							<button class="btn btn-sm btn-success" ng-click="vm.EnterpriseAppointment.ShowInspectEnterpriseModelDialog(item)">
+								查看
+							</button>
+							<button class="btn btn-sm btn-info" ng-click="vm.EnterpriseAppointment.ShowModifyEnterpriseModelDialog(item)">
+								编辑
+							</button>
+							<button class="btn btn-sm btn-warning" ng-click="vm.EnterpriseAppointment.ShowDeleteEnterpriseModelDialog(item)">
+								删除
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<tm-pagination class="pull-right" conf="EnterprisePaginationConf"></tm-pagination>
+		</div>
+	</div>
+</section>
+
+<!-- StartaddOrModifyEnterpriseAppointmentCompanyModal -->
+<div class="modal fade" id="addOrModifyEnterpriseAppointmentCompanyModal" style="overflow-y:auto;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined">添加团检企业</h4>
+				<h4 class="modal-title" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined">编辑团检企业</h4>
+			</div>
+			<div class="modal-body BMS_table_border Upload_td">
+				<table class="table" style="margin-bottom: 0;">
+					<tr>
+						<td style="width: 120px;"><span class="red">*</span><span>团检企业名称：</span></td>
+						<td>
+							<input class="input-sm form-control" maxlength="80" type="text" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Name" placeholder="请输入团检企业名称" />
+						    <input class="input-sm form-control" maxlength="80" type="text" disabled ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Name" placeholder="请输入团检企业名称" /></td>
+					</tr>
+					<tr>
+						<td>
+		    				<span class="red">*</span><span>体检时间段：</span>
+		    			</td>
+		    			<td>
+			    			<div class="input-group input-group-sm"> 
+							<input type="date" class="form-control" id="startDate" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMinAppointDate" placeholder="请输入开始时间"/>
+							<input type="date" disabled class="form-control" id="startDate" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMinAppointDate" placeholder="请输入开始时间"/>
+								                    <div class="input-group-addon">~</div>
+								                    <input type="date" class="form-control" id="endDate" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMaxAppointDate" placeholder="请输入结束时间"/>
+			                </div>
+		    			</td>
+						<!-- <td><span class="red">*</span><span>体检时间段：</span></td>
+						<td>
+							<input type="date" class="form-control" id="startDate" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMinAppointDate" placeholder="请输入开始时间"/>
+							<input type="date" disabled class="form-control" id="startDate" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMinAppointDate" placeholder="请输入开始时间"/>
+								                    <div class="input-group-addon">~</div>
+								                    <input type="date" class="form-control" id="endDate" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMaxAppointDate" placeholder="请输入结束时间"/>
+						</td> -->
+					</tr>
+					<tr>
+						<td><span>单位联系人：</span></td>
+						<td><input class="input-sm form-control" maxlength="20" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConnectName" placeholder="请输入单位联系人" /></td>
+					</tr>
+					<tr>
+						<td><span>联系人电话：</span></td>
+						<td><input class="input-sm form-control" maxlength="11" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConnectMobile" placeholder="请输入联系人电话" /></td>
+					</tr>
+					<tr>
+						<td><span>单位地址：</span></td>
+						<td><input class="input-sm form-control" maxlength="200" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Address" placeholder="请输入单位地址" /></td>
+					</tr>
+					<tr>
+						<td><span>报告寄送方式：</span></td>
+						<td><select class="input-sm form-control" ng-options="o.value as o.text for o in vm.EnterpriseAppointment.ReportSendType" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSendType">
+							<option ng-if="false"></option>
+						</select></td>
+					</tr>
+					<tr>
+						<td><span>是否出具总检报告：</span></td>
+						<td>
+							<!-- 添加 -->
+						    <div ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined">
+						    	<label><input type="radio" name="isSendReport"  ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />是</label>
+							<label><input type="radio" name="isSendReport"  ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />否</label>
+						    </div>
+						    <!-- 编辑 -->
+						    <div ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined">
+						    	<label><input type="radio" value="是" name="isEditSendReport" ng-value=true ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />是</label>
+								<label><input type="radio" value="否" name="isEditSendReport" ng-value=false ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />否</label>
+						    </div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>企业提醒：</span></td>
+						<td>
+							<input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.WarningText" placeholder="请输入企业提醒" />
+						</td>
+					</tr>
+				</table>
+				<hr />
+				<!-- 体检服务商 -->
+				<div class="form-group BMS_table_border Upload_td" style="margin-bottom: 0px;">
+					<table class="table" style="margin-bottom: 0;">
+						<tr>
+							<td style="width:23%;text-align: left;">体检服务商</td>
+							<td style="width:23%;text-align: left;">体检套餐</td>
+							<td style="width:23%;text-align: left;">第三方机构商品ID</td>
+							<td style="width:23%;text-align: left;">售价</td>
+							<td style="width:4%;text-align: right;"><button class="btn btn-sm btn-info" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-click="vm.EnterpriseAppointment.ShowAddServiceProvider()">
+								添加
+							</button>
+							<button class="btn btn-sm btn-info" disabled ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-click="vm.EnterpriseAppointment.ShowAddServiceProvider()">
+								添加
+							</button></td>
+						</tr>
+					</table>
+				</div>
+				<hr />
+				<!-- 添加的服务商 -->
+				<div class="form-group BMS_table_border Upload_td">
+				    <!-- 添加 -->
+					<table class="table" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined">
+						<tbody>
+							<tr ng-repeat="item in vm.EnterpriseAppointment.CurrentEnterpriseGoodsInfo">
+								<td style="width:23%;text-align: left;"><span>{{item.SupplierName}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.CommonInfo.Name}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.Id}}</span></td>
+								<td style="width:23%;text-align: left;"><input type="text" ng-model="item.GroupAppointmentPrice" placeholder="请输入价格" /></td>
+								<td style="width:4%;text-align: right;"><button class="btn btn-sm btn-warning" ng-click="vm.EnterpriseAppointment.RemoveFirstAddingGoodsInfo(item)">
+									<span class="glyphicon glyphicon-minus-sign"></span>
+								</button></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- 编辑 -->
+					<table class="table" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined">
+						<tbody>
+							<tr ng-repeat="item in vm.EnterpriseAppointment.CurrentEnterpriseGoodsInfo">
+								<td style="width:23%;text-align: left;"><span>{{item.SupplierName}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GoodsName}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GoodsId}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GroupSalesPrise}}</span></td>
+								<td style="width:4%;text-align: right;"><button class="btn btn-sm btn-warning" disabled ng-click="">
+									<span class="glyphicon glyphicon-minus-sign"></span>
+								</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-warning" data-dismiss="modal">
+					取消
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-click="vm.EnterpriseAppointment.AddAppointmentEnterprise()">
+					<span class="glyphicon"></span>
+					保存
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-click="vm.EnterpriseAppointment.ModifyAppointmentEnterprise()">
+					<span class="glyphicon"></span>
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- EndaddOrModifyEnterpriseAppointmentCompanyModal -->
+
+<!-- inspectEnterpriseAppointmentCompanyModal -->
+<div class="modal fade" id="inspectEnterpriseAppointmentCompanyModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">查看团检企业</h4>
+			</div>
+			<div class="modal-body BMS_table_border Upload_td">
+				<table class="table" style="margin-bottom: 0;">
+					<tr>
+						<td style="width: 120px;"><span class="red">*</span><span>团检企业名称：</span></td>
+						<td><input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Name" disabled placeholder="请输入团检企业名称" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span><span>体检时间段：</span></td>
+						<td>
+		    			<div class="input-group input-group-sm"> 
+							<input type="date" class="form-control" id="startDate" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMinAppointDate" disabled placeholder="请输入开始时间"/>
+		                    <div class="input-group-addon">~</div>
+		                    <input type="date" class="form-control" id="endDate" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConvertMaxAppointDate" disabled placeholder="请输入结束时间"/>
+		                </div>
+						</td>
+					</tr>
+					<tr>
+						<td><span>单位联系人：</span></td>
+						<td><input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConnectName" disabled placeholder="请输入单位联系人" /></td>
+					</tr>
+					<tr>
+						<td><span>联系人电话：</span></td>
+						<td><input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ConnectMobile" disabled placeholder="请输入联系人电话" /></td>
+					</tr>
+					<tr>
+						<td><span>单位地址：</span></td>
+						<td><input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Address" disabled placeholder="请输入单位地址" /></td>
+					</tr>
+					<tr>
+						<td><span>报告寄送方式：</span></td>
+						<td><select class="input-sm form-control" disabled ng-options="o.value as o.text for o in vm.EnterpriseAppointment.ReportSendType" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSendType">
+							<option ng-if="false"></option>
+						</select></td>
+					</tr>
+					<tr>
+						<td><span>是否出具总检报告：</span></td>
+						<td>
+							<label><input type="radio" disabled name="isInspectSendReport" ng-value=true ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />是</label>
+							<label><input type="radio" disabled name="isInspectSendReport" ng-value=false ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.ReportSummary" />否</label>
+						</td>
+					</tr>
+					<tr>
+						<td><span>企业提醒：</span></td>
+						<td>
+							<input class="input-sm form-control" type="text" ng-model="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.WarningText" disabled placeholder="请输入企业提醒" />
+						</td>
+					</tr>
+				</table>
+				<hr />
+				<!-- 体检服务商 -->
+				<div class="form-group BMS_table_border Upload_td" style="margin-bottom: 0px;">
+					<table class="table" style="margin-bottom: 0;">
+						<tr>
+							<td style="width:23%;text-align: left;">体检服务商</td>
+							<td style="width:23%;text-align: left;">体检套餐</td>
+							<td style="width:23%;text-align: left;">第三方机构商品ID</td>
+							<td style="width:23%;text-align: left;">售价</td>
+							<td style="width:4%;text-align: right;"><button class="btn btn-sm btn-info" ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id == undefined" ng-click="vm.EnterpriseAppointment.ShowAddServiceProvider()">
+								添加
+							</button>
+							<button class="btn btn-sm btn-info" disabled ng-if="vm.EnterpriseAppointment.AddOrModifyGroupEnterpriseInfoCategory.Id != undefined" ng-click="vm.EnterpriseAppointment.ShowAddServiceProvider()">
+								添加
+							</button></td>
+						</tr>
+					</table>
+				</div>
+				<hr />
+				<!-- 添加的服务商 -->
+				<div class="form-group BMS_table_border Upload_td">
+					<!-- 查看 -->
+					<table class="table">
+						<tbody>
+							<tr ng-repeat="item in vm.EnterpriseAppointment.CurrentEnterpriseGoodsInfo">
+								<td style="width:23%;text-align: left;"><span>{{item.SupplierName}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GoodsName}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GoodsId}}</span></td>
+								<td style="width:23%;text-align: left;"><span>{{item.GroupSalesPrise}}</span></td>
+								<td style="width:4%;text-align: right;"><button class="btn btn-sm btn-warning" disabled ng-click="">
+									<span class="glyphicon glyphicon-minus-sign"></span>
+								</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-warning" data-dismiss="modal">
+					确定
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- inspectEnterpriseAppointmentCompanyModal -->
+
+<!-- deleteEnterpriseAppointmentCompanyModal -->
+<div class="modal fade" id="deleteEnterpriseAppointmentCompanyModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要删除吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.EnterpriseAppointment.DeleteAppointmentEnterprise()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- deleteEnterpriseAppointmentCompanyModal -->
+
+<!-- addServiceProviderModal -->
+<div class="modal fade" id="addServiceProviderModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">选择</h4>
+			</div>
+			<div class="modal-body" style="padding: 20px 18px;">
+				<div class="form-group">
+					<span>体检服务商：</span>
+					<input class="input-sm form-control" style="display: inline-block;width:65%;" type="text" placeholder="请输入体检服务商名称" ng-model="vm.EnterpriseAppointment.SearchGoodsSupplier" />
+					<div class="pull-right" style="width:24%;">
+			            <button type="button" class="btn btn-success btn-sm" ng-click="vm.EnterpriseAppointment.OnSearchGoodsSupplier()">
+			              <span class="glyphicon glyphicon-search"></span>&nbsp;搜索
+			            </button>
+			            <button type="button" class="btn btn-info btn-sm" ng-click="vm.EnterpriseAppointment.OnClearGoodsSupplier()">
+			              <span class="glyphicon glyphicon-trash"></span>&nbsp;清除
+			            </button>
+		            </div>
+				</div>
+				<div class="form-group enterpriseAppointment_boxOne">
+					<div class="enterpriseAppointment_divOne">
+					    <label ng-repeat="item in vm.EnterpriseAppointment.GroupEnterpriseList" 
+					    ng-class="{true:'enterpriseAppointment_labelTwo',false:'enterpriseAppointment_labelOne'}[item.isChecked]"
+					    ng-click="vm.EnterpriseAppointment.OnGetGoodsInfo(item, $index)">
+
+				    <!-- <div class="enterpriseAppointment_divOne">
+					    <label ng-repeat="item in vm.EnterpriseAppointment.GroupEnterpriseList" 
+					    ng-class="{true:'enterpriseAppointment_labelTwo',false:'enterpriseAppointment_labelOne'}[item.isChecked]"
+					    ng-click="vm.EnterpriseAppointment.OnGetGoodsInfo(item)"> -->
+					        {{item.SupplierName}}
+					    </label>
+					</div>
+					<div class="enterpriseAppointment_divOne">
+					    <label ng-repeat="item in vm.EnterpriseAppointment.CurrentGoodsList" 
+					    ng-class="{true:'enterpriseAppointment_labelTwo',false:'enterpriseAppointment_labelOne'}[item.isChecked]"
+					    ng-click="vm.EnterpriseAppointment.OnGetAllGoodsInfo($index,item)"> {{item.CommonInfo.Name}}
+					    </label>
+					</div>
+					<div class="enterpriseAppointment_divTwo">
+						<div  ng-repeat="item in vm.EnterpriseAppointment.AllGoodsList">
+						    <label  class="enterpriseAppointment_labelTwo">
+						    	{{item.SupplierName}}
+						        <button class="close" style="font-size: 20px;background-color:#ff6600;border-radius: 50%;">
+									<span ng-click="vm.EnterpriseAppointment.OnRemoveGoodsInfo($index,item,1)" style="color:#fff;">×</span>
+								</button>
+						    </label>
+					        <label ng-repeat="cItem in item.GoodsInfoList" 
+					               class="enterpriseAppointment_labelOne">
+						    	{{cItem.CommonInfo.Name}}
+						        <button class="close" style="font-size: 20px;background-color:#ff6600;border-radius: 50%;">
+									<span ng-click="vm.EnterpriseAppointment.OnRemoveGoodsInfo($index,cItem,2)" style="color:#fff;">×</span>
+								</button>
+						    </label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-warning" data-dismiss="modal">
+					取消
+				</button>
+				<button class="btn btn-sm btn-info" ng-click="vm.EnterpriseAppointment.AddAppointmentServiceProvider()">
+					<span class="glyphicon"></span>
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- addServiceProviderModal -->
+
+
+

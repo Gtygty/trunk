@@ -1,0 +1,88 @@
+.pointer {
+  cursor: pointer;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.mAll {
+  margin: 10px;
+}
+.ml {
+  margin-left: 10px;
+}
+.mr {
+  margin-right: 10px;
+}
+.mt {
+  margin-top: 10px;
+}
+.mb {
+  margin-bottom: 10px;
+}
+.pAll {
+  padding: 10px;
+}
+.pl {
+  padding-left: 10px;
+}
+.pr {
+  padding-right: 10px;
+}
+.pt {
+  padding-top: 10px;
+}
+.pb {
+  padding-buttom: 10px;
+}
+.RunOut{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow:ellipsis; 
+  -o-text-overflow:ellipsis; 
+  -moz-text-overflow: ellipsis; 
+  -webkit-text-overflow: ellipsis; 
+}
+/*--------------table--------------*/
+.BMS_table .table>tbody>tr>th {
+  text-align: center;
+}
+.BMS_table_border .table>tbody>tr>th,
+.BMS_table_border .table>tbody>tr>td {
+  border: 0;
+}
+/*--------------模态框--------------*/
+.clonzing {
+  width: 300px;
+  height: auto;
+  margin: 25% auto;
+  border-radius: 6px;
+}
+.clonzing .modal-body {
+  padding: 0;
+}
+.clonzing button{
+  margin-bottom: 10px;
+}
+.clonzing h3 {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-bottom: 10px;
+  font-family: 'Arial Normal', 'Arial';
+  font-size: 20px;
+  font-weight: 400;
+  border-bottom: 1px solid #ddd;
+}
+.Adding {
+  width: 500px;
+  margin: 100px auto;
+  border-radius: 6px;
+}
+.Adding .modal-body{
+  padding: 15px;
+}
+.Adding .modal-footer{
+  text-align: center;
+}

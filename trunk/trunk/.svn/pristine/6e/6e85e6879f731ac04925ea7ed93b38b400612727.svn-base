@@ -1,0 +1,502 @@
+<section class=" banner-pic Goods">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">优惠券管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+        <form class="form-inline pull-left" role="form">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control input-sm" placeholder="请输入卡券名称搜索" ng-model="vm.couponManagement.Search.CouponTitle">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button" ng-click="vm.couponManagement.OnSearchClick()"><span class='glyphicon glyphicon-search'></span>&nbsp;搜索</button>
+            </span>
+          </div>
+        </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.couponManagement.OnOpenAddDiaolog()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;添加通用券
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active" ng-click="vm.couponManagement.OnGetList(-1);">
+            <a href="#All" role="tab" data-toggle="tab">全部</a>
+          </li>
+          <li role="presentation" ng-click="vm.couponManagement.OnGetList(0);">
+            <a href="#All" role="tab" data-toggle="tab">发放未开始</a>
+          </li>
+          <li role="presentation" ng-click="vm.couponManagement.OnGetList(1);">
+            <a href="#All" role="tab" data-toggle="tab">发放进行中</a>
+          </li>
+          <li role="presentation" ng-click="vm.couponManagement.OnGetList(2);">
+            <a href="#All" role="tab" data-toggle="tab">发放已结束</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 8px 8px 8px;">
+                <div class="pull-right">
+                  <!--<from class="form-inline">
+                    <div class="form-group">
+                      领券总数：<label ng-bind="vm.AppointmentCollection.data.totalCounts"></label>&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="form-group">
+                      总使用量：<label ng-bind="vm.AppointmentCollection.data.totalCounts"></label>&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="form-group">
+                      <label ng-bind="vm.AppointmentCollection.data.totalCounts"></label>条
+                    </div>
+                  </from>-->
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                   <th>
+                        <input type="checkbox" ng-model="vm.couponManagement.AllChecked"
+                                            ng-click="vm.couponManagement.OnClickAllChecked()"/>
+                  </th>
+                  <th>发行时间</th>
+                  <th>使用有效期</th>
+                  <th>总数量</th>
+                  <th>优惠券内容</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.couponManagement.List">
+                  <td><input type="checkbox" ng-model="item.IsChecked" /></td>
+                  <td><span ng-bind="item.StartTime"></span>~<span ng-bind="item.EndTime"></span></td>
+                  <td>从优惠券领券日起<span ng-bind="item.DueTime"></span>天</td>
+                  <td ng-bind="item.Total"></td>
+                  <td ng-bind="item.CouponTitle"></td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.couponManagement.OnViewDialog(item)">
+                    <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看详情
+                    </button>
+                    <label ng-if="item.CouponState==0">
+                        <button type="button" class="btn btn-warning btn-xs" ng-click="vm.couponManagement.OnUpOrDown(item,1)">
+                            <span class='glyphicon glyphicon-ok'></span>&nbsp;开启
+                        </button>
+                    </label>
+                    <label ng-if="item.CouponState==1">
+                    <button type="button" class="btn btn-danger btn-xs" ng-click="vm.couponManagement.OnUpOrDown(item,2)">
+                        <span class='glyphicon glyphicon-remove'></span>&nbsp;终止
+                    </button>
+                    </label>
+                  </td>
+                </tr>
+              </table>
+
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+                    <div class="footerinfo" ng-show="vm.couponManagement.List.length > 0">
+                    <label ng-if="vm.couponManagement.Search.CouponState==0">
+                      <div class="dropup pull-left ml">
+                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.couponManagement.OnBatchStateDialog($event, 1)" >
+                              <i class="glyphicon glyphicon-ok"></i>
+                              开启</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量开启吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.couponManagement.OnBatchStateUpOrDown()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                    </label>
+                      <div class="dropup pull-left ml">
+                      <label ng-if="vm.couponManagement.Search.CouponState==1">
+                        <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.couponManagement.OnBatchStateDialog($event, 2)" >
+                              <i class="glyphicon glyphicon-remove"></i>
+                              终止</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量终止吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.couponManagement.OnBatchStateUpOrDown()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                    </label>
+                    </div>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 添加或修改体优惠券:START -->
+<div class="modal fade" id="addOrEditCoupon" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">添加通用券</h4>
+      </div>
+      <div class="modal-body" style="padding:0 120px;">
+         <table class="table medicallytable">
+           <tr>
+             <td colspan="2">
+                <h4 class="modal-title" style="color:#C2CE89">通用券信息:</h4>
+             </td>
+           </tr>
+           <tr>
+             <td style="width: 120px">
+               <span class="red">*</span><span>通用券名称:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                  <input type="text" class="form-control" ng-model="vm.couponManagement.Current.CouponTitle"
+                       maxlength="50" placeholder="请输入通用券名称" style="width:402px;border-radius:5px;"/>
+                </div>
+            </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>发行时间:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <input type="date" class="form-control" id="startDate" ng-model="vm.couponManagement.Current.StartDate" placeholder="请输入开始时间"/>
+                    <div class="input-group-addon">~</div>
+                    <input type="date" class="form-control" id="endDate" ng-model="vm.couponManagement.Current.EndDate" placeholder="请输入结束时间"/>
+                </div>
+              </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>面值:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <input type="text" class="form-control"  maxlength="50" ng-model="vm.couponManagement.Current.Amount" placeholder="请输入面值"/>
+                    <span class="input-group-addon">元</span>
+                </div>
+             </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>发行量:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <input type="text" class="form-control"  maxlength="50" ng-model="vm.couponManagement.Current.Total" placeholder="请输入发行量"/>
+                    <span class="input-group-addon">张</span>
+                </div>
+             </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>有效期:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <input type="text" class="form-control"  maxlength="50"  ng-model="vm.couponManagement.Current.DueTime" placeholder="请输入有效期"/>
+                    <span class="input-group-addon">天</span>
+                </div>
+             </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>使用说明:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <textarea class="form-control" cols="30" rows="2" ng-model="vm.couponManagement.Current.CouponDescription"  placeholder="请输入使用说明" style="width:402px;border-radius:5px;"></textarea>
+                </div>
+              </td>
+           </tr>
+           <tr>
+             <td colspan="2">
+                <h4 class="modal-title" style="color:#C2CE89">使用限制:</h4>
+             </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>订单类型:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                <label class="checkbox-inline" ng-repeat="goodsTypeItem in vm.couponManagement.Tag.orterTypeDDL">
+                  <input type="checkbox" ng-value="goodsTypeItem.value"  ng-model="goodsTypeItem.checked"/> {{ goodsTypeItem.text }}
+                </label>
+                </div>
+              </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>商品类型:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                <label class="checkbox-inline" ng-repeat="goodsTypeItem in vm.couponManagement.Tag.goodsTypeDDL">
+                  <input type="checkbox" ng-value="goodsTypeItem.value" ng-model="goodsTypeItem.checked" />  {{ goodsTypeItem.text }}&nbsp;&nbsp;
+                </label>
+                </div>
+              </td>
+           </tr>
+           <tr>
+             <td>
+               <span class="red">*</span><span>使用门槛:</span>
+             </td>
+             <td>
+                <div class="input-group">
+                    <span class="input-group-addon">订单满</span>
+                    <input type="text" class="form-control"  ng-model="vm.couponManagement.Current.OrderPrice"  placeholder="请输入使用价格下限" style="border-radius:5px;" />
+                    <span class="input-group-addon"><span style="color:#689601;">元</span>即可使用</span>
+                </div>
+             </td>
+           </tr>
+         </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.couponManagement.OnDismiss()">取消</button>
+        <button type="button" class="btn btn-success"
+                ng-click="vm.couponManagement.OnAdd()" >保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 添加或修改优惠券:END -->
+
+<!-- 详情 -->
+<div class="modal fade" id="viewDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">用券详情</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+            <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" style="padding-top:20px;" id="navTab">
+          <li role="presentation" class="active" ng-click="vm.couponManagement.OnGetViewData();">
+            <a href="#tabone" role="tab" data-toggle="tab">详情</a>
+          </li>
+          <li role="presentation" ng-click="vm.couponManagement.OnGetReceiveList();">
+            <a href="#tabtwo" role="tab" data-toggle="tab">领取记录</a>
+          </li>
+          <li role="presentation" ng-click="vm.couponManagement.OnGetComsumList();">
+            <a href="#tabthree" role="tab" data-toggle="tab">消费记录</a>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane tabPan active" id="tabone">
+            <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 8px 8px 8px;">
+                <div class="pull-right">
+                </div>
+                <div class="clearfix"></div>
+              </div>
+                <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                    <tr>
+                        <td colspan="2">
+                            <h4 class="modal-title" style="color:#C2CE89">通用券信息:</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 120px">
+                        <span>通用券名称:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="vm.couponManagement.Current.CouponTitle" maxlength="50" disabled  style="width:402px;border-radius:5px;"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>发行时间:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="startDate" disabled ng-model="vm.couponManagement.Current.StartTime"
+                                    style="width: 165px; border-right: 0;"/>
+                                <div class="input-group-addon">~</div>
+                                <input type="text" class="form-control" id="endDate" disabled ng-model="vm.couponManagement.Current.EndTime"
+                                    style="width: 165px; border-left: 0;"/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>面值:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control"  maxlength="50" ng-model="vm.couponManagement.Current.Amount" disabled/>
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>发行量:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control"  maxlength="50" ng-model="vm.couponManagement.Current.Total" disabled/>
+                                <span class="input-group-addon">张</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>有效期:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" class="form-control"  maxlength="50"  ng-model="vm.couponManagement.Current.DueTime" disabled/>
+                                <span class="input-group-addon">天</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>使用说明:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" cols="30" rows="2" ng-model="vm.couponManagement.Current.CouponDescription" disabled   style="width:402px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h4 class="modal-title" style="color:#C2CE89">使用限制:</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>订单类型:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                            <label class="checkbox-inline" ng-repeat="goodsTypeItem in vm.couponManagement.Tag.orterTypeDDL">
+                            <input type="checkbox" ng-value="goodsTypeItem.value"  ng-model="goodsTypeItem.checked" disabled/> {{ goodsTypeItem.text }}
+                            </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span>商品类型:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                            <label class="checkbox-inline" ng-repeat="goodsTypeItem in vm.couponManagement.Tag.goodsTypeDDL">
+                            <input type="checkbox" ng-value="goodsTypeItem.value" ng-model="goodsTypeItem.checked" disabled/>  {{ goodsTypeItem.text }}&nbsp;&nbsp;
+                            </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        <span class="red">&nbsp;</span><span>使用门槛:</span>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <span class="input-group-addon">订单满</span>
+                                <input type="text" class="form-control"  ng-model="vm.couponManagement.Current.OrderPrice" disabled/>
+                                <span class="input-group-addon"><span style="color:#689601;">元</span>即可使用</span>
+                            </div>
+                        </td>
+                    </tr>
+                    </table>
+            </div>
+          </div>
+
+          <div role="tabpanel" class="tab-pane tabPan" id="tabtwo">
+            <div style="padding-top: 8px;padding-bottom:45px; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 8px 8px 8px;">
+                <div class="pull-right">
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                  <th>客户ID</th>
+                  <th>状态</th>
+                  <th>领取时间</th>
+                </tr>
+                <tr ng-repeat="item in vm.couponManagement.ReceiveList">
+                  <td ng-bind="item.AccountId"></td>
+                  <td ng-bind="item.stateStr"></td>
+                  <td ng-bind="item.CreateDate"></td>
+                </tr>
+              </table>
+            <tm-pagination class="pull-right" conf="receivePageConfig"  style="width:60%;"></tm-pagination>
+            </div>
+            <br/>
+          </div>
+
+          <div role="tabpanel" class="tab-pane tabPan" id="tabthree">
+            <div style="padding-top: 8px;padding-bottom:45px; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 8px 8px 8px;">
+                <div class="pull-right">
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                  <th>客户ID</th>
+                  <!--<th>体检服务商</th>-->
+                  <!--<th>使用方式</th>-->
+                  <th>使用时间</th>
+                </tr>
+                <tr ng-repeat="item in vm.couponManagement.ComsumList">
+                  <td ng-bind="item.AccountId"></td>
+                  <!--<td ng-bind="item.OrderId"></td>-->
+                  <!--<td>支付宝支付</td>-->
+                  <td ng-bind="item.CreateDate"></td>
+                </tr>
+              </table>
+            <tm-pagination class="pull-right" conf="comsumPageConfig"  style="width:60%;"></tm-pagination>
+            </div>
+            <br/>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

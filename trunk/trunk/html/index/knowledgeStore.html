@@ -1,0 +1,587 @@
+<section class="knowledgeStore">
+	<div class="panel panel-default banner-paneller">
+		<!-- head -->
+		<div class="panel-heading">
+			<ol class="breadcrumb">
+				<li><a href="#">掌上体检</a></li>
+				<li class="active">知识库</li>
+			</ol>
+		</div>
+		<!-- body -->
+		<div class="panel-body">
+			<!-- tab -->
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="#quotaStore" data-toggle="tab" ng-click="vm.QuotaStore.OnLoad()">指标库</a></li>
+				<li><a href="#diseaseStore" data-toggle="tab" ng-click="vm.DiseaseStore.OnLoad()">疾病库</a></li>
+			</ul>
+
+			<!-- tab-content -->
+			<div class="tab-content answers_pane" style="margin-top: 5px; padding: 10px;">
+				<!-- search -->
+				<form class="form-inline pull-left">
+					<div class="form-group">
+						<span>所属：</span>
+						<input type="text" class="form-control" ng-model="vm.SearchTypeKey" placeholder="请输入" />
+					</div>
+					<div class="form-group">
+						<span ng-bind="vm.SearchBoxName"></span>
+						<input type="text" class="form-control" ng-model="vm.SearchNameKey" placeholder="请输入" />
+					</div>
+				</form>
+				<div class="pull-right">
+					<div class="form-group">
+					    <!-- 添加分类 -->
+						<button class="btn btn-warning btn-sm" data-toggle="modal" ng-click="vm.QuotaStore.ShowAddCategory()" ng-bind="vm.SearchBtnName" ng-if="vm.CurrentTab == 0" >
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button class="btn btn-warning btn-sm" data-toggle="modal" ng-click="vm.DiseaseStore.ShowAddCategory()" ng-bind="vm.SearchBtnName" ng-if="vm.CurrentTab == 1" >
+							<span class="glyphicon glyphicon-plus"></span>
+						</button>
+
+						<!-- 添加 -->
+						<button class="btn btn-sm btn-info" data-toggle="modal" ng-click="vm.QuotaStore.ShowAddModelDialog()" ng-if="vm.CurrentTab == 0">
+							<span class="glyphicon"></span>
+							添加
+						</button>
+						<button class="btn btn-sm btn-info" data-toggle="modal" ng-click="vm.DiseaseStore.ShowAddModelDialog()" ng-if="vm.CurrentTab == 1">
+							<span class="glyphicon"></span>
+							添加
+						</button>
+
+						<!-- 搜索 -->
+						<button class="btn btn-sm btn-info" ng-click="vm.QuotaStore.OnSearchQuotaClick()" ng-if="vm.CurrentTab == 0" >
+							搜索
+						</button>
+						<button class="btn btn-sm btn-info" ng-click="vm.DiseaseStore.OnSearchIllnessClick()" ng-if="vm.CurrentTab == 1" >
+							搜索
+						</button>
+					</div>
+				</div>
+				
+				<!-- tab-pane -->
+				<!-- quotaStore -->
+				<div class="tab-pane active" id="quotaStore">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>所属指标分类</th>
+								<th>指标名称</th>
+								<th>详情</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in vm.QuotaStore.List track by $index">
+								<td ng-bind="item.Type"></td>
+								<td ng-bind="item.Name"></td>
+								<td><a ng-click="vm.QuotaStore.LookQuotaInfoDetail(item)" style="cursor: pointer;">查看更多</a></td>
+								<td>
+								  <button class="btn btn-sm btn-info" data-toggle="modal" ng-click="vm.QuotaStore.ShowModifyModelDialog(item)">
+								  	编辑
+								  </button>
+								  <button class="btn btn-sm btn-danger" data-toggle="modal" ng-click="vm.QuotaStore.ShowDeleteModelDialog(item)">
+								  	删除
+								  </button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- diseaseStore -->
+				<div class="tab-pane" id="diseaseStore">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>所属疾病分类</th>
+								<th>疾病名称</th>
+								<th>详情</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in vm.DiseaseStore.List track by $index">
+								<td ng-bind="item.Type"></td>
+								<td ng-bind="item.Name"></td>
+								<td><a ng-click="vm.DiseaseStore.LookDiseaseInfoDetail(item)" style="cursor: pointer;">查看更多</a></td>
+								<td>
+								  <button class="btn btn-sm btn-info" data-toggle="modal" ng-click="vm.DiseaseStore.ShowModifyModelDialog(item)">
+								  	编辑
+								  </button>
+								  <button class="btn btn-sm btn-danger" data-toggle="modal" ng-click="vm.DiseaseStore.ShowDeleteModelDialog(item)">
+								  	删除
+								  </button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</section>
+
+<!-- QuotaStore Begin -->
+<!-- addQuotaCategory -->
+<div class="modal fade" id="addQuotaCategory" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+	    <div class="modal-content answers_pane">
+		    <!-- header -->
+	    	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title">添加指标分类</h4>
+		    </div>
+		    <!-- body -->
+			<div class="modal-body">
+				<!-- form -->
+				<div style="padding: 0 0 15px 0;">
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<input type="text" class="form-control" maxlength="30" ng-model="vm.QuotaStore.AddCategoryName" placeholder="请输入分类" />
+							<button class="btn btn-sm btn-success" ng-click="vm.QuotaStore.AddOrModifyTagList()">
+								<span class="glyphicon glyphicon-info"></span>
+								确定
+							</button>
+						</div>
+					</form>
+				</div>
+				<!-- table -->
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>指标分类</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in vm.QuotaStore.QuotaCategory track by $index">
+							<td ng-bind="item"></td>
+							<td>
+								<a href="javascript:void(0)" 
+								   class="btn btn-xs btn-info ng-scope" 
+								   ng-click="vm.QuotaStore.SortCategory($index,$index-1)" ng-hide="$index == 0">上移</a>
+                                <a href="javascript:void(0)" 
+                                   class="btn btn-xs btn-info ng-scope" 
+                                   ng-click="vm.QuotaStore.SortCategory($index,$index+1)" ng-hide="$index == vm.QuotaStore.QuotaCategory.length-1">下移</a>
+                                <a href="javascript:void(0)" 
+                                   class="btn btn-xs btn-danger ng-scope"
+                                   ng-click="vm.QuotaStore.DeleteTagList(item)">删除</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- footer -->
+			<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" ng-click="vm.QuotaStore.ResortedTagList()">
+						<span class="glyphicon"></span>
+						确定
+					</button>
+				</div>
+			</div>
+	    </div>    	
+    </div>
+</div>
+
+<!-- 查看 quotaInfoDetail -->
+<div class="modal fade" id="preViewQuotaInfoDetail" tabindex="-1">
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	    	<!-- header -->
+	    	<div class="modal-header">
+	    		<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title">指标详情</h4>
+	    	</div>
+	    	<!-- body -->
+	    	<div class="modal-body form-group BMS_table_border Upload_td">
+	    	    <table class="table">
+	    	    	<tr>
+	    	    		<td width="90"><span>所属：</span></td>
+	    	    		<td><select class="form-control input-sm" ng-options="y for (x,y) in vm.QuotaStore.CurrentInfo" disabled ng-model="vm.QuotaStore.CurrentInfo.Type" ></select></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td><span>指标名称：</span></td>
+	    	    		<td><input type="text" class="form-control input-sm" maxlength="50" ng-model="vm.QuotaStore.CurrentInfo.Name" disabled /></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>简介：</span></td>
+	    	    		<td><textarea rows="3" disabled class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.CurrentInfo.Description"></textarea
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>临床意义：</span></td>
+	    	    		<td><textarea rows="3" disabled class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.CurrentInfo.Clinic"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>医生建议：</span></td>
+	    	    		<td><textarea rows="3" disabled class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.CurrentInfo.Suggestion"></textarea></td>
+	    	    	</tr>
+	    	    </table>
+	    	</div>
+	    	<!-- footer -->
+	    	<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" data-dismiss="modal">
+						<span class="glyphicon"></span>
+						确定
+					</button>
+				</div>
+			</div>
+
+	    </div>
+	</div>
+</div>
+
+<!-- 添加和修改 addQuotaModel -->
+<div class="modal fade" id="addQuotaModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- header -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title" ng-if="vm.QuotaStore.AddOrModifyModelInfoCategory.Id == undefined">添加指标</h4>
+		        <h4 class="modal-title" ng-if="vm.QuotaStore.AddOrModifyModelInfoCategory.Id != undefined">编辑指标</h4>
+			</div>
+			<!-- body -->
+			<div class="modal-body form-group BMS_table_border Upload_td">
+	    	    <table class="table">
+	    	    	<tr>
+	    	    		<td width="90"><span>所属：</span></td>
+	    	    		<td><select class="form-control input-sm" ng-options="o for o in vm.QuotaStore.QuotaCategory" ng-model="vm.QuotaStore.AddOrModifyModelInfoCategory.Type" >
+	    	    			<option ng-if="value = null"></option>
+	    	    		</select></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td><span>指标名称：</span></td>
+	    	    		<td><input type="text" class="form-control input-sm" maxlength="50" ng-model="vm.QuotaStore.AddOrModifyModelInfoCategory.Name" placeholder="请输入内容" /></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>简介：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.AddOrModifyModelInfoCategory.Description" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>临床意义：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.AddOrModifyModelInfoCategory.Clinic" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>医生建议：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.QuotaStore.AddOrModifyModelInfoCategory.Suggestion" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    </table>
+	    	</div>
+	    	<!-- footer -->
+	    	<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" ng-if="vm.QuotaStore.AddOrModifyModelInfoCategory.Id == undefined" ng-click="vm.QuotaStore.AddModel()">
+						<span class="glyphicon"></span>
+						保存
+					</button>
+					<button class="btn btn-sm btn-success" ng-if="vm.QuotaStore.AddOrModifyModelInfoCategory.Id != undefined" ng-click="vm.QuotaStore.ModifyModel()">
+						<span class="glyphicon"></span>
+						保存
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--删除 QuotaStoreModel-->
+<div class="modal fade" id="deleteQuotaStoreModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要删除吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.QuotaStore.DeleteModel()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- QuotaStore End -->
+
+
+<!-- DiseaseStore Begin-->
+<!-- addDiseaseCategory -->
+<div class="modal fade" id="addDiseaseCategory" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+	    <div class="modal-content answers_pane">
+		    <!-- header -->
+	    	<div class="modal-header">
+		    	<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title">添加疾病分类</h4>
+		    </div>
+		    <!-- body -->
+			<div class="modal-body">
+				<!-- form -->
+				<div style="padding: 0 0 15px 0;">
+					<form class="form-inline" role="form">
+						<div class="form-group">
+							<input type="text" class="form-control" maxlength="30" ng-model="vm.DiseaseStore.AddCategoryName" placeholder="请输入分类" />
+							<button class="btn btn-sm btn-success" ng-click="vm.DiseaseStore.AddOrModifyTagList()">
+								<span class="glyphicon glyphicon-info"></span>
+								确定
+							</button>
+						</div>
+					</form>
+				</div>
+				<!-- table -->
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>指标分类</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in vm.DiseaseStore.DiseaseCategory track by $index">
+							<td ng-bind="item"></td>
+							<td>
+								<a href="javascript:void(0)" 
+								   class="btn btn-xs btn-info ng-scope" 
+								   ng-click="vm.DiseaseStore.SortCategory($index,$index-1)" ng-hide="$index == 0">上移</a>
+                                <a href="javascript:void(0)" 
+                                   class="btn btn-xs btn-info ng-scope" 
+                                   ng-click="vm.DiseaseStore.SortCategory($index,$index+1)" ng-hide="$index == vm.DiseaseStore.DiseaseCategory.length-1">下移</a>
+                                <a href="javascript:void(0)" 
+                                   class="btn btn-xs btn-danger ng-scope"
+                                   ng-click="vm.DiseaseStore.DeleteTagList(item)">删除</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- footer -->
+			<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" ng-click="vm.DiseaseStore.ResortedTagList()">
+						<span class="glyphicon"></span>
+						确定
+					</button>
+				</div>
+			</div>
+	    </div>    	
+    </div>
+</div>
+
+<!-- 查看 addDiseaseModel -->
+<div class="modal fade" id="preViewDiseaseInfoDetail" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- header -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id == undefined">添加疾病指标</h4>
+		        <h4 class="modal-title" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id != undefined">编辑疾病指标</h4>
+			</div>
+			<!-- body -->
+			<div class="modal-body form-group BMS_table_border Upload_td">
+	    	    <table class="table">
+	    	    	<tr>
+	    	    		<td width="90"><span>所属：</span></td>
+	    	    		<td><select class="form-control input-sm" ng-options="y for (x,y) in vm.DiseaseStore.CurrentInfo" disabled ng-model="vm.DiseaseStore.CurrentInfo.Type" >
+	    	    			<option ng-if="value = null"></option>
+	    	    		</select></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td><span>指标名称：</span></td>
+	    	    		<td><input type="text" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Name" disabled placeholder="请输入内容" /></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>简介：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Description" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>病因或危险因素：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Illness" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>临床表现：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Clinic" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top; padding-top: 10px;"><span>健康处方：</span></td>
+	    	    		<td>
+	    	    			<div class="form-group">
+	    	    				<table class="talbe" width="100%">
+		    	    				<tr>
+				    	    			<td style="padding-bottom: 10px;vertical-align: top; padding-top: 10px;width: 50px"><span>生活：</span></td>
+					    	    		<td style="padding-bottom: 10px;"><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.RecipeLife" disabled placeholder="请输入内容"></textarea></td>
+				    	    		</tr>
+				    	    		<tr>
+				    	    			<td style="padding-bottom: 10px;vertical-align: top;padding-top: 10px;"<span>运动：</span></td>
+					    	    		<td style="padding-bottom: 10px;"><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.RecipeSport" disabled placeholder="请输入内容"></textarea></td>
+				    	    		</tr>
+				    	    		<tr>
+				    	    			<td style="vertical-align: top;padding-top: 10px;"><span>饮食：</span></td>
+					    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.RecipeFood" disabled placeholder="请输入内容"></textarea>
+  					    	    		</td>
+				    	    		</tr>
+		    	    			</table>
+	    	    			</div>
+	    	    		</td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>风险及并发症：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Risk" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>医生建议：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.Suggestion" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>预后：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.CurrentInfo.prognosis" disabled placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    </table>
+	    	</div>
+	    	<!-- footer -->
+	    	<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" data-dismiss="modal">
+						<span class="glyphicon"></span>
+						保存
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!-- 添加和修改 addDiseaseModel -->
+<div class="modal fade" id="addDiseaseModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- header -->
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+			        <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+		        </button>
+		        <h4 class="modal-title" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id == undefined">添加疾病指标</h4>
+		        <h4 class="modal-title" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id != undefined">编辑疾病指标</h4>
+			</div>
+			<!-- body -->
+			<div class="modal-body form-group BMS_table_border Upload_td">
+	    	    <table class="table">
+	    	    	<tr>
+	    	    		<td width="90"><span>所属：</span></td>
+	    	    		<td><select class="form-control input-sm" ng-options="o for o in vm.DiseaseStore.DiseaseCategory" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Type" >
+	    	    			<option ng-if="value = null"></option>
+	    	    		</select></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td><span>指标名称：</span></td>
+	    	    		<td><input type="text" class="form-control input-sm" maxlength="50" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Name" placeholder="请输入内容" /></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>简介：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Description" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>病因或危险因素：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Illness" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>临床表现：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" maxlength="2000" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Clinic" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top; padding-top: 10px;"><span>健康处方：</span></td>
+	    	    		<td>
+	    	    			<div class="form-group">
+	    	    				<table class="talbe" width="100%">
+		    	    				<tr>
+				    	    			<td style="padding-bottom: 10px; vertical-align: top;padding-top: 10px; width: 50px"><span>生活：</span></td>
+					    	    		<td style="padding-bottom: 10px;"><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.RecipeLife" placeholder="请输入内容"></textarea></td>
+				    	    		</tr>
+				    	    		<tr>
+				    	    			<td style="padding-bottom: 10px; vertical-align: top;padding-top: 10px;"><span>运动：</span></td>
+					    	    		<td style="padding-bottom: 10px;"><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.RecipeSport" placeholder="请输入内容"></textarea></td>
+				    	    		</tr>
+				    	    		<tr>
+				    	    			<td style="vertical-align: top;padding-top: 10px;"><span>饮食：</span></td>
+					    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.RecipeFood" placeholder="请输入内容"></textarea></td>
+				    	    		</tr>
+		    	    			</table>
+	    	    			</div>
+	    	    		</td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>风险及并发症：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Risk" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>医生建议：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.Suggestion" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    	<tr>
+	    	    		<td style="vertical-align: top"><span>预后：</span></td>
+	    	    		<td><textarea rows="3" class="form-control input-sm" ng-model="vm.DiseaseStore.AddOrModifyModelInfoCategory.prognosis" placeholder="请输入内容"></textarea></td>
+	    	    	</tr>
+	    	    </table>
+	    	</div>
+	    	<!-- footer -->
+	    	<div class="modal-footer">
+				<div class="pull-right">
+					<button class="btn btn-sm btn-warning" data-dismiss="modal">
+						取消
+					</button>
+					<button class="btn btn-sm btn-success" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id == undefined" ng-click="vm.DiseaseStore.AddModel()">
+						<span class="glyphicon"></span>
+						保存
+					</button>
+					<button class="btn btn-sm btn-success" ng-if="vm.DiseaseStore.AddOrModifyModelInfoCategory.Id != undefined" ng-click="vm.DiseaseStore.ModifyModel()">
+						<span class="glyphicon"></span>
+						保存
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!--删除 DiseaseStoreModel-->
+<div class="modal fade" id="deleteDiseaseStoreModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要删除吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.DiseaseStore.DeleteModel()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- DiseaseStore End -->
+
+
+

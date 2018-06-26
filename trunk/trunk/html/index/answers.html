@@ -1,0 +1,828 @@
+<section class="questionnaire answer">
+    <div class="panel panel-default message">
+        <!-- 页面头部 -->
+        <div class="panel-heading">
+            <ol class="breadcrumb">
+                <li><a href="#">掌上体检</a></li>
+                <li class="active">问答圈</li>
+            </ol>
+        </div>
+        <div class="tab-content">
+
+            <ul class="nav nav-tabs mt">
+                <li class="active"><a href="#home" data-toggle="tab">医师健康分组</a></li>
+                <li><a href="#again" data-toggle="tab">医师认证审核</a></li>
+                <li><a href="#question" data-toggle="tab">问答圈咨询</a></li>
+                <li><a href="#activities" data-toggle="tab">活动标签</a></li>
+            </ul>
+
+            <div class="tab-content answers_pane">
+                <!--医师健康分组 栏目-->
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div class="clearfix">
+                      <div class="pull-right">
+                        <!--添加分组按钮-->
+                        <button class="btn btn-info btn-sm btnaccd" ng-click="vm.TalentGroup.OnAddDialog()" type="button">
+                          <span class="glyphicon glyphicon-plus"></span>
+                          添加</button>
+                      </div>
+                    </div>
+
+                    <!--分组列表展示-->
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>图像</th>
+                            <th>名称</th>
+                            <th>简介</th>
+                            <th>时间</th>
+                            <th width="250">排序</th>
+                            <!--<th>标签</th>-->
+                            <th width="200">操作</th>
+                        </tr>
+                        <tr ng-repeat="($index, item) in vm.TalentGroup.List">
+                            <td><img ng-src="{{item.HeadImageUrl}}" alt="医师头像" style="width:40px;height:40px;" /></td>
+                            <td ng-bind="item.Name"></td>
+                            <td>
+                              <p ng-attr-title="{{ item.Desc }}">{{item.Desc | stringSub:20 }}</p>
+                            </td>
+                            <td ng-bind="item.LastUpdateTime"></td>
+                            <td>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-info" ng-click="vm.TalentGroup.OnTop(item)" ng-if="$index>0" >置顶</a>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-info" ng-click="vm.TalentGroup.OnPrev(item)" ng-if="$index>0" >上移</a>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-info" ng-click="vm.TalentGroup.OnNext(item)" ng-if="$index<vm.TalentGroup.List.length-1" >下移</a>
+                                <a href="javascript:void(0)" class="btn btn-xs btn-info" ng-click="vm.TalentGroup.OnBottom(item)" ng-if="$index<vm.TalentGroup.List.length-1" >置底</a>
+                                <span ng-if="vm.TalentGroup.List.length == 1">/</span>
+                            </td>
+                            <!--<td>
+                                <button class="btn btn-sm btn-info" ng-click="vm.TalentGroup.OnAddTagDialog(item)"  type="button">详情</button>
+                            </td>-->
+                            <td>
+                                <button class="btn btn-sm btn-success" ng-click="vm.TalentGroup.OnModifyDialog(item)" type="button">
+                                  <i class="glyphicon glyphicon-pencil"></i>
+                                  编辑</button>
+                                <button class='btn btn-sm btn-warning' type='button' ng-click="vm.TalentGroup.OnDeleteDialog(item)">
+                                  <i class="glyphicon glyphicon-trash"></i>
+                                  删除</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!--医师认证 栏目-->
+                <div role="tabpanel" class="tab-pane" id="again" style="padding-bottom: 50px;">
+                    <div class="clearfix">
+                       <!--搜索 板块-->
+                      <div class="form-inline answers_search pull-left">
+                          <span>手机:</span>
+                          <input type="text" class="form-control input-sm" ng-model="vm.DoctorAuth.Search.Mobile" placeholder="请输入提问内容" maxlength="11" />
+                          <span>医师健康分组:</span>
+                          <select class="form-control input-sm" ng-model="vm.DoctorAuth.Search.GroupID" ng-options="s.value as s.text for s in vm.DoctorAuth.TalentGroupDDL" style="width:120px;"></select>
+                          <span>昵称:</span>
+                          <input type="text" class="form-control input-sm" ng-model="vm.DoctorAuth.Search.NickName" placeholder="请输入医师姓名" maxlength="50" />
+                          <span>职称:</span>
+                          <input type="text" class="form-control input-sm"  ng-model="vm.DoctorAuth.Search.Title" placeholder="请输入医师职称" maxlength="100" />
+                          <span>审核:</span>
+                          <select class="form-control input-sm" ng-model="vm.DoctorAuth.Search.State" ng-options="s.value as s.text for s in vm.DoctorAuth.DoctorAuthStateDDL" style="width:120px;"></select>
+
+                      </div>
+                      <div class="pull-right answers_search">
+                          <button class="btn btn-sm btn-success" ng-click="vm.DoctorAuth.OnSearch()" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                            搜索</button>
+                          <button class="btn btn-sm btn-info" ng-click="vm.DoctorAuth.OnAddDialog()"  type="button">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            添加</button>
+                      </div>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                              <input type="checkbox" ng-model="vm.DoctorAuth.AllChecked"
+										           ng-click="vm.DoctorAuth.OnClickAllChecked()"/>
+                            </th>
+                            <th>昵称</th>
+                            <th>资格认证</th>
+                            <th>职称</th>
+                            <th>所属医院</th>
+                            <th>专家介绍</th>
+                            <th>医生健康分组</th>
+                            <th>审核</th>
+                            <th>动态</th>
+                        </tr>
+                        <tr ng-repeat="item in vm.DoctorAuth.List">
+                            <td><input type="checkbox" ng-model="item.IsChecked" /></td>
+                            <td>
+                              <strong ng-bind="item.NickName"></strong>
+                              <span ng-click="vm.DoctorAuth.OnModDialog(item)" class="glyphicon glyphicon-edit" style="cursor:pointer;" title="编辑医师资料"></span>
+                            </td>
+                            <td><a href="{{item.VerifyImageUrl }}" target="_blank"><img ng-src="{{item.VerifyImageUrl}}" alt="图片" style="width:40px;height:40px;"></a></td>
+                            <td ng-bind="item.Title"></td>
+                            <td ng-bind="item.DepartName"></td>
+                            <td>
+                              <p ng-attr-title="{{ item.Desc }}">{{item.Desc | stringSub:20 }}</p>
+                            </td>
+                            <td ng-bind="item.TalentGroupName"></td>
+                            <td>
+                              <label ng-if="item.Status == 1">
+                                <button title="通过" class="btn btn-xs btn-success pass" ng-click="vm.DoctorAuth.OnPass(item)" type="button">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </button>
+                                <button title="拒绝" class="btn btn-xs btn-danger ng" ng-click="vm.DoctorAuth.OnNoPassDialog(item)" type="button">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                              </label>
+                              <label ng-if="item.Status == 2" title="已通过">
+                                <button class="btn btn-xs btn-success topass" type="button" disabled>
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                </button>
+                              </label>
+                              <label ng-if="item.Status == 3" title="被拒绝">
+                                <button class="btn btn-xs btn-danger tong" type="button" disabled>
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </button>
+                              </label>
+                              <button title="查看二维码" class="btn btn-xs btn-info code" ng-click="vm.DoctorAuth.OnviewTwoDimensionCode(item)" type="button">
+                                <i class="glyphicon glyphicon-qrcode"></i>
+                              </button>
+                            </td>
+                            <td>
+                                <label ng-if="item.Status == 1">
+                                    <button title="详情" class="btn btn-xs btn-info" ng-click="vm.DoctorAuth.OnViewDeatail(item)" type="button" disabled>
+                                        详情
+                                    </button>
+                                </label>
+                                <label ng-if="item.Status == 2">
+                                    <button title="详情" class="btn btn-xs btn-info" ng-click="vm.DoctorAuth.OnViewDeatail(item)" type="button">
+                                        详情
+                                    </button>
+                                </label>
+                                <label ng-if="item.Status == 3">
+                                    <button title="详情" class="btn btn-xs btn-info" ng-click="vm.DoctorAuth.OnViewDeatail(item)" type="button" disabled>
+                                        详情
+                                    </button>
+                                </label>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="footerinfo" ng-show="vm.DoctorAuth.List.length > 0">
+                      <div class="dropup pull-left ml">
+                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.DoctorAuth.OnBatchStateDialog($event, 2)" >
+                              <i class="glyphicon glyphicon-ok"></i>
+                              通过</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量通过医师认证吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.DoctorAuth.OnBatchPass()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                      <div class="dropup pull-left ml">
+                        <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.DoctorAuth.OnBatchStateDialog($event, 3)" >
+                              <i class="glyphicon glyphicon-remove"></i>
+                              拒绝</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量拒绝医师认证吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.DoctorAuth.OnBatchNoPassDialog()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                    </div>
+                </div>
+
+                <!--问答圈咨询 栏目-->
+                <div role="tabpanel" class="tab-pane" id="question" style="padding-bottom: 80px;">
+                    <div class="clearfix">
+                       <!--搜索 板块-->
+                      <div class="form-inline answers_search pull-left">
+                          <span>内容:</span>
+                          <input type="text" class="form-control input-sm" ng-model="vm.TalentConsultation.Search.Content" placeholder="请输入提问内容" maxlength="11" />
+                          <div class="form-group input-margin">
+                                <span>时间：</span>
+                                <div class="input-group input-group-sm">
+                                <input id="StartTime" type="text" class="form-control" placeholder="请选择起始时间" style="width:110px; border-right:0;" />
+                                <span class="input-group-addon">-</span>
+                                <input id="EndTime" type="text" class="form-control" placeholder="请选择结束时间" style="width:110px; border-left:0;" />
+                                </div>
+                          </div>
+                          <div class="form-group input-margin">
+                                <span>是否上架:</span>
+                                <select class="form-control input-sm" ng-model="vm.TalentConsultation.Search.State" ng-options="s.value as s.text for s in vm.TalentConsultation.TalentConsultationDDL" style="width:120px;"></select>
+                          </div>
+
+                      </div>
+                      <div class="pull-right answers_search">
+                          <button class="btn btn-sm btn-success" ng-click="vm.TalentConsultation.OnSearchClick()" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                            搜索</button>
+                      </div>
+                    </div>
+
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>
+                              <input type="checkbox" ng-model="vm.TalentConsultation.AllChecked"
+										           ng-click="vm.TalentConsultation.OnClickAllChecked()"/>
+                            </th>
+                            <th style="width:10%;">姓名</th>
+                            <th style="width:30%;">提问内容</th>
+                            <th style="width:15%;">是否回复</th>
+                            <th style="width:20%;">状态更新时间</th>
+                            <th style="width:25%;">操作</th>
+                        </tr>
+                        <tr ng-repeat="item in vm.TalentConsultation.List">
+                            <td><input type="checkbox" ng-model="item.IsChecked" /></td>
+                            <td>
+                              <strong ng-bind="item.RealName"></strong>
+                            </td>
+                            <td style="text-align:left;padding-left:20px;">
+                              <p ng-attr-title="{{ item.Content }}">{{item.Content | stringSub:30 }}</p>
+                            </td>
+                            <td>
+                                <label ng-if="item.IsReply">
+                                    <button title="已回复" class="btn btn-xs btn-info"  type="button" disabled>
+                                        <i class="glyphicon glyphicon-ok"></i>已回复
+                                    </button>
+                                </label>
+                                <label ng-if="!item.IsReply">
+                                    <button title="未回复" class="btn btn-xs btn-danger"  type="button" disabled>
+                                        <i class="glyphicon glyphicon-remove"></i>未回复
+                                    </button>
+                                </label>
+                            </td>
+                            <td ng-bind="item.CreateTime"></td>
+                            <td>
+                                <label ng-if="item.State==1">
+                                    <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" disabled>
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                        已上架</button>
+                                </label>
+                                <label ng-if="item.State==3">
+                                    <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown" disabled>
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                        已下架</button>
+                                </label>
+                                <!--<label ng-if="item.State!=1 && item.State!=3">-->
+                                    <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+                                        ng-click="vm.TalentConsultation.OnUpOrDown(item,1)"  >
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                        上架</button>
+                                    <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"
+                                        ng-click="vm.TalentConsultation.OnUpOrDown(item,3)">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                        下架</button>
+                                <!--</label>-->
+                            </td>
+                        </tr>
+                    </table><br/>
+					<tm-pagination class="pull-right" conf="paginationConf"></tm-pagination>	
+                    <div class="footerinfo" ng-show="vm.TalentConsultation.List.length > 0">
+                      <div class="dropup pull-left ml">
+                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.TalentConsultation.OnBatchStateDialog($event, 1)" >
+                              <i class="glyphicon glyphicon-ok"></i>
+                              上架</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量上架吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.TalentConsultation.OnBatchStateUpOrDown()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                      <div class="dropup pull-left ml">
+                        <button type="button" class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown"
+                              ng-click="vm.TalentConsultation.OnBatchStateDialog($event, 3)" >
+                              <i class="glyphicon glyphicon-remove"></i>
+                              下架</button>
+                        	<ul class="dropdown-menu Messdropdown">
+                            <h3 class="text-center">你确定要批量下架吗？</h3>
+                            <div>
+                              <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal">取消</button>
+                              <button type="button" class="btn btn-sm btn-success" data-dismiss="modal"
+                                  ng-click="vm.TalentConsultation.OnBatchStateUpOrDown()">确定</button>
+                            </div>
+                          </ul>
+                      </div>
+                    </div>
+                </div>
+
+                <!-- 活动标签 栏目 -->
+                <div role="tabpanel" class="tab-pane" id="activities" style="padding-bottom: 50px;">
+                    <aside id="sidebar-menu" class="pull-left" style="width:500px;">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control input-sm ng-pristine ng-untouched ng-valid"  id="inputName"
+                                ng-model="vm.ActiveTag.Data.name"
+                                placeholder="请输入活动标签">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button"  ng-click="vm.ActiveTag.OnAdd()">
+                                    <span class="glyphicon glyphicon-plus"></span>&nbsp;添加
+                                </button>
+                            </span>
+                        </div>
+                        <ul class="nav">
+                            <li  ng-repeat="item in vm.ActiveTag.List">
+                                <p style="display:inline-block;width:350px;color:#979797;"> {{item.name}} </p>
+                                <p style="display:inline-block;position:absoult;right:0px;">
+                                    <a ng-click="vm.ActiveTag.OnOpenModify(item)"><span class="glyphicon glyphicon-edit"></span></a>
+                                    <a  ng-if="vm.ActiveTag.List.length > 1 && item.no != vm.ActiveTag.List.length-1 "
+                                        ng-click="vm.ActiveTag.OnDown(item)">
+                                        <span class="glyphicon glyphicon-arrow-down"></span>
+                                    </a>
+                                    <a  ng-if="vm.ActiveTag.List.length > 1 && item.no != 0 "
+                                        ng-click="vm.ActiveTag.OnAllUp(item)">
+                                        <span class="glyphicon glyphicon-chevron-up"></span>
+                                    </a>
+                                    <a  ng-if="vm.ActiveTag.List.length > 1 && item.no != vm.ActiveTag.List.length-1 "
+                                        ng-click="vm.ActiveTag.OnAllDown(item)">
+                                        <span class="glyphicon glyphicon-chevron-down"></span>
+                                    </a>
+                                    <a  ng-if="vm.ActiveTag.List.length > 1 && item.no != 0 "
+                                        ng-click="vm.ActiveTag.OnUp(item)">
+                                        <span class="glyphicon glyphicon-arrow-up"></span>
+                                    </a>
+                                    <a ng-click="vm.ActiveTag.OnDeleteDialog(item)"><span class="glyphicon glyphicon-trash"></span></a>
+                                </p>
+                            </li>
+                        </ul>
+                    </aside>
+                </div>
+
+            </div>
+        </div>
+</section>
+
+<!-- 医师健康分组(添加或修改 功能) -->
+<div class="modal fade" id="panelAddOrModTalentGroup" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">医师健康分组</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table medicallytable">
+            <tr>
+                <td width='100'><span><span class='red'>*</span>头像：</span></td>
+                <td>
+                    <div class="input-group">
+                        <input type="file" id='inputAddReportItemSrc'
+                                class="form-control input-sm"
+                                style='display:inline-block'
+                                placeholder="请选择机构图标"
+                                ng-model="vm.TalentGroup.Current.HeadImageUrl" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    ng-click="vm.TalentGroup.OnUploadImage()">上传图像</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="mb">
+                        <img class="form-control" id="headImageUrl"
+                              style="width:80px; height: 80px; padding-top: 10px;"
+                              ng-src="{{ vm.TalentGroup.Current.HeadImageUrl }}" alt="" />
+                    </div><br/>
+                    <span class="comcolor">注：120*120px，100kb以内，png、jpg、jpeg格式的图片</span>
+                </td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>名称：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.TalentGroup.Current.Name" maxlength="50" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>说明：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.TalentGroup.Current.Desc" maxlength="100" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>&nbsp;</span>标签：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.TalentGroup.Current.Tags" maxlength="100" />
+                </td>
+            </tr>
+            <tr>
+                <td></td><td><p class="help-block Tags">标签添加以英文";"进行分割</p></td>
+            </tr>
+            <tr>
+                <td width='80'><span><span class='red'>*</span>Banner图：</span></td>
+                <td>
+                    <div class="input-group">
+                        <input type="file" id='inputAdImageUrlReportItemSrc'
+                                class="form-control input-sm"
+                                style='display:inline-block'
+                                placeholder="请选择Banner图"
+                                ng-model="vm.TalentGroup.Current.AdImageUrl" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    ng-click="vm.TalentGroup.OnUploadAdImage()">上传图像</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="mb">
+                        <img class="form-control" id="adImageUrl"
+                              style="width:127px; height: 80px; padding-top: 10px;"
+                              ng-src="{{ vm.TalentGroup.Current.AdImageUrl }}" alt="" />
+                    </div><br/>
+                    <span class="comcolor">注：750*472px，1024kb以内，png、jpg、jpeg格式的图片</span>
+                </td>
+            </tr>
+        </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" ng-if="vm.TalentGroup.Current.ID == 0"
+                        ng-click="vm.TalentGroup.OnAdd()" >确定</button>
+                <button type="button" class="btn btn-success" ng-if="vm.TalentGroup.Current.ID > 0"
+                        ng-click="vm.TalentGroup.OnModify()" >确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 医师健康分组(删除 功能) -->
+<div class="modal fade" id="panelDelTalentGroup" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">当前医师健康分组下,有{{ vm.TalentGroup.CurrentCount}}位用户,您确认要删除此条记录吗？</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+              ng-click="vm.TalentGroup.OnDelete()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 医师认证（添加 功能）-->
+<div class="modal fade" id="panelAddOrModDoctorAuth" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">医师认证审核</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table medicallytable">
+            <tr ng-if="vm.DoctorAuth.Current.AccountId == ''">
+                <td><span><span class='red'>*</span>手机号：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.DoctorAuth.Current.Mobile" maxlength="11" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>昵称：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.DoctorAuth.Current.NickName" maxlength="20" /></td>
+            </tr>
+            <tr>
+                <td width='120'><span><span class='red'>&nbsp;</span>认证资料：</span></td>
+                <td>
+                    <div class="input-group">
+                        <input type="file" id='inputAddDoctorAuthItemSrc'
+                                class="form-control input-sm"
+                                style='display:inline-block'
+                                placeholder="请选择认证资料"
+                                ng-model="vm.DoctorAuth.Current.VerifyImageUrl" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    ng-click="vm.DoctorAuth.OnUploadImage()">上传图像</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="mb">
+                        <img class="form-control"
+                              style="width:80px; height: 80px; padding-top: 10px;"
+                              ng-src="{{ vm.DoctorAuth.Current.VerifyImageUrl }}" />
+                    </div><br/>
+                    <span class="comcolor">注：100kb以内，png、jpg、jpeg格式的图片</span>
+                </td>
+            </tr>
+            <tr>
+              <td><span><span class='red'>*</span>医师健康分组：</span></td>
+              <td>
+                  <select class="form-control input-sm" ng-model="vm.DoctorAuth.Current.TalentGroupId" ng-options="s.value as s.text for s in vm.DoctorAuth.TalentGroupDDL"></select>
+              </td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>职称：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.DoctorAuth.Current.Title" maxlength="20" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>&nbsp;</span>所属医院：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.DoctorAuth.Current.DepartName" maxlength="20" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>&nbsp;</span>专长介绍：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.DoctorAuth.Current.Desc" maxlength="40" /></td>
+            </tr>
+
+        </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" ng-if="vm.DoctorAuth.Current.AccountId == ''"
+                        ng-click="vm.DoctorAuth.OnAdd()" >保存</button>
+        <button type="button" class="btn btn-success" ng-if="vm.DoctorAuth.Current.AccountId != ''"
+                ng-click="vm.DoctorAuth.OnModify()" >保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 拒绝理由 对话框 -->
+<div class="modal fade" id="panelNoPass" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">拒绝理由</h4>
+			</div>
+			<div class="modal-body">
+			<table class="table medicallytable">
+          <tr>
+              <td style="width:80px;"><span><span class='red'>*</span>原因：</span></td>
+              <td>
+                  <textarea rows="5" class="form-control input-sm" ng-model="vm.DoctorAuth.BatchState.Remark" maxlength="50"></textarea>
+              </td>
+          </tr>
+      </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-success" ng-click="vm.DoctorAuth.OnBatchNoPass()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 查看二维码 -->
+<div class="modal fade" id="viewTwoDimensionCode" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">二维码</h4>
+			</div>
+			<div class="modal-body">
+			<table class="table medicallytable">
+                <tr>
+                    <td style="width:80px;"><span><span class='red'>*</span>二维码：</span></td>
+                    <td><input type="text" class="form-control input-sm" ng-model="vm.DoctorAuth.Current.twoDimensionCode"></td>
+                </tr>
+            </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success"  ng-click="vm.DoctorAuth.OnGetShortLink()" >转成短码</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- 详情编辑页面（达人添加动态） -->
+<div class="modal fade bs-example-modal-lg" id="viewDynamicsDetail" tabindex="-1" role="dialog" style="overflow-y:auto;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="banner-close pull-right" id="addBannerColse" data-dismiss="modal" ng-click="vm.DoctorAuth.OnhideDynamics()" >关闭</span>
+				<h4 class="modal-title" id="myModalLabel">添加动态</h4>
+			</div>
+			<div class="modal-body banner-model">
+				<form class="form-horizontal" role="form">
+                    <div class="Dynamics">
+                        <div class="form-group">
+                            <div class="Dynamics_top_left">
+                                <img ng-src="{{vm.DoctorAuth.CurrentDynamics.VerifyImageUrl}}" class="Dynamics_img">
+                                <div class="Dynamics_talent">
+                                    <p class="Dynamics_talent_name" 
+                                       ng-bind="vm.DoctorAuth.CurrentDynamics.NickName"></p>
+                                    <p class="Dynamics_talent_desc"
+                                       ng-bind="vm.DoctorAuth.CurrentDynamics.Desc"></p>
+                                </div>
+                            </div>
+                            <div class="Dynamics_top_right">
+                                <p>共<span ng-bind="vm.DoctorAuth.CurrentDynamics.count"></span>条动态</p>
+                                <button class="btn btn-primary" ng-click="vm.DoctorAuth.OnshowDynamics()" >发动态</button>
+                            </div>
+                        </div>
+                        <div id="sendDynamics"  style="display:none;">
+                            <div class="form-group">
+                                <div class="Dynamics_center">
+                                    <div class="Dynamics_center_one">
+                                        <input type="text" placeholder="请输入标题  选填" ng-model="vm.DoctorAuth.CurrentDynamics.Title">
+                                        <div class="hr"></div>
+                                        <textarea  ng-model="vm.DoctorAuth.CurrentDynamics.Content" cols="30" rows="13" 
+                                                   ng-change="vm.DoctorAuth.OnchangeContent()"
+                                                   placeholder="在这里输入内容，最少10个字"></textarea>
+                                        <p class="content-length">
+                                            <span>还可以输入</span>
+                                            <span ng-bind="vm.DoctorAuth.ContentLength" style="color:#5BC0DE;" ng-if="vm.DoctorAuth.ContentLength>0">2000</span>
+                                            <span ng-bind="vm.DoctorAuth.ContentLength" style="color:red;" ng-if="vm.DoctorAuth.ContentLength<=0">2000</span>
+                                            <span>个字</span>
+                                        </p>
+                                    </div>
+                                    <div class="Dynamics_center_two">
+                                        <span ng-class="{'Dynamics_color': item.isChosen}"  ng-repeat="item in vm.DoctorAuth.AllTags"
+                                              ng-attr-title="{{item.name}}" ng-click="vm.DoctorAuth.OnchangeState(item)"> 
+                                            {{item.name}}
+                                        </span>
+                                    </div>
+                                    <div class="Dynamics_center_three">
+                                        <div class="input-group input-group-sm">
+                                            <input type="file" class="form-control" id="inputAddDynamicsItemSrc" placeholder="请上传图片"
+                                                    ng-model="vm.activityGroup.Current.ImageUrl">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-info" type="button" ng-click="vm.DoctorAuth.OnUploadDynamicsImage()">
+                                                <span class='glyphicon glyphicon-eject'></span>&nbsp;上传图像</button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="Dynamics_center_five">
+                                        <div class="mb" style="margin-top:10px;margin-right:20px;"  ng-repeat="($index, item) in vm.DoctorAuth.CurrentDynamics.Images">
+                                            <img class="form-control"  
+                                                style="width:80px; height: 80px; padding-top: 10px;cursor: pointer;"
+                                                ng-click="vm.DoctorAuth.OnViewImage(item)"
+                                                ng-src="{{ item }}" />
+                                            <div class="mb-del" ng-click="vm.DoctorAuth.OnDelImage($index,item)">删除</div>
+                                        </div>
+                                    </div>
+                                    <div class="Dynamics_center_four">
+                                        <button class="btn btn-primary"
+                                                ng-click="vm.DoctorAuth.OnSaveDynamics()"
+                                        >发布</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="Dynamics_detail" ng-repeat="item in vm.DoctorAuth.DynamicsList" style="margin-top:20px;">
+                                <div class="Dynamics_detail_one">
+                                    <div class="Dynamics_detail_left">
+                                        <span>{{item.CreateTime}}</span>
+                                        <span class="glyphicon glyphicon-eye-open" 
+                                              style="color:green;right:150px;">
+                                          <span style="padding-left:5px;">
+                                              {{item.ViewCount}}
+                                          </span>
+                                        </span>
+                                        <span class="glyphicon glyphicon-heart"
+                                              style="color:red;right:210px;">
+                                          <span style="padding-left:5px;">
+                                              {{item.FavoriteAccountNumbers}}
+                                          </span>
+                                        </span>
+                                        <label ng-if="!item.IsTop">
+                                            <button class="btn btn-info" style="right:70px;top:0;"
+                                            ng-click="vm.DoctorAuth.OnUpOrDownDynamtisDilog(item)">上头条
+                                            </button>
+                                        </label>
+                                        <label ng-if="item.IsTop">
+                                            <button class="btn btn-primary" style="right:70px;top:0;"
+                                            ng-click="vm.DoctorAuth.OnUpOrDownDynamtisDilog(item)">下头条
+                                            </button>
+                                        </label>
+                                        <button class="btn btn-danger"
+                                                ng-click="vm.DoctorAuth.OnDelDynamicsDilog(item)"
+                                        >删除</button>
+                                    </div>
+                                </div>
+                                <div class="Dynamics_detail_two">
+                                    <div class="Dynamics_detail_title">
+                                        {{item.Title}}
+                                    </div>
+                                    <div class="Dynamics_detail_content">
+                                        <pre style="padding:0;border:none;background-color:#fff;overflow:auto;white-space: pre-wrap;white-space: -moz-pre-wrap; white-space: -pre-wrap;white-space: -o-pre-wrap;   word-wrap: break-word;">{{item.Content}}</pre>
+                                    </div>
+                                    <div>
+                                        <div class="mb" style="margin-top:10px;margin-right:20px;cursor: pointer;" ng-repeat="imgItem in item.Images track by $index">
+                                            <img class="form-control"
+                                                style="width:70px; height: 80px; padding:0px;"
+                                                ng-click="vm.DoctorAuth.OnViewImage(imgItem)"
+                                                ng-src="{{ imgItem }}" />
+                                        </div>
+                                    </div>
+                                    <p class="Dynamics_detail_span">
+                                        <span class="Dynamics_color"  ng-repeat="spanItem in item.Tags" ng-attr-title="{{spanItem}}" >
+                                            {{spanItem}}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 编辑活动标签 -->
+<div class="modal fade" id="editDynamics" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">编辑标签</h4>
+			</div>
+			<div class="modal-body">
+			<table class="table medicallytable">
+                <tr>
+                    <td style="width:80px;"><span><span class='red'>*</span>名称：</span></td>
+                    <td><input type="text" class="form-control input-sm" ng-model="vm.ActiveTag.Data.item.name"></td>
+                </tr>
+            </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="vm.ActiveTag.OnLoad()">关闭</button>
+                <button type="button" class="btn btn-success"  ng-click="vm.ActiveTag.OnModify()" >保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 动态中的图片预览 -->
+<div class="modal fade" id="viewPicture" tabindex="-1" role="dialog">
+  <div class="modal-dialog Adding" style="width:540px;">
+    <div class="modal-content"><img ng-src="{{vm.DoctorAuth.ViewPicture}}" style="width:100%;height:630px;"/></div>
+  </div>
+</div>
+
+
+
+<!-- 医师认证审核(动态删除 功能) -->
+<div class="modal fade" id="delDynamics" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确定删除该条动态吗？</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+              ng-click="vm.DoctorAuth.OnDelDynamics()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 上头条 -->
+<div class="modal fade" id="upDynamics" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding banner-h3">确定要将本内容推荐到<br/><br/>APP【掌上头条】？</h3>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"
+              ng-click="vm.DoctorAuth.OnUpOrDynamics()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 下头条 -->
+<div class="modal fade" id="downDynamics" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding banner-h3">确定要将本内容取消<br/><br/>APP【掌上头条】？</h3>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal"
+              ng-click="vm.DoctorAuth.OnUpOrDynamics()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 活动标签(删除 功能) -->
+<div class="modal fade" id="delActivityTags" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确定删除该标签吗？</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal"
+              ng-click="vm.ActiveTag.OnDelete()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>

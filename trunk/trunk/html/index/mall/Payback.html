@@ -1,0 +1,169 @@
+<section class=" banner-pic payback">
+    <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">退款管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>订单编号:</span>
+              <input class="form-control input-sm" ng-model="vm.PaybackCollection.data.searchParams.OrderId" placeholder="请输入订单编号" maxlength="50"/>
+            </div>
+            <div class="form-group form-group-sm">
+              <span>下单时间:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" ng-model="vm.PaybackCollection.data.searchParams.StartTime" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" ng-model="vm.PaybackCollection.data.searchParams.EndTime" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.PaybackCollection.GetList()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.PaybackCollection.ResetSearchParams()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active" ng-click="vm.PaybackCollection.SetSearchState(-1);vm.PaybackCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">全部</a>
+          </li>
+          <li role="presentation" ng-click="vm.PaybackCollection.SetSearchState(4005);vm.PaybackCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">申请退款</a>
+          </li>
+          <li role="presentation" ng-click="vm.PaybackCollection.SetSearchState(4010);vm.PaybackCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">退款中</a>
+          </li>
+          <li role="presentation" ng-click="vm.PaybackCollection.SetSearchState(4015);vm.PaybackCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">退款成功</a>
+          </li>
+          <li role="presentation" style="float:right;">
+              <button class="btn btn-success btn-sm" type="button"  data-toggle="modal" data-target="#paybackConfirmModal" >批量审核</button>
+              <button class="btn btn-info btn-sm" type="button" ng-click="vm.PaybackCollection.ExportCSV()">导出表格</button>
+
+              <!--<div class="form-group" >-->
+                 <!--<div class="form-group"  data-toggle="modal" data-target="#paybackConfirmModal">-->
+                   <!--<button class="btn btn-success btn-sm" type="button">批量审核</button>-->
+                 <!--</div>-->
+                 <!--<div class="form-group" ng-click="vm.PaybackCollection.ExportCSV()">-->
+                   <!--<button class="btn btn-info btn-sm" type="button">导出表格</button>-->
+                 <!--</div>-->
+              <!--</div>-->
+
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <!--<div class="form-group" >
+                      <div class="form-group"  data-toggle="modal" data-target="#paybackConfirmModal">
+                        <button class="btn btn-success btn-sm" type="button">批量审核</button>
+                      </div>
+                      <div class="form-group" ng-click="vm.PaybackCollection.ExportCSV()">
+                        <button class="btn btn-info btn-sm" type="button">导出表格</button>
+                      </div>
+                    </div>-->
+                    <div class="form-group">
+                      <label ng-bind="pageConfig.totalItems"></label>条
+                    </div>
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <table id="test" class="table">
+                <tr>
+                  <th>
+                    <input type="checkbox" ng-model="vm.PaybackCollection.data.payBackCheckAll" ng-click="vm.PaybackCollection.CheckAll()" ng-disabled="vm.PaybackCollection.data.searchParams.State != 4005" />
+                  </th>
+                  <th style="width:10%;">订单编号</th>
+                  <th style="width:10%;">支付流水号</th>
+                  <th style="width:10%;">退款金额</th>
+                  <th style="width:10%;">订单状态</th>
+                  <th style="width:50%;">备注</th>
+                  <th style="width:10%;">修改时间</th>
+                  <!--<th>操作</th>-->
+                </tr>
+                <tr ng-repeat="item in vm.PaybackCollection.data.payBackList">
+                  <td>
+                    <input ng-model="item.Selected" type="checkbox" ng-disabled="item.State != 4005" />
+                  </td>
+                  <td ng-bind="item.OrderId"></td>
+                  <td ng-bind="item.PayId"></td>
+                  <td ng-bind="item.Amount"></td>
+                  <td>
+                    <div class="btn btn-info btn-xs disabled" ng-show="item.State == 4005" >
+                      申请中
+                    </div>
+                    <div class="btn btn-primary btn-xs disabled" ng-show="item.State == 4010" >
+                      退款中
+                    </div>
+                    <div type="button" class="btn btn-success btn-xs disabled" ng-show="item.State == 4015" >
+                      退款成功
+                    </div>
+                  </td>
+                  <td ng-bind="item.Remark" style="text-align:left;"></td>
+                  <td ng-bind="item.LastUpdateDate"></td>
+                  <!--<td>-->
+                    <!--<button type="button" class="btn btn-success btn-xs" ng-show="item.State == 4005" data-toggle="modal" data-target="#paybackConfirmModal">-->
+                      <!--&lt;!&ndash;ng-click="vm.AppointmentCollection.ReferSuccessAppointment(item.OrderId,'审核通过！')"&ndash;&gt;-->
+                      <!--<span class='glyphicon glyphicon-ok'></span>&nbsp;通过审核-->
+                    <!--</button>-->
+                  <!--</td>-->
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--退单审核model-->
+<div class="modal fade" id="paybackConfirmModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要执行审核退款吗？</h4>
+        <!--<h6 class="ng-binding">执行退款后，该笔订单状态将无法回退！<br/> 请谨慎操作！</h6>-->
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.PaybackCollection.ExecutePayBack()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div ng-show="false" >
+  <div id="container" class="frame">
+  </div>
+</div>
+

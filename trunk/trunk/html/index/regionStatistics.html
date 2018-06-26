@@ -1,0 +1,95 @@
+<section class="questionnaire">
+        	<div class="panel panel-default message">
+        		<div class="panel-heading">
+        			<ol class="breadcrumb">
+					  <li><a href="#">运营管理 </a></li>
+					  <li class="active">地推统计</li>
+					</ol>
+        		</div>
+        		<div class="panel-body push-content" >
+        	        <ul class="push-header clearfix" >
+						<li class="active"><a href="#push-a"  data-toggle="tab">机构汇总统计</a></li>
+						<li><a href="#push-b"  data-toggle="tab">各机构统计</a></li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div role="tabpanel" class="tab-pane active" id="push-a">
+							<div class="push-title">
+								<ul>
+									<li><input type="text" id="startDate" class="form-control input-sm" placeholder="请输入日期" readonly="readonly"
+                  ng-model="vm.organizeTotal.viewDate.startDate"></li>
+									<li>至</li>
+									<li><input type="text" id="endDate" class="form-control input-sm" placeholder="请输入日期" readonly="readonly"
+                  ng-model="vm.organizeTotal.viewDate.endDate"></li>
+                                    <li><button class="btn btn-success btn-sm" ng-click="vm.organizeTotal.OnClickSure()">确定</button></li>
+								</ul>
+							</div>
+							<div id="containerTotal" class="push-chart">
+							</div>
+							<div class="push-tabte">
+								<table class="table table-bordered">
+									<tr >
+										<th>服务机构</th>
+								    <th ng-repeat="el in vm.organizeTotal.serviceCollection">{{el}}</th>
+
+									</tr>
+									<tr ng-repeat="item in vm.organizeTotal.data" >
+                    	<td style="text-align:center" ng-repeat="item2 in item" ng-bind="item2.value"></td>
+										<!--<td style="text-align:center" ng-bind="item.Date"></td>
+										<td style="text-align:center" ng-bind="item.name4"></td>
+										<td style="text-align:center" ng-bind="item.name7"></td>
+										<td style="text-align:center" ng-bind="item.name14"></td>-->
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="push-b">
+							<div class="push-title">
+								<ul>
+									<li>
+										<select class="form-control input-sm" ng-model="vm.organizeClass.selectCollection.selected" ng-options="s.id as s.name for s in vm.organizeClass.selectCollection.organizeList">
+										</select>
+									</li>
+									<li><input type="text" id="startDate2" class="form-control input-sm" placeholder="请输入日期" readonly="readonly"
+                  ng-model="vm.organizeClass.viewDate.startDate"></li>
+									<li>至</li>
+									<li><input type="text" id="endDate2" class="form-control input-sm" placeholder="请输入日期" readonly="readonly"
+                  ng-model="vm.organizeClass.viewDate.endDate"></li>
+									<li><button class="btn btn-success btn-sm" ng-click="vm.organizeClass.OnClickSearch()">确定</button></li>
+								</ul>
+							</div>
+							<div id="containerClass" class="push-chart">
+							</div>
+							<div class="push-tabte">
+								<!--<button class="btn btn-warning" ng-click="vm.organizeClass.openViewCollectionOnClick()">展开明细数据</button>-->
+                <span>展开明细数据</span>
+								<span>
+                  <img src="img/messright.png" ng-show="!vm.organizeClass.openViewCollection" ng-click="vm.organizeClass.openViewCollectionOnClick()">
+									<img src="img/messdown.png" ng-show="vm.organizeClass.openViewCollection" ng-click="vm.organizeClass.openViewCollectionOnClick()">
+								</span>
+
+								<table class="table table-bordered push-table-vm" >
+									<tr>
+										<th  width="50%">日期</th>
+								    <th  width="50%">注册量</th>
+									</tr>
+								</table>
+								<table class="table table-bordered" ng-show="!vm.organizeClass.openViewCollection && vm.organizeClass.searchBealon">
+									<tr >
+										<td style="text-align:center;width:50%" ng-bind="vm.organizeClass.totalRegistData.Date"></td>
+										<td style="text-align:center;width:50%" ng-bind="vm.organizeClass.totalRegistData.RegistCount"></td>
+									</tr>
+								</table>
+								<table class="table table-bordered" ng-show="vm.organizeClass.openViewCollection && vm.organizeClass.searchBealon">
+									<tr ng-repeat="item in vm.organizeClass.data">
+										<td style="text-align:center;width:50%" ng-bind="item.Date"></td>
+										<td style="text-align:center;width:50%" ng-bind="item.RegistCount"></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+        		</div>
+        	</div>
+        </section>

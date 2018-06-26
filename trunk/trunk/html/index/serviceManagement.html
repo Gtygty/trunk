@@ -1,0 +1,364 @@
+﻿<aside id="sidebar-menu" class="pull-left" >
+  <h2>健康服务代理机构</h2>
+  <!--搜索-->
+  <div class="input-group"  style="width:100%">
+    <input type="text" class="form-control" placeholder="请输入搜索的机构" ng-model="search" style="width:100%;border-radius:5px">
+    </button>
+    </span>
+  </div>
+  <!--style="height:630px;overflow-y:scroll;"-->
+  <div style="overflow-y:scroll;" ng-style="vm.deptCollection.scrollheight"  >
+  <ul class="nav" ng-repeat="item in vm.deptCollection.Data | filter:search">
+    <li>
+      <div ng-click="vm.deptCollection.OnClick(item)">
+        <span class="iconfont">&#xe711;</span>
+        <span class="sidebar-text">{{item.Name}}</span>
+      </div>
+    </li>
+  </ul>
+  </div>
+</aside>
+
+<section id="serviceMain" class="banner-pic">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <ol class="breadcrumb">
+        <li><a href="javascript:void(0);">系统管理 </a></li>
+        <li class="active">服务管理</li>
+      </ol>
+    </div>
+    <div class="panel-body">
+      <div class="clearfix">
+        <form class="form-inline pull-left" role="form">
+          <span class="h3" style="padding-right: 10px; vertical-align: middle;" ng-bind="vm.deptCollection.Current.Name"></span>
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control input-sm" placeholder="请输入健管师姓名" ng-model="vm.serviceManagementCollection.Search.Current" />
+            <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" ng-click="vm.serviceManagementCollection.Search.OnClick()"><span class='glyphicon glyphicon-search'></span>&nbsp;搜索</button>
+            </span>
+          </div>
+          </form>
+        </div>
+      <div class="BMS_table upload_table pt">
+        <table class="table mt">
+          <tr>
+            <!--<th><input type="checkbox"></th>-->
+            <th>姓名</th>
+            <th>人员ID</th>
+            <th>专长</th>
+            <th>服务状态</th>
+            <th>职称</th>
+            <th>所属机构名称</th>
+            <th>托管工作状态</th>
+            <th>托管机构数量</th>
+            <th>操作</th>
+          </tr>
+          <tr ng-show="vm.serviceManagementCollection.List.Data.length>0">
+            <!--<td><input type="checkbox"></td>-->
+            <tr ng-repeat='listItem in vm.serviceManagementCollection.List.Data'>
+              <td>{{ listItem.UserName }}</td>
+              <td>{{ listItem.DoctorId }}</td>
+              <td title="{{ listItem.Speciality }}">{{ listItem.SpecialityDesc }}</td>
+              <td>{{ listItem.JobStateName }}</td>
+              <td>{{ listItem.PisitionName }}</td>
+              <td>{{ listItem.DeptName }}</td>
+              <td>{{ listItem.IsTrusteeshipName }}</td>
+              <td>{{ listItem.TrusteeshipCount }}</td>
+              <td>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myListDetail" ng-click="vm.serviceManagementCollection.Detail.OnOpenDialog(listItem)"><span class='glyphicon glyphicon-detail'></span>&nbsp;查看详细</button>
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myListEdit" ng-click="vm.serviceManagementCollection.Edit.OnOpenDialog(listItem)"><span class='glyphicon glyphicon-pencil'></span>&nbsp;修改</button>
+              </td>
+            </tr>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<div class="modal fade" id="myListEdit" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">-->
+<div class="modal fade"  id="myListEdit" role="dialog"  >
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div role="tabpanel" class="tab-pane tabPan" >
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="myListEditLabel">托管机构设置</h4>
+          </div>
+      <!--<div class="modal-body">-->
+
+        <div style="padding-left:25px;padding-right:25px;padding-top: 15px;padding-bottom:50px; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+        <!-- 两个链接 -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="active">
+              <!--<a href="#alldept"  data-toggle="tab"  ng-click="vm.serviceManagementCollection.Edit.Search.getDepart()">按所有机构</a>-->
+                <a href="#alldept"  data-toggle="tab" >按所有机构</a>
+              
+              </li>
+            <li >
+              <a href="#dept" data-toggle="tab" >按已托管机构</a>
+            </li>
+          </ul>
+        <!-- 按所有机构 -->
+        <div class="tab-content answers_pane">
+          <div role="tabpanel" class="tab-pane active" id="alldept" >
+            <div style="padding:20px 20px 10px 0; border: 1px solid #ddd; border-top: 0;">
+              <form class="form-horizontal">
+                 <div class="BMS_table_border Upload_td">
+                    <table class="table" style="margin-left:10px">
+                        <tr>
+                        <td width='90'><span>托管健管师:</span></td>
+                        <td colspan="3">
+                            <input type="text"  class="form-control" ng-model="vm.serviceManagementCollection.Edit.Current.UserName" disabled   />
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><span class="red"></span><span>机构查询:</span></td>
+                        <td >
+                            <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Edit.Search.param"  />
+                        </td>
+                        <td>    
+                            <select class="form-control input-sm" style="width:150px;"   ng-model="vm.serviceManagementCollection.Edit.IsTrusteeship"  
+                            ng-options="s.value as s.text for s in vm.serviceManagementCollection.Edit.deptState"></select>
+
+    
+                        </td>
+                        <td>    
+                            <button class="form-control input-sm btn btn-success" type="button" ng-click="vm.serviceManagementCollection.Edit.Search.OnClick()">搜索</button>
+                        </td>
+                        </tr>
+                        <!--下拉框-->
+                        <tr>
+                        <td><span class="red">*</span><span>托管机构:</span></td>
+                        <td colspan="3">
+                            <div>
+                                <!--左边-->
+                            <div class="pull-left commentDiv"  style="width:42%">
+                                <ul ng-repeat="item in vm.serviceManagementCollection.Edit.Search.Data">
+                                <li ng-click="vm.serviceManagementCollection.Edit.Search.OnDeptClick(item)">
+                                    <p ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ng-show="!item.Checked"></p>
+                                    <p ng-show="item.Checked" style="background-color: greenyellow;">
+                                    <strong ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ></strong>
+                                    </p>
+                                </li>
+                                </ul>
+                            </div>
+                            <!--中间-->
+                            <div class="pull-left commentDivMid"  style="width:15%">
+                                <ul>
+                                <li>
+                                    <span class='glyphicon glyphicon-chevron-right' title="选择机构"
+                                       ng-click='vm.serviceManagementCollection.Edit.Search.OnLeftClick()'>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class='glyphicon glyphicon-chevron-left' title="移除机构"
+                                        ng-click='vm.serviceManagementCollection.Edit.Search.OnRightClick()'></span>
+                                </li>
+                                <li>
+                                    <span class='glyphicon glyphicon glyphicon-step-forward' title="选择所有机构"
+                                       ng-click='vm.serviceManagementCollection.Edit.Search.OnLeftAllClick()'></span>
+                                </li>
+                                <li>
+                                    <span class='glyphicon glyphicon glyphicon-step-backward' title="移除所有机构"
+                                        ng-click='vm.serviceManagementCollection.Edit.Search.OnRightAllClick()'></span>
+                                </li>
+                                </ul>
+                            </div>
+                            <div class="pull-right commentDiv" style="width:42%">
+                                <ul ng-repeat="item in vm.serviceManagementCollection.Edit.Search.SelectedData">
+                                 <li ng-click="vm.serviceManagementCollection.Edit.Search.OnDeptClick(item)">
+                                    <p ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ng-show="!item.Checked"></p>
+                                    <p ng-show="item.Checked" style="background-color: greenyellow;">
+                                      <strong ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ></strong>
+                                    </p>
+                                  </li>
+                                </ul>
+                            </div>
+                            </div>
+                        </td>
+                        </tr>
+                    </table>
+                 </div>  
+              </form>
+            </div>
+          </div>
+   
+        <!--按已托管机构-->
+          <div role="tabpanel" class="tab-pane" id="dept" >
+            <div style="padding:20px 20px 10px 0; border: 1px solid #ddd; border-top: 0;">
+              <form class="form-horizontal">
+                <div class="BMS_table_border Upload_td" >
+                    <table class="table" style="margin-left:10px">
+                        <tr>
+                        <td width='90'><span>托管健管师:</span></td>
+                        <td colspan="3">
+                            <input type="text"  class="form-control" ng-model="vm.serviceManagementCollection.Edit.Current.UserName" disabled  />
+                        </td>
+                        </tr>
+                        <tr>
+                        <td><span class="red"></span><span>已托管机构查询:</span></td>
+                        <td >
+                          <select class="form-control input-sm" style="width:150px;"  ng-model="vm.serviceManagementCollection.List.Roles.selectItem"  
+                          ng-options="s.id as s.name for s in vm.serviceManagementCollection.List.Roles.Name"></select>
+                        </td>
+                        <td>    
+                           <span>（按机构下的其他成员）</span>
+                        </td>
+                        <td>    
+                            <button class="form-control input-sm btn btn-success" type="button" ng-click="vm.serviceManagementCollection.Edit.Search.OnSearch()">搜索</button>
+                        </td>
+                        </tr>
+                        <!--下拉框-->
+                        <tr>
+                        <td><span class="red">*</span><span>托管机构:</span></td>
+                        <td colspan="3">
+                            <div>
+                                <!--左边-->
+                            <div class="pull-left commentDiv"  style="width:42%">
+                                <ul ng-repeat="item in vm.serviceManagementCollection.Edit.Search.CurrentData ">
+                                <li ng-click="vm.serviceManagementCollection.Edit.Search.OnDeptClick(item)">
+                                    <p ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ng-show="!item.Checked"></p>
+                                    <p ng-show="item.Checked" style="background-color: greenyellow;">
+                                    <strong ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ></strong>
+                                    </p>
+                                </li>
+                                </ul>
+                            </div>
+                            <!--中间-->
+                            <div class="pull-left commentDivMid"  style="width:15%">
+                                <ul>
+                                <li>
+                                    <span class='glyphicon glyphicon-chevron-right' title="选择机构" style="margin-top: 32px;"
+                                       ng-click='vm.serviceManagementCollection.Edit.Search.OnLeft()'>
+                                    </span>
+                                </li>
+                               
+                                <li>
+                                    <span class='glyphicon glyphicon glyphicon-step-forward' title="选择所有机构"
+                                       ng-click='vm.serviceManagementCollection.Edit.Search.OnLeftAll()'></span>
+                                </li>
+                
+                                </ul>
+                            </div>
+                            <div class="pull-right commentDiv" style="width:42%">
+                                <ul ng-repeat="item in vm.serviceManagementCollection.Edit.Search.SelectedData">
+                                 <li ng-click="vm.serviceManagementCollection.Edit.Search.OnDeptClick(item)">
+                                    <p ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ng-show="!item.Checked"></p>
+                                    <p ng-show="item.Checked" style="background-color: greenyellow;">
+                                      <strong ng-attr-title='{{ item.Name }}' ng-bind="item.Name" ></strong>
+                                    </p>
+                                  </li>
+                                </ul>
+                            </div>
+                            </div>
+                        </td>
+                        </tr>
+                    </table>
+                </div>  
+              </form>
+            </div>
+           </div>
+
+
+        </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;关闭</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.serviceManagementCollection.Edit.OnClick()"><span class='glyphicon glyphicon-ok'></span>&nbsp;保存</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+<!-- myListDetail查看详细信息 -->
+<div class="modal fade" id="myListDetail" tabindex="-1" role="dialog" aria-labelledby="myListDetailLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myListDetailLabel">基本信息</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="inputUserName" class="col-sm-2 control-label">姓名</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.UserName" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">人员ID</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.DoctorId" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputUserName" class="col-sm-2 control-label">服务状态</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.JobStateName" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">职称</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.PisitionName" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputUserName" class="col-sm-2 control-label">身份证号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.CertificateCode" disabled
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">手机号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.Mobile" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">所属机构</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.DeptName" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">所属高级主管</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.SuppserDoctorName" disabled
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">账号</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model="vm.serviceManagementCollection.Detail.Current.Account" disabled />
+            </div>
+          </div>
+          <div class="form-group">
+            <hr />
+          </div>
+          <div class="form-group">
+            <label for="inputContent" class="col-sm-2 control-label">托管机构</label>
+            
+            <div class="col-sm-10">
+              <!--修改内容 托管机构-->
+                 <select class="form-control input-sm" ng-model="vm.serviceManagementCollection.Detail.Current.TrusteeshipDepts.DeptName" ng-options="s.Id as s.DeptName for s in vm.serviceManagementCollection.Detail.Current.TrusteeshipDepts"></select>
+    
+            </div>
+
+
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

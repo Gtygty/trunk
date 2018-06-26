@@ -1,0 +1,381 @@
+<section class=" banner-pic appointment">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">预约管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>订单编号:</span>
+              <input class="form-control input-sm" ng-model="vm.AppointmentCollection.data.searchParams.OrderId" placeholder="请输入订单编号" maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>客户体检服务商:</span>
+              <input class="form-control input-sm" ng-model="vm.AppointmentCollection.data.searchParams.DeptName" placeholder="请输入服务商名称" maxlength="50"/>
+            </div>
+            <div class="form-group form-group-sm">
+              <span>客户体检日期:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" ng-model="vm.AppointmentCollection.data.searchParams.StartTime" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" ng-model="vm.AppointmentCollection.data.searchParams.EndTime" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.AppointmentCollection.GetList()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.AppointmentCollection.ResetSearchParams()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active" ng-click="vm.AppointmentCollection.SetSearchState(-1);vm.AppointmentCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">全部</a>
+          </li>
+          <li role="presentation" ng-click="vm.AppointmentCollection.SetSearchState(2010);vm.AppointmentCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">申请预约</a>
+          </li>
+          <li role="presentation" ng-click="vm.AppointmentCollection.SetSearchState(2015);vm.AppointmentCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已预约</a>
+          </li>
+          <li role="presentation" ng-click="vm.AppointmentCollection.SetSearchState(2025);vm.AppointmentCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已取消</a>
+          </li>
+          <li role="presentation" ng-click="vm.AppointmentCollection.SetSearchState(2020);vm.AppointmentCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已到检</a>
+          </li>
+          <li role="presentation" style="float:right;">
+            <button class="btn btn-info btn-sm" type="button" ng-click="vm.AppointmentCollection.ExportCSV()">导出表格</button>
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="pageConfig.totalItems"></label>条
+                    </div>
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <table class="table">
+                <tr>
+                  <th>订单编号</th>
+                  <th>商品信息</th>
+                  <th>客户体检服务商</th>
+                  <th>预约日期</th>
+                  <th>买家ID</th>
+                  <th>体检人信息</th>
+                  <th>预约状态</th>
+                  <th>修改时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.AppointmentCollection.data.appointmentList">
+                  <td ng-bind="item.OrderId"></td>
+                  <td >
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.AppointmentCollection.OrderGoodsList(item.OrderId)">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                  </td>
+                  <td ng-bind="item.DepartName"></td>
+                  <td ng-bind="item.AppointDate"></td>
+                  <td ng-bind="item.AccountId"></td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#appointmentCustomDetail" ng-click="vm.AppointmentCollection.data.appointmentInfo = item" >
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                  </td>
+                  <td>
+                    <div class="btn btn-info btn-xs disabled" ng-show="item.State == 2010" >
+                      申请中
+                    </div>
+                    <div class="btn btn-primary btn-xs disabled" ng-show="item.State == 2015" >
+                      预约成功
+                    </div>
+                    <div type="button" class="btn btn-success btn-xs disabled" ng-show="item.State == 2020" >
+                      已到检
+                    </div>
+                    <div type="button" class="btn btn-inverse btn-xs disabled" ng-show="item.State == 2025" >
+                      已取消
+                    </div>
+                  </td>
+                  <td ng-bind="item.LastUpdateDate"></td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-show="item.State == 2010" data-toggle="modal" data-target="#remarkComfirmSuccess"
+                            ng-click="vm.AppointmentCollection.data.appointmentRemark = ''; vm.AppointmentCollection.data.appointmentInfo = item;">
+                      <!--ng-click="vm.AppointmentCollection.ReferSuccessAppointment(item.OrderId,'审核通过！')"-->
+                      <span class='glyphicon glyphicon-plus'></span>&nbsp;通过审核
+                    </button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-show="item.State == 2015"
+                            ng-click="vm.AppointmentCollection.data.appointmentRemark = '';
+                            vm.AppointmentCollection.data.appointmentInfo = item;
+                            vm.AppointmentCollection.AppointmentRules(item.OrderId)">
+                      <!--ng-click="vm.AppointmentCollection.FinishAppointment(item.OrderId,'确认到检！')"-->
+                      <span class='glyphicon glyphicon-ok'></span>&nbsp;预约改期
+                    </button>
+                    <!--&& vm.AppointmentCollection.data.OnlineAppointmentDepts.indexOf(item.DepartCode) > 0-->
+                    <button type="button" class="btn btn-info btn-xs"
+                            ng-click="vm.AppointmentCollection.CheckThirdPartAppointment(item.OrderId)">
+                      <!--ng-show="item.State == 2015 "-->
+                      <!--ng-click="vm.AppointmentCollection.CancelAppointment(item.OrderId,'预约取消！')"-->
+                      <span class='glyphicon glyphicon-ok'></span>&nbsp;到检状态
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs" ng-show="item.State == 2015" data-toggle="modal" data-target="#remarkComfirmFinish"
+                            ng-click="vm.AppointmentCollection.data.appointmentRemark = '';vm.AppointmentCollection.data.appointmentInfo = item;">
+                      <!--ng-click="vm.AppointmentCollection.FinishAppointment(item.OrderId,'确认到检！')"-->
+                      <span class='glyphicon glyphicon-ok'></span>&nbsp;确认到检
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" ng-show="item.State == 2010 || item.State == 2015" data-toggle="modal" data-target="#remarkComfirmCancel"
+                            ng-click="vm.AppointmentCollection.data.appointmentRemark = '';vm.AppointmentCollection.data.appointmentInfo = item;">
+                      <!--ng-click="vm.AppointmentCollection.CancelAppointment(item.OrderId,'预约取消！')"-->
+                      <span class='glyphicon glyphicon-remove'></span>&nbsp;取消预约
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="goodsDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">商品信息详情</h4>
+      </div>
+      <div class="modal-body">
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;" >
+          <!-- <div class="pull-right"style="width:auto; height:auto;">
+            <img src="{{item.ListIconUrl}}" style="width: 100px; height: 100px;">
+          </div>
+ng-repeat="item in vm.AppointmentCollection.data.appointmentGoodsList"
+
+           -->
+          <table class="table" style="width: 100%;text-align: center;">
+            <thead>
+              <tr>
+                <td><strong>商品编号</strong></td>
+                <td><strong>商品名称</strong></td>
+                <td><strong>加项名称</strong></td>
+                <td><strong>售价</strong></td>
+                <td><strong>数量</strong></td>
+                <td><strong>图片</strong></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in vm.AppointmentCollection.data.appointmentGoodsList | orderBy:'ListIconUrl':true"">
+                <td>{{item.GoodsId}}</td>
+                <td><span ng-if="item.ListIconUrl">{{item.Name}}</span></td>
+                <td><span ng-if="!item.ListIconUrl">{{item.Name}}</span></td>
+                <td>{{item.Price}}</td>
+                <td>
+                  <span ng-if="item.ListIconUrl">{{item.Count}}</span>
+                  <span ng-if="!item.ListIconUrl">1</span>
+                </td>
+                <td>
+                  <img  ng-if="item.ListIconUrl" ng-src="{{item.ListIconUrl}}" width="50" height="50"/>
+                </td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="appointmentCustomDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">预约人信息</h4>
+      </div>
+      <div class="modal-body">
+        <div style="margin: 20px; border: 1px solid #000; padding:20px;">
+          <table class="table" style="width: 70%; ">
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人姓名:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.CustomerName" /></td>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人身份证:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.CustomerIDCard"/></td>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人手机号:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.CustomerMobile" /></td>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人性别:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.CustomerGender" /></td>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人婚姻状况:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.CustomerMarried" /></td>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>体检人购买人关系:</span>
+              </td>
+              <td colspan="1" style="border: 0; text-align: left;">
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.AppointmentCollection.data.appointmentInfo.Relation" /></td>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remarkComfirmSuccess" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">您确定要审核该笔预约吗？</h4>
+      </div>
+      <div class="modal-body text-center">
+        <textarea placeholder="预约成功请填写备注...." ng-model="vm.AppointmentCollection.data.appointmentRemark" style=" padding: 10px; width: 350px; height: 100px; max-width: 350px; max-height: 100px; resize: none;"></textarea>
+        <!--<p><br/>预约成功后，除非客户本人修改，该状态将不可逆转，请慎重操作！</p>-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.AppointmentCollection.ReferSuccessAppointment(vm.AppointmentCollection.data.appointmentInfo.OrderId, vm.AppointmentCollection.data.appointmentRemark)">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remarkComfirmFinish" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">您确定要修改该笔预约为到检吗？</h4>
+      </div>
+      <div class="modal-body text-center">
+        <textarea placeholder="预约到检请填写备注...." ng-model="vm.AppointmentCollection.data.appointmentRemark" style=" padding: 10px; width: 350px; height: 100px; max-width: 350px; max-height: 100px; resize: none;"></textarea>
+        <p><br/>预约到检后，该状态将不可逆转，请慎重操作！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.AppointmentCollection.FinishAppointment(vm.AppointmentCollection.data.appointmentInfo.OrderId, vm.AppointmentCollection.data.appointmentRemark)">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="remarkComfirmCancel" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">您确定要取消该笔预约吗？</h4>
+      </div>
+      <div class="modal-body text-center">
+        <textarea placeholder="预约取消请填写备注...." ng-model="vm.AppointmentCollection.data.appointmentRemark" style=" padding: 10px; width: 350px; height: 100px; max-width: 350px; max-height: 100px; resize: none;"></textarea>
+        <p><br/>预约取消后，该状态将不可逆转，请慎重操作！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.AppointmentCollection.CancelAppointment(vm.AppointmentCollection.data.appointmentInfo.OrderId, vm.AppointmentCollection.data.appointmentRemark)">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="appointmentModifyDate" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">您确定要为该笔预约改期吗？</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-inline" role="form">
+          <div class="form-group form-group-sm">
+            <span>预约体检日期:</span>
+            <div class="input-group">
+              <select class="form-control input-sm" ng-model="vm.AppointmentCollection.data.appointmentDate"
+                      ng-options="s as s for s in vm.AppointmentCollection.data.appointmentRules"></select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.AppointmentCollection.ModifyAppointment(vm.AppointmentCollection.data.appointmentInfo.OrderId, vm.AppointmentCollection.data.appointmentDate)">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

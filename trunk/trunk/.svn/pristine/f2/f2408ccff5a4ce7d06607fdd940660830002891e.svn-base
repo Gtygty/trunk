@@ -1,0 +1,222 @@
+<section class=" banner-pic order">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">中医专家一对一电话服务</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>订单编号:</span>
+              <input class="form-control input-sm" ng-model="vm.PromoteOrder.data.params.OrderId" placeholder="请输入订单编号" maxlength="50"/>
+            </div>
+            <div class="form-group input-margin">
+              <span>手机号:</span>
+              <input class="form-control input-sm" ng-model="vm.PromoteOrder.data.params.CallMobile" placeholder="请输入手机号" maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>订单状态:</span>
+              <select class="form-control input-sm" ng-model="vm.PromoteOrder.data.params.PromoteOrderState"
+                      ng-options="s.Value as s.Text for s in vm.PromoteOrder.PromoteOrderStateList"></select>
+            </div>
+            <div class="form-group form-group-sm input-margin">
+              <span>服务时间:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" ng-model="vm.PromoteOrder.data.params.StartTime" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" ng-model="vm.PromoteOrder.data.params.EndTime" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.PromoteOrder.GetList()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.PromoteOrder.ResetSearchParams()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" style="float:right;">
+            <div class="form-group" ng-click="vm.PromoteOrder.ExportCSV()">
+              <button class="btn btn-info btn-sm" type="button">导出表格</button>
+            </div>
+          </li>
+          <li role="presentation" style="float:right;line-height:28px;margin-right:15px;">
+            <div class="form-group">
+              <label ng-bind="pageConfig.totalItems"></label>条
+            </div>
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <!--<div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="pageConfig.totalItems"></label>条
+                    </div>
+                  </from>
+                </div>-->
+                <div class="clearfix"></div>
+              </div>
+              <table class="table table-bordered">
+                <tr>
+                  <th style="width:10%">订单号</th>
+                  <th style="width:10%">服务客户手机号</th>
+                  <th style="width:10%">订单时间</th>
+                  <th style="width:15%">支付单号</th>
+                  <th style="width:5%">支付价格</th>
+                  <th style="width:15%">订单状态</th>
+                  <th style="width:10%">服务时间</th>
+                  <th style="width:15%">备注</th>
+                  <th style="width:10%">操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.PromoteOrder.data.PromoteOrderList">
+                  <td ng-bind="item.Id"></td>
+                  <td ng-bind="item.CallMobile"></td>
+                  <td ng-bind="item.CreateTime"></td>
+                  <td ng-bind="item.PayId"></td>
+                  <td ng-bind="item.PayAmount"></td>
+                  <td>
+                    <label ng-if="item.State==1000">待支付</label>
+                    <label ng-if="item.State==2000">已付款未联系</label>
+                    <label ng-if="item.State==3000">已付款已联系</label>
+                  </td>
+                  <!--<td><label ng-show="item.LastUpdateTime!=item.CreateTime">{{item.LastUpdateTime}}</label></td>-->
+                  <td ng-bind="item.LastUpdateTime"></td>
+                  <td ng-bind="item.Remark"></td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.PromoteOrder.OnOperateDialog(item)">
+                    <span class='glyphicon glyphicon-eye-open'></span>&nbsp;操作详情
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- 详情 -->
+<div class="modal fade" id="OperateDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">用券详情</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+        <div class="tab-content answers_pane">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" style="padding-top:20px;" id="navTab">
+              <li role="presentation" class="active">
+                <a href="#tabone" role="tab" data-toggle="tab">客人主述</a>
+              </li>
+              <li role="presentation">
+                <a href="#tabtwo" role="tab" data-toggle="tab">备注</a>
+              </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane tabPan active" id="tabone">
+                <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+                  <div style="margin:0 8px 8px 8px;">
+                    <div class="pull-right">
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                    <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                      <tr>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" cols="30" rows="10" disabled ng-model="vm.PromoteOrder.data.SelfDescription" style="width:815px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane tabPan" id="tabtwo">
+                <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+                  <div style="margin:0 8px 8px 8px;">
+                    <div class="pull-right">
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                    <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                      <tr>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" placeholder="添加备注" cols="30" rows="6" ng-model="vm.PromoteOrder.data.Remark" style="width:815px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>                        
+                      </tr>
+
+                      <tr>
+                        <td style="float:right;">
+                            <button type="button" class="btn btn-success" ng-click="vm.PromoteOrder.OnSureRemark()">提交备注</button>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" placeholder="添加报告小结" cols="30" rows="6" ng-model="vm.PromoteOrder.data.Feedback" style="width:815px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <td style="float:right;" ng-if="vm.PromoteOrder.data.CurrentState == 1000 || vm.PromoteOrder.data.CurrentState == 3000">
+                            <button type="button" class="btn btn-success" disabled>提交报告小结</button>
+                        </td>
+                        <td style="float:right;" ng-if="vm.PromoteOrder.data.CurrentState == 2000">
+                            <button type="button" class="btn btn-success" ng-click="vm.PromoteOrder.OnSureFeedback()">提交报告小结</button>
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

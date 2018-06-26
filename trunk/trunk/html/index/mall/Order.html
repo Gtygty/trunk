@@ -1,0 +1,513 @@
+<section class=" banner-pic order">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">订单管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>订单编号:</span>
+              <input class="form-control input-sm" ng-model="vm.OrderCollection.data.searchParams.OrderId" placeholder="请输入订单编号" maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>买家手机号:</span>
+              <input class="form-control input-sm" ng-model="vm.OrderCollection.data.searchParams.Mobile" placeholder="请输入买家手机号" maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>订单分类:</span>
+              <!--<input class="form-control input-sm" ng-model="vm.PaybackCollection.data.searchParams.OrderId" placeholder="请输入买家手机号" maxlength="50"/>-->
+              <select class="form-control input-sm" ng-model="vm.OrderCollection.data.searchParams.OrderTypeOption"
+                      ng-options="s.Value as s.Text for s in vm.OrderCollection.const.OrderTypeList"></select>
+            </div>
+            <div class="form-group">
+              <span>发票状态:</span>
+              <!--<input class="form-control input-sm" ng-model="vm.PaybackCollection.data.searchParams.OrderId" placeholder="请输入买家手机号" maxlength="50"/>-->
+              <select class="form-control input-sm" ng-model="vm.OrderCollection.data.searchParams.OrderTicketOption"
+                      ng-options="s.Value as s.Text for s in vm.OrderCollection.const.OrderChildList"></select>
+            </div>
+            <div class="form-group form-group-sm">
+              <span>下单时间:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" ng-model="vm.OrderCollection.data.searchParams.StartTime" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" ng-model="vm.OrderCollection.data.searchParams.EndTime" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.OrderCollection.GetList()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.OrderCollection.ResetSearchParams()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active" ng-click="vm.OrderCollection.SetSearchState(-1);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">全部</a>
+          </li>
+          <li role="presentation" ng-click="vm.OrderCollection.SetSearchState(1);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">待付款</a>
+          </li>
+          <li role="presentation" ng-click="vm.OrderCollection.SetSearchState(4);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已付款</a>
+          </li>
+          <li role="presentation" ng-click="vm.OrderCollection.SetSearchState(2);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已取消</a>
+          </li>
+          <li role="presentation" ng-click="vm.OrderCollection.SetSearchState(5);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">退款中</a>
+          </li>
+          <li role="presentation" ng-click="vm.OrderCollection.SetSearchState(6);vm.OrderCollection.GetList();">
+            <a href="#All" role="tab" data-toggle="tab">已完成</a>
+          </li>
+          <li role="presentation" style="float:right;">
+            <div class="form-group" ng-click="vm.OrderCollection.ExportCSV()">
+              <button class="btn btn-info btn-sm" type="button">导出表格</button>
+            </div>
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="pageConfig.totalItems"></label>条
+                    </div>
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <table class="table">
+                <tr>
+                  <th>订单编号</th>
+                  <th>订单类型</th>
+                  <th>商品信息</th>
+                  <th>买家手机号</th>
+                  <th>下单时间</th>
+                  <th>优惠状态</th>
+                  <th>订单状态</th>
+                  <th>发票状态</th>
+                  <th>修改时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.OrderCollection.data.orderList">
+                  <td ng-bind="item.OrderId"></td>
+                  <td ng-bind="item.OrderType"></td>
+                  <td >
+
+                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#goodsDetail" ng-click=" vm.OrderCollection.data.currentOrderInfo = item ">
+
+                      <!--
+                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#goodsDetail" ng-click="vm.OrderCollection.checkDetai(item)">
+                      -->
+
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                  </td>
+                  <td ng-bind="item.Mobile"></td>
+                  <td ng-bind="item.CreateDate"></td>
+                  <td >
+                    <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#couponDetail" ng-click="vm.OrderCollection.data.currentOrderInfo = item ">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                  </td>
+                  <td ng-bind="item.ChildStateFormat"></td>
+                  <td >
+                    <button type="button" class="btn btn-warning btn-xs" ng-disabled = "item.ChildState != 2030 && item.ChildState != 2035 "
+                        ng-click="vm.OrderCollection.GetOrderTicketDetail(item.OrderId)">
+                      <span class='glyphicon glyphicon-stats' ng-bind="item.InvoiceState"></span>
+                    </button>
+                  </td>
+                  <td ng-bind="item.LastUpdateDate"></td>
+                  <td >
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.OrderCollection.OrderFlowList(item)">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                  </td>
+                  <!--<td>-->
+                  <!--<button type="button" class="btn btn-success btn-xs" ng-show="item.State == 4005" data-toggle="modal" data-target="#paybackConfirmModal">-->
+                  <!--&lt;!&ndash;ng-click="vm.AppointmentCollection.ReferSuccessAppointment(item.OrderId,'审核通过！')"&ndash;&gt;-->
+                  <!--<span class='glyphicon glyphicon-ok'></span>&nbsp;通过审核-->
+                  <!--</button>-->
+                  <!--</td>-->
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal fade" id="goodsDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">商品信息详情</h4>
+      </div>
+      <div class="modal-body">
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;">
+          <table class="table" style="width: 100%; text-align: center;">
+            <thead>
+              <tr>
+                <td><strong>商品编号</strong></td>
+                <td><strong>商品名称</strong></td>
+                <td><strong>加项名称</strong></td>
+                <td><strong>售价</strong></td>
+                <td><strong>数量</strong></td>
+                <td><strong>图片</strong></td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="item in vm.OrderCollection.data.currentOrderInfo.GoodsList | orderBy:'ListIconUrl':true">
+                <td>{{item.GoodsId}}</td>
+                <td><span ng-if="item.ListIconUrl">{{item.Name}}</span></td>
+                <td><span ng-if="!item.ListIconUrl">{{item.Name}}</span></td>
+                <td>{{item.Price}}</td>
+                <td>
+                  <span ng-if="item.ListIconUrl">{{item.Count}}</span>
+                  <span ng-if="!item.ListIconUrl">1</span>
+                </td>
+                <td>
+                  <img  ng-if="item.ListIconUrl" ng-src="{{item.ListIconUrl}}" width="50" height="50"/>
+                </td>
+              </tr>
+
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="2">总计：<strong>{{vm.OrderCollection.data.currentOrderInfo.TotalAmount}}</strong>元</td>
+              <td colspan="2">共计：<strong>{{vm.OrderCollection.data.currentOrderInfo.GoodCount}}</strong>件</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="couponDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">优惠信息详情</h4>
+      </div>
+      <div class="modal-body">
+          <table class="table" style="width: 70%; ">
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>订单总价:</span>
+              </td>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.TotalAmount" /></td>
+            </tr>
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>优惠券抵扣:</span>
+              </td>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.CouponAmount"/></td>
+            </tr>
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>支付金额:</span>
+              </td>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.PayAmount" />&nbsp</td>
+            </tr>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!--个人发票摸态框-->
+<div class="modal fade" id="ticketDetail_0" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">发票信息详情</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" style="width: 70%; ">
+          <tr>
+            <td style="border: 0; text-align: left;" width="200px">
+              <span>发票抬头:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Title" /></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>收件人:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Receiver"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>联系电话:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Mobile" />&nbsp</td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>收货地址:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Address" />&nbsp</td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;"><div style="border-bottom:1px dashed #000000;"/></td>
+            <td style="border: 0; text-align: left;"><div style="border-bottom:1px dashed #000000;"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.InvoiceState"></span>
+            </td>
+            <td style="border: 0; text-align: left;">
+              <input class="form-control input-sm" ng-disabled = "vm.OrderCollection.data.currentOrderTicketInfo.State == 2035"
+                     ng-model="vm.OrderCollection.data.currentOrderTicketInfo.MailNumber" placeholder="请输入物流单号" maxlength="50"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-show = "vm.OrderCollection.data.currentOrderTicketInfo.State == 2030"
+                ng-click="vm.OrderCollection.SetTicketState()">确认修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--企业发票摸态框-->
+<div class="modal fade" id="ticketDetail_1" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">发票信息详情</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" style="width: 70%; " >
+          <tr>
+            <td style="border: 0; text-align: left;" width="200px">
+              <span>发票抬头:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Title" /></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>税号:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.CompanyTaxNumber"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>开户行名称:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.CompanyBankName"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>开户行账号:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.CompanyBankNumber"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>收件人:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Receiver"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>联系电话:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Mobile" />&nbsp</td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span>收货地址:</span>
+            </td>
+            <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.Address" />&nbsp</td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;"><div style="border-bottom:1px dashed #000000;"/></td>
+            <td style="border: 0; text-align: left;"><div style="border-bottom:1px dashed #000000;"/></td>
+          </tr>
+          <tr>
+            <td style="border: 0; text-align: left;">
+              <span ng-bind="vm.OrderCollection.data.currentOrderTicketInfo.InvoiceState"></span>
+            </td>
+            <td style="border: 0; text-align: left;">
+              <input class="form-control input-sm" ng-disabled = "vm.OrderCollection.data.currentOrderTicketInfo.State == 2035"
+                     ng-model="vm.OrderCollection.data.currentOrderTicketInfo.MailNumber" placeholder="请输入物流单号" maxlength="50"/>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-show = "vm.OrderCollection.data.currentOrderTicketInfo.State == 2030"
+                ng-click="vm.OrderCollection.SetTicketState()">确认修改</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="orderDetail" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">订单信息详情</h4>
+      </div>
+      <div class="modal-body">
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;">
+          <table class="table" >
+            <tr>
+              <td style="border: 0; text-align: left;">
+                <span>订单编号:</span>
+              </td>
+              <td style="border: 0; text-align: left;">
+                <span>下单时间:</span>
+              </td>
+              <td style="border: 0; text-align: left;">
+                <span>当前订单状态:</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.OrderId" /></td>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.CreateDate" /></td>
+              <td style="border: 0; text-align: left;"><span ng-bind="vm.OrderCollection.data.currentOrderInfo.ChildStateFormat" /></td>
+            </tr>
+          </table>
+        </div>
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;">
+          <div>
+            <h4>订单明细</h4>
+            <div style="border-bottom:1px dashed #000000; margin-top: 10px; margin-bottom: 10px"/>
+          </div>
+          <table class="table" >
+            <tr>
+              <td style="text-align: left;">
+                <span>商品名称:</span>
+              </td>
+              <td style="text-align: left;">
+                <span>加项名称:</span>
+              </td>
+              <td style="text-align: left;">
+                <span>商品数量:
+                  <sub><span ng-bind="'(总计' + vm.OrderCollection.data.currentOrderInfo.GoodCount + ')'"></span></sub>
+                </span>
+              </td>
+              <td style="text-align: left;">
+                <span>商品价格:</span>
+              </td>
+            </tr>
+            <tr ng-repeat="item in vm.OrderCollection.data.currentOrderInfo.GoodsList | orderBy:'ListIconUrl':true">
+              <td style="text-align: left;"><span ng-bind="item.Name" ng-if="item.ListIconUrl"/></td>
+              <td style="text-align: left;"><span ng-bind="item.Name" ng-if="!item.ListIconUrl"/></td>
+              <td style="text-align: left;">
+                <span ng-bind="item.Count" ng-if="item.ListIconUrl"></span>
+                <span ng-if="!item.ListIconUrl">1</span>
+              </td>
+              <td style="text-align: left;"><span ng-bind="item.Price" /></td>
+            </tr>
+
+            <tr>
+              <td colspan="2"></td>
+              <td>总计：<strong>{{vm.OrderCollection.data.currentOrderInfo.TotalAmount}}</strong>元</td>
+              <td>共计：<strong>{{vm.OrderCollection.data.currentOrderInfo.GoodCount}}</strong>件</td>
+            </tr>
+          </table>
+        </div>
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;">
+          <div>
+            <h4>支付记录</h4>
+            <div style="border-bottom:1px dashed #000000; margin-top: 10px; margin-bottom: 10px"/>
+          </div>
+          <table class="table" >
+            <tr>
+              <td style="text-align: left;">
+                <span>付款流水号:</span>
+              </td>
+              <td style="text-align: left;">
+                <span>付款金额:</span>
+              </td>
+              <td style="text-align: left;">
+                <span>优惠金额:</span>
+              </td>
+              <td style="text-align: left;">
+                <span>订单总价:</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: left;">
+                <span ng-bind="vm.OrderCollection.data.currentOrderInfo.PayId"></span>
+              </td>
+              <td style="text-align: left;">
+                <span ng-bind="vm.OrderCollection.data.currentOrderInfo.PayAmount"></span>
+              </td>
+              <td style="text-align: left;">
+                <span ng-bind="vm.OrderCollection.data.currentOrderInfo.CouponAmount"></span>
+              </td>
+              <td style="text-align: left;">
+                <span ng-bind="vm.OrderCollection.data.currentOrderInfo.TotalAmount"></span>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div style="margin: 20px; border: 1px solid #000; border-radius: 12px; padding:20px;">
+          <div>
+            <h4>订单变更记录</h4>
+            <div style="border-bottom:1px dashed #000000; margin-top: 10px; margin-bottom: 10px"/>
+          </div>
+          <table class="table" >
+            <tr ng-repeat="item in vm.OrderCollection.data.currentOrderFlowList">
+              <td style="text-align: left;"><span ng-bind="item.CreateTime" /></td>
+              <td style="text-align: left;"><span ng-bind="item.Remark" /></td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal" ng-show = "vm.OrderCollection.data.currentOrderTicketInfo.State == 2030">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

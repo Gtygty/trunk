@@ -1,0 +1,143 @@
+<section class="physicalExamEventQuota">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ul class="breadcrumb">
+				<li><a href="#">掌上体检</a></li>
+				<li class="active">体检项目指标库</li>
+			</ul>
+		</div>
+		<div class="panel-body answers_pane">
+			<div class="clearfix">
+				<div class="form-inline">
+					<form class="form-inline pull-left">
+						<div class="form-group input-margin">
+							<span>项目：</span>
+							<input type="text" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnSearchParam.Project" placeholder="请输入项目" />
+						</div>
+						<div class="form-group input-margin">
+							<span>内容：</span>
+							<input type="text" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnSearchParam.Content" placeholder="请输入内容" />
+						</div>
+					</form>
+					<div class="pull-right">
+						<label ng-bind="pageConfig.totalItems"></label>条
+						<button class="btn btn-sm btn-info" ng-click="vm.physicalExamEventQuota.OnSearch()">
+							搜索
+						</button>
+						<button class="btn btn-sm btn-warning" ng-click="vm.physicalExamEventQuota.ShowAddEventQuotaDialog()">
+							添加项目
+						</button>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<!-- table -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>项目</th>
+						<th>内容</th>
+						<th>意义</th>
+						<th>类别</th>
+						<th>标签项目</th>
+						<th>权重</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in vm.physicalExamEventQuota.NormalList">
+						<td ng-bind="item.Project"></td>
+						<td ng-bind="item.Content"></td>
+						<td ng-bind="item.Desc"></td>
+						<td ng-bind="item.SexType"></td>
+						<td ng-bind="item.Tag"></td>
+						<td ng-bind="item.Weight"></td>
+						<td>
+							<button class="btn btn-sm btn-info" ng-click="vm.physicalExamEventQuota.ShowModifyEventQuotaDialog(item)">
+								编辑
+							</button>
+							<button class="btn btn-sm btn-danger" ng-click="vm.physicalExamEventQuota.ShowDeleteEventQuotaDialog(item)">
+								删除
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+		</div>
+	</div>
+</section>
+
+<!-- start添加编辑指标 -->
+<div class="modal fade" id="addOrModifyEventQuotaModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" ng-if="vm.physicalExamEventQuota.EditingItem.Id == undefined">添加指标</h4>
+				<h4 class="modal-title" ng-if="vm.physicalExamEventQuota.EditingItem.Id != undefined">编辑指标</h4>
+			</div>
+			<div class="modal-body BMS_table_border">
+				<table class="table">
+					<tr>
+						<td><span class="red">*</span>项目：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnAddExamEventQuotaParam.Project" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>内容：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnAddExamEventQuotaParam.Content" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top"><span class="red">*</span>意义：</td>
+						<td colspan="3"><textarea  rows="3" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnAddExamEventQuotaParam.Desc" maxlength="2000" placeholder="请输入" ></textarea></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>类别：</td>
+						<td>
+							<label class="form-inline pull-left">
+								<label><input type="checkbox" class="form-control" ng-model="vm.physicalExamEventQuota.SexTypes[0].checked" />&nbsp;男</label>
+								<label><input type="checkbox" class="form-control" ng-model="vm.physicalExamEventQuota.SexTypes[1].checked" />&nbsp;女已婚</label>
+								<label><input type="checkbox" class="form-control" ng-model="vm.physicalExamEventQuota.SexTypes[2].checked" />&nbsp;女未婚</label>
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>标签项目：</td>
+						<td><input type="text" maxlength="300" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnAddExamEventQuotaParam.Tag" placeholder="请输入" /></td>
+						<td><span class="red">*</span>权重：</td>
+						<td><input type="text" class="form-control input-sm" ng-model="vm.physicalExamEventQuota.OnAddExamEventQuotaParam.Weight" placeholder="请输入" /></td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-warning" data-dismiss="modal">
+					取消
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.physicalExamEventQuota.EditingItem.Id == undefined" ng-click="vm.physicalExamEventQuota.AddEventQuota()">
+					保存
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.physicalExamEventQuota.EditingItem.Id != undefined" ng-click="vm.physicalExamEventQuota.ModifyEventQuota()">
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- endAddOrModifyQuota -->
+
+<!-- deleteEventQuotaModal -->
+<div class="modal fade" id="deleteEventQuotaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要删除吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.physicalExamEventQuota.DeleteEventQuota()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- deleteEventQuotaModal -->

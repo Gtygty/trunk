@@ -1,0 +1,173 @@
+<section class=" banner-pic appointment">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">服务订单管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>订单编号:</span>
+              <input class="form-control input-sm" ng-model="vm.simpleServiceManagement.data.searchParams.OrderId" 
+              placeholder="请输入" maxlength="50"/>
+            </div>
+            <!-- <div class="form-group">
+              <span>商品名称:</span>
+              <select class="form-control input-sm"  ng-model="vm.simpleServiceManagement.data.searchParams.GoodsName"
+                      ng-options="s.Value as s.Text for s in vm.simpleServiceManagement.data.supplierInfoList">
+                      <option ng-if=false></option>
+              </select>
+            </div> -->
+
+            <div class="form-group">
+              <span>买家手机号:</span>
+              <input class="form-control input-sm" ng-model="vm.simpleServiceManagement.data.searchParams.Mobile" 
+              placeholder="请输入" maxlength="11"/>
+            </div>
+
+            <div class="form-group">
+              <span>订单状态:</span>
+               <select class="form-control input-sm" ng-model="vm.simpleServiceManagement.data.searchParams.OrderState"
+                      ng-options="s.Value as s.Text for s in vm.simpleServiceManagement.data.orderType">
+                <option ng-if=false></option>
+              </select> 
+            </div>
+
+            <div class="form-group">
+              <span>商品名称:</span>
+               <select class="form-control input-sm" ng-model="vm.simpleServiceManagement.data.searchParams.OrderType"
+                      ng-options="s.Value as s.Text for s in vm.simpleServiceManagement.data.goodsName">
+                <option ng-if=false></option>
+              </select> 
+            </div>
+
+            <div class="form-group">
+              <span>下单日期:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+
+          </form>
+          <div class="pull-right" style="margin-top:5px;">
+            <button class="btn btn-info btn-sm" type="button" ng-click="vm.simpleServiceManagement.OnExportCSV()">导出Excel</button>
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.simpleServiceManagement.OnSearchClick()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.simpleServiceManagement.Onclear()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <table class="table table-bordered">
+                <tr>
+                  <th>
+                    <input ng-model="vm.simpleServiceManagement.data.checkedAll" ng-click="vm.simpleServiceManagement.OnCheckedAll()" type="checkbox"
+                           name="AppointmentCheckAll"/>
+                  </th>
+                  <th>订单编号</th>
+                  <th>商品名称</th>
+                  <th>买家手机号</th>
+                  <th>下单日期</th>
+                  <th>支付单号</th>
+                  <th>支付价格</th>
+                  <th>订单状态</th>
+                  <th>备注</th>
+                </tr>
+                <tr ng-repeat="item in vm.simpleServiceManagement.data.orderList">
+                  <td>
+                    <input ng-model="item.Checked" ng-click="vm.simpleServiceManagement.OnCheckedItem(item)" type="checkbox"
+                           name="AppointmentCheck"/>
+                  </td>
+                  <td ng-bind="item.orderId"></td>
+                  <td ng-bind="item.goodsName"></td>
+                  <td ng-bind="item.mobile"></td>
+                  <td ng-bind="item.orderTime"></td>
+                  <td ng-bind="item.payId"></td>
+                  <td ng-bind="item.payAmount"></td>
+                  
+                  <td ng-bind="item.payState"></td>
+                  <td>
+                    <button class="btn btn-sm btn-success" ng-if="!item.IsSendRefundMessages" ng-click="vm.simpleServiceManagement.OnPushRefundMessage(item)" type="button">
+                      退款通知</button> 
+                    <button class="btn btn-sm" ng-if="item.IsSendRefundMessages" disabled type="button">
+                      已发送</button> 
+                    <button class="btn btn-sm btn-warning" type="button" ng-click="vm.simpleServiceManagement.OnModifyRemarkDialog(item)">
+                      <i class="glyphicon glyphicon-pencil"></i>
+                      备注</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 备注 -->
+<div class="modal fade" id="RemarkDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">备注</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+        <div class="tab-content answers_pane">
+          <div class="tab-content">
+              <div role="tabpanel" class="tab-pane tabPan active" id="tabone">
+                <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+                  <div style="margin:0 8px 8px 8px;">
+                    <div class="pull-right">
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                    <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                      <tr>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" cols="30" rows="10"  ng-model="vm.simpleServiceManagement.data.editingOrder.remark" style="width:815px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+           </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-success" ng-click="vm.simpleServiceManagement.OnModifyRemark()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+<section class=" banner-pic activitygroup">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <ol class="breadcrumb">
+        <li><a href="javascript:void(0);">质量管理 </a></li>
+        <li class="active">竟争力分析</li>
+      </ol>
+    </div>
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>服务机构:</span>
+              <select class="form-control input-sm"
+                      ng-model="vm.doctorPower.Search.selectedDept"
+                      ng-options="s.value as s.text for s in vm.doctorPower.Search.DDLDept">
+                            </select>
+            </div>
+            <div class="form-group input-margin">
+              <span>请选择周期:</span>
+              <select class="form-control input-sm"
+                      ng-model="vm.doctorPower.Search.selectedWeek"
+                      ng-options="s.value as s.text for s in vm.doctorPower.Search.DDLWeek">
+                            </select>
+              <span ng-bind="vm.doctorPower.Search.selectedWeekDesc"></span>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button ng-click="vm.doctorPower.Search.OnSearch()" type="button" class="btn btn-success btn-sm">
+                <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+            </button>
+            <button ng-click="vm.doctorPower.Search.OnClear()" type="button" class="btn btn-danger btn-sm">
+                <span class='glyphicon glyphicon-remove'></span>&nbsp;清除
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!--分组列表展示-->
+        <table class="table table-bordered table-hover">
+          <tr>
+            <th>姓名</th>
+            <th>好评指数</th>
+            <th>勤奋度</th>
+            <th>业绩指标</th>
+            <th>工作效率</th>
+            <th width="200">操作</th>
+          </tr>
+          <tr ng-repeat="item in vm.doctorPower.List">
+            <td ng-bind="item.doctorName"></td>
+            <td ng-bind-html="item.positiveScoreHtml"></td>
+            <td ng-bind-html="item.diligentScoreHtml"></td>
+            <td ng-bind-html="item.achievementScoreHtml"></td>
+            <td ng-bind-html="item.effectiveScoreHtml"></td>
+            <td width="200">
+              <button ng-mouseover="vm.doctorPower.OnMouseOverListItem(item)" ng-mouseleave="vm.doctorPower.OnMouseOuterListItem()" type="button" class="btn btn-default btn-xs">
+                <span class="glyphicon glyphicon-stats"></span>
+              </button>
+              <button ng-click="vm.doctorPower.OnAddCompare(item)" type="button" class="btn btn-default btn-xs">
+                加入对比
+              </button>
+            </td>
+          </tr>
+          <tr ng-show="vm.doctorPower.List.length > 0" style="color:#337ab7">
+            <th>平均值</th>
+            <th ng-bind="vm.doctorPower.AvgWeek.positiveScore"></th>
+            <th ng-bind="vm.doctorPower.AvgWeek.diligentScore"></th>
+            <th ng-bind="vm.doctorPower.AvgWeek.achievementScore"></th>
+            <th ng-bind="vm.doctorPower.AvgWeek.effectiveScore"></th>
+            <th width="200"></th>
+          </tr>
+        </table>
+      </div>
+
+
+      <!-- 指数排名: start -->
+      <div class="panel panel-default">
+        <table class="table table-bordered">
+          <tr>
+            <th colspan="6" class="header">指数排名</th>
+          </tr>
+          <tr ng-show="vm.doctorPower.List.length > 0">
+            <th>好评指数</th>
+            <th>勤奋度</th>
+            <th>业绩指标</th>
+            <th>工作效率</th>
+          </tr>
+          <tr ng-show="vm.doctorPower.List.length > 0">
+            <td>
+              <div id="containerPositive" style="min-width:200px;min-height:400px"></div>
+            </td>
+            <td>
+              <div id="containerDiligent" style="min-width:200px;min-height:400px"></div>
+            </td>
+            <td>
+              <div id="containerAchievement" style="min-width:200px;min-height:400px"></div>
+            </td>
+            <td>
+              <div id="containerEffective" style="min-width:200px;min-height:400px"></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- 指数排名: end -->
+
+      <!-- 时间序列分析: start -->
+       <div class="comparelist">
+        <p>时间序列分析</p>
+        <dl ng-show="vm.doctorPower.List.length > 0" class="compare-title">
+          <dt>医生姓名</dt>
+          <dd>好评指数</dd>
+          <dd>勤奋度</dd>
+          <dd>业绩指标</dd>
+          <dd>工作效率</dd>
+        </dl>
+        <div style="overflow-x: auto;">
+          <div style="min-width: 1000px;" ng-style="{ width: vm.doctorPower.CompareList.length* 235 + 'px'}">
+            <dl ng-repeat="item2 in vm.doctorPower.CompareList">
+              <dt>
+                <button class="btn btn-xs btn-link">
+                  {{ item2.doctorName }}
+                  <span class="glyphicon glyphicon-remove-circle" ng-click="vm.doctorPower.OnRemoveCompare(item2)"></span>
+                </button>
+              </dt>
+              <dd>
+                <div ng-attr-id="{{ item2.id + 'Positive' }}"></div>
+              </dd>
+              <dd>
+                <div ng-attr-id="{{ item2.id + 'Diligent' }}"></div>
+              </dd>
+              <dd>
+                <div ng-attr-id="{{ item2.id + 'Achievement' }}"></div>
+              </dd>
+              <dd>
+                <div ng-attr-id="{{ item2.id + 'Effective' }}"></div>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <!-- 时间序列分析: end -->
+
+  </div>
+</section>
+
+<!--竞争力分析悬浮框-->
+<div class="hoverdialog" ng-show="vm.IsPopover">
+  <div class="table-content clearfix">
+    <div class="content-left pull-left">
+      <dl>
+        <dt>本周综合竞争力超越了<span class="red" style="margin:0;">{{vm.doctorPower.Current.allScoreSortRemark}}</span>医生</dt>
+        <dd><em><label>好评指数：</label><span class="red">{{vm.doctorPower.Current.positiveScore}}</span></em>您的好评指数本周超越了
+          <span class="green">{{vm.doctorPower.Current.positiveScoreSortRemark}}</span>医生</dd>
+        <dd><em><label>勤奋度：</label><span class="red">{{vm.doctorPower.Current.diligentScore}}</span></em>您的勤奋度指数本周超越了
+          <span class="green">{{vm.doctorPower.Current.diligentScoreSortRemark}}</span>医生</dd>
+        <dd><em><label>业绩指数：</label><span class="red">{{vm.doctorPower.Current.achievementScore}}</span></em>您的业绩指数本周排名第
+          <span class="green">{{vm.doctorPower.Current.achievementScoreDesc}}</span>位</dd>
+        <dd><em><label>工作效率：</label><span class="red">{{vm.doctorPower.Current.effectiveScore}}</span></em>您的工作效率本周超越了
+          <span class="green">{{vm.doctorPower.Current.effectiveScoreSortRemark}}</span>医生</dd>
+      </dl>
+    </div>
+    <div class="content-right pull-left">
+      <div id="container" style="width:380px; height:250px; margin-left: 20px"></div>
+    </div>
+  </div>
+</div>

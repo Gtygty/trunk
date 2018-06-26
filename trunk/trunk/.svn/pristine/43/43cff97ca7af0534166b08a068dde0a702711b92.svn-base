@@ -1,0 +1,251 @@
+.Dynamics_img{
+    border-radius:50%;
+    width:40px;
+    height:40px;
+}
+.Dynamics_top_left{
+    display: inline-block;
+    width:600px;
+    float: left;
+    word-break: break-all;
+}
+.Dynamics{
+    padding:30px 40px;
+}
+.Dynamics_talent{
+    display: inline-block;  
+}
+.Dynamics_talent_name{
+    line-height: 2;
+    color: #979797;
+    position: absolute;
+    top: 58px;
+}
+.Dynamics_top_right{
+    float: right;
+}
+.Dynamics_top_right p,.Dynamics_top_right button{
+    display: inline-block;
+    margin-right:10px;
+}
+.Dynamics_top_right p span{
+    color: #337AB7;
+    margin-left: 5px;
+}
+.Dynamics_center{
+    background-color: #f2f2f2;
+    position: relative;
+    border-radius: 10px;
+    padding:15px 20px;
+}
+.Dynamics_center_four{
+    float: right;
+    position: absolute;
+    bottom: 20px;
+    right:20px;
+}
+.Dynamics_center_one{
+    margin:0 auto;
+    z-index: 99999;
+    border: 1px solid #D9D9D9;    
+    margin-top: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+.Dynamics_center_one input,.Dynamics_center_one textarea{
+    display: block;
+    width:100%;
+    outline: 0;
+    border:none;
+    width: 643px;
+    margin:0 auto;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+.Dynamics_center_one textarea{
+    margin-top:20px;
+    resize:none;
+    overflow-y: scroll;
+    line-height: 20px;
+}
+.Dynamics_center_one input{
+    height: 20px;
+    margin-top: 20px;
+}
+.hr{
+    width: 643px;
+    border-bottom: 1px solid #D9D9D9;
+    margin-left: 38px;
+}
+.Dynamics_center_two{
+    margin-top:10px;
+    margin-bottom: 15px;
+}
+.Dynamics_center_two span{
+    width:135px;
+    height:30px;
+    background-color: #fff;
+    color: #666;
+    margin-right:8px;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    border:1px solid #D9D9D9;
+    cursor: pointer;
+    margin-top:5px;
+    overflow: hidden;
+}
+.Dynamics_center_two .Dynamics_color{
+    width:135px;
+    height:30px;
+    line-height: 30px;
+    background-color: #00cc33;
+    color: #fff;
+}
+.Dynamics_center_three{
+    margin-bottom: 10px;
+    width:350px;
+}
+.Dynamics_center_five{
+    height:120px;
+}
+.mb{
+    display: inline-block;
+}
+
+
+.Dynamics_detail{
+    border:2px solid #EAEAEA;
+    border-radius: 10px;
+    padding:20px 20px;
+}
+.Dynamics_detail_one{
+    position: relative;
+}
+.Dynamics_detail_left span{
+    color: #666;
+}
+.Dynamics_detail_left .glyphicon-eye-open{
+    position: absolute;
+    right:102px;
+    top:12px;
+}
+.Dynamics_detail_left .glyphicon-heart{
+    position: absolute;
+    right:163px;
+    top:12px;
+}
+.Dynamics_detail_left button{
+    position: absolute;
+    right:0px;
+}
+.Dynamics_detail_title{
+    margin-top:40px;
+    font-weight: 600;
+    word-break:break-all;
+}
+.Dynamics_detail_content{
+    margin-top:25px;
+    line-height:22px;
+    word-break:break-all;
+}
+.Dynamics_detail_span span{
+    width:115px;
+    height:30px;
+    background-color: #fff;
+    color: #666;
+    margin-right:8px;
+    display: inline-block;
+    line-height: 30px;
+    text-align: center;
+    border:1px solid #D9D9D9;
+}
+.Dynamics_detail_span .Dynamics_color{
+    line-height: 30px;
+    background-color: #00cc33;
+    color: #fff;
+    overflow: hidden;
+    display: inline;
+    padding: 1px 5px;
+}
+.content-length{
+    position: relative;
+    bottom: 7px;
+    left: 520px;
+    color:#333;
+}
+.mb-del{
+    height: 23px;
+    width: 40px;
+    line-height: 22px;
+    border: 1px solid;
+    margin-left: 21px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 5px;
+    cursor: pointer;
+    background-color: #D9534f;
+    color: #fff;
+}
+
+
+/**************************团检管理模块************************************/
+.enterpriseAppointment_boxOne{
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+}
+.enterpriseAppointment_divOne{
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+    width:33%;
+    height:400px;
+    border-radius:5px;
+    border:solid 1px #999;
+    margin-right: 3px;
+    overflow:auto;
+    padding:10px;
+}
+.enterpriseAppointment_divTwo{
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+    width:33%;
+    height:400px;
+    border-radius:5px;
+    border:solid 1px #999;
+    overflow: auto;
+    padding:10px;
+}
+.enterpriseAppointment_labelOne{
+    padding:0;
+    margin:2px;
+    width:100%;
+    /*height:20px;*/
+    line-height: 20px;
+    cursor: pointer;
+    text-indent: 4px;
+}
+.enterpriseAppointment_checkboxOne{
+    padding:0;
+    margin:0;
+}
+.enterpriseAppointment_labelTwo{
+    padding:0;
+    margin:2px;
+    width:100%;
+    /*height:20px;*/
+    border-radius: 5px;
+    line-height: 20px;
+    background-color:#00ccff;    
+    cursor: pointer;
+    text-indent: 4px;
+}
+
+.enterpriseAppointment_pre{
+    text-align:left;
+    background-color:#fff;
+    border:1px solid #fff;
+    font-size: 14px;
+}

@@ -1,0 +1,302 @@
+<section class=" banner-pic appointment">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">APP推送管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>标题:</span>
+              <input class="form-control input-sm" ng-model="vm.PushManagement.data.searchParams.Title" 
+              placeholder="请输入活动名称" maxlength="50"/>
+            </div>
+            <div class="form-group input-margin">
+              <span>状态:</span>
+              <select class="form-control input-sm"  ng-model="vm.PushManagement.data.searchParams.State"
+                      ng-options="s.Value as s.Text for s in vm.PushManagement.PushManagementStateList">
+                      <option ng-if=false></option>
+              </select>
+            </div>
+            <div class="form-group">
+              <span>推送时间:</span>
+              <div class="input-group">
+                <input type="text" class="form-control input-sm" id="startDate" placeholder="请输入日期"
+                       style="width: 160px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input type="text" class="form-control input-sm" id="endDate" placeholder="请输入日期"
+                       style="width: 160px; border-left: 0;"/>
+              </div>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.PushManagement.GetList()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.PushManagement.Onclear()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" style="float:right;margin-left: 5px;">
+            <button class="btn btn-info btn-sm" style="margin-bottom:5px;" type="button" ng-click="vm.PushManagement.OnAdd()">添加</button>
+          </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="pageConfig.totalItems"></label>条
+                    </div>
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <table class="table table-bordered">
+                <tr>
+                  <th style="width:2%;">ID</th>
+                  <th style="width:10%;">创建时间</th>
+                  <th style="width:10%;">标题</th>
+                  <th style="width:18%;">内容</th>
+                  <th style="width:5%;">活动类型</th>
+                  <th style="width:35%;">推送人群</th>
+                  <th style="width:10%;">推送时间</th>
+                  <th style="width:10%;">操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.PushManagement.data.pushList">
+                    <td>{{$index+1}}</td>
+                    <td ng-bind="item.CreateDate"></td>
+                    <td ng-bind="item.Title"></td>
+                    <td ng-bind="item.Content"></td>
+                    <td ng-bind="item.TypeStr"></td>
+                    <td><pre style="border:none;font-size:14px;background-color:#fff;">{{item.pushPeople}}</pre></td>
+                    <td ng-bind="item.PushTime"></td>
+                    <td>
+                      <button class="btn btn-sm btn-success" ng-click="vm.PushManagement.OnRemarkDialog(item)" type="button">
+                        备注</button>
+                      <button class="btn btn-sm btn-warning" type="button"  ng-if="item.State == 0"
+                              ng-click="vm.PushManagement.OnPushDialog(item)">
+                        发布</button>
+                      <button class="btn btn-sm btn-warning" type="button"  ng-if="item.State == 1" disabled>
+                        已发布</button>
+                    </td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- 活动位(添加或修改 功能) -->
+<div class="modal fade" id="panelAddOrModPushManagement" tabindex="-1" role="dialog">
+	<div class="modal-dialog Adding">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">推送</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table medicallytable">
+            <tr>
+                <td style="width:120px;"><span><span class='red'>*</span>标题：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.Title" maxlength="100" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>内容：</span></td>
+                <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.Content" maxlength="100" /></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'>*</span>活动类型：</span></td>
+                <td>
+                  <select class="form-control input-sm"  ng-model="vm.PushManagement.data.addParams.Type"
+                          ng-options="s.Value as s.Text for s in vm.PushManagement.PushManagementActivityList">
+                          <option ng-if=null></option>
+                  </select>
+            </tr>
+            <tr>
+                <td width='100'><span><span class='red'>*</span>上传图片：</span></td>
+                <td>
+                    <div class="input-group">
+                        <input type="file" id='inputAddSrc'
+                                class="form-control input-sm"
+                                style='display:inline-block'
+                                placeholder="请选择图标"
+                                ng-model="vm.PushManagement.data.addParams.ImageUrl" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-success btn-sm"
+                                    ng-click="vm.PushManagement.OnUploadImage()">上传图像</button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="mb">
+                        <img class="form-control" id="headImageUrl"
+                              style="width:80px; height: 80px; padding-top: 10px;"
+                              ng-src="{{ vm.PushManagement.data.addParams.ImageUrl }}" alt="" />
+                    </div><br/>
+                    <span class="comcolor">注：710*300，png、jpg、jpeg格式的图片。</span>
+                </td>
+            </tr>
+            <tr ng-if="vm.PushManagement.data.addParams.Type == 1">
+              <td><span><span class='red'>*</span>链接：</span></td>
+              <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.H5LinkUrl" maxlength="100" /></td>
+            </tr>
+            <tr ng-if="vm.PushManagement.data.addParams.Type == 2">
+              <td><span><span class='red'>*</span>安卓地址：</span></td>
+              <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.NativeAndroidClassName" maxlength="100" /></td>
+            </tr>
+            <tr ng-if="vm.PushManagement.data.addParams.Type ==2">
+              <td><span><span class='red'>*</span>安卓参数：</span></td>
+              <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.NativeAndroidParams" maxlength="100" /></td>
+            </tr>
+            <tr ng-if="vm.PushManagement.data.addParams.Type == 2">
+              <td><span><span class='red'>*</span>iOS地址：</span></td>
+              <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.NativeIOSClassName" maxlength="100" /></td>
+            </tr>
+            <tr ng-if="vm.PushManagement.data.addParams.Type == 2">
+              <td><span><span class='red'>*</span>iOS参数：</span></td>
+              <td><input type="text" class="form-control input-sm"
+                            ng-model="vm.PushManagement.data.addParams.NativeIOSParams" maxlength="100" /></td>
+            </tr>
+            <tr>
+                <td><span><span style="color:black;weight:600;">|--</span>推送人群：</span></td>
+            </tr>
+            <tr>
+                <td><span><span class='red'></span>新注册用户：</span></td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="RegisterStartTime" placeholder="请输入日期"
+                          style="width: 160px; border-right: 0;"/>
+                    <div class="input-group-addon">~</div>
+                    <input type="text" class="form-control input-sm" id="RegisterEndTime" placeholder="请输入日期"
+                          style="width: 160px; border-left: 0;"/>
+                  </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span><span class='red'></span>添加报告用户:</span></td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="ReportStartTime" placeholder="请输入日期"
+                          style="width: 160px; border-right: 0;"/>
+                    <div class="input-group-addon">~</div>
+                    <input type="text" class="form-control input-sm" id="ReportEndTime" placeholder="请输入日期"
+                          style="width: 160px; border-left: 0;"/>
+                  </div>
+                </td>
+            </tr>
+            <tr>
+                <td><span><span class='red'></span>咨询用户：</span></td>
+                <td>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="ConsultStartTime" placeholder="请输入日期"
+                          style="width: 160px; border-right: 0;"/>
+                    <div class="input-group-addon">~</div>
+                    <input type="text" class="form-control input-sm" id="ConsultEndTime" placeholder="请输入日期"
+                          style="width: 160px; border-left: 0;"/>
+                  </div>
+                </td>
+            </tr>
+        </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" ng-click="vm.PushManagement.OnAddParams()" >确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- 备注 -->
+<div class="modal fade" id="RemarkDialog" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">备注</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+        <div class="tab-content answers_pane">
+          <div class="tab-content">
+              <div role="tabpanel" class="tab-pane tabPan active" id="tabone">
+                <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+                  <div style="margin:0 8px 8px 8px;">
+                    <div class="pull-right">
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                    <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                      <tr>
+                        <td>
+                            <div class="input-group">
+                              <textarea class="form-control" cols="30" rows="10" 
+                               ng-model="vm.PushManagement.data.remarkParam.Remark" style="width:815px;border-radius:5px;"></textarea>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                </div>
+              </div>
+           </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-success" ng-click="vm.PushManagement.OnModifyRemark()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="OnPushDialogs" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要推送当前消息吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" 
+              ng-click="vm.PushManagement.OnPush()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

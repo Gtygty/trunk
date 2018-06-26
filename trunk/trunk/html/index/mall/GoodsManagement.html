@@ -1,0 +1,960 @@
+<section class=" banner-pic Goods">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">掌上体检 </a></li>
+          <li class="active">商品管理</li>
+        </ol>
+      </div>
+      <div class="pull-right">
+        <button ng-click="vm.Goods.OnAddDialog()" class="btn btn-primary btn-sm">
+          <span class="glyphicon glyphicon-plus"></span>
+          添加体检套餐
+        </button>
+        <button class="btn btn-info btn-sm" disabled>
+          <span class="glyphicon glyphicon-plus"></span>
+          添加虚拟类
+        </button>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>所属服务商:</span>
+              <select id="supplierSelect" class="form-control" ></select>
+
+              <!-- <select class="form-control input-sm" ng-model="vm.Goods.Search.ProviderId"
+                      ng-options="s.value as s.text for s in vm.Goods.ServiceDDL">
+              </select> -->
+            </div>
+            <div class="form-group input-margin">
+              <span>商品类型:</span>
+              <select class="form-control input-sm" ng-model="vm.Goods.Search.Type"
+                      ng-options="s.value as s.text for s in vm.Goods.TypeDDL">
+              </select>
+            </div>
+            <div class="form-group">
+              <span>商品名称:</span>
+              <input class="form-control input-sm" ng-model="vm.Goods.Search.Name" placeholder="请输入商品名称"
+                     maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>商品编号:</span>
+              <input class="form-control input-sm" ng-model="vm.Goods.Search.Id" placeholder="请输入商品编号" maxlength="50">
+            </div>
+            <div class="form-group form-group-sm">
+              <span>商品价格:</span>
+              <div class="input-group">
+                <input ng-model="vm.Goods.Search.MinSalePrice" type="text" class="form-control" placeholder="0"
+                       maxlength="10" style="width: 60px; border-right: 0;"/>
+                <div class="input-group-addon">~</div>
+                <input ng-model="vm.Goods.Search.MaxSalePrice" type="text" class="form-control" placeholder="1000"
+                       maxlength="10" style="width: 60px; border-left: 0;"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <span>套餐类型:</span>
+              <select class="form-control input-sm" ng-model="vm.Goods.Search.GoodsType" ng-options="s.value as s.text for s in vm.Goods.GoodsTypeDDL">
+              </select>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.Goods.OnSearch()">
+              <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.Goods.OnClearSearch()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+          <!--<form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>支持服务商:</span>
+              <input class="form-control input-sm" ng-model="vm.Goods.Search.HZOwner" placeholder="请输入支持服务商">
+            </div>
+          </form>-->
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active">
+            <a ng-click="vm.OnClickTabAll()" href="#home" aria-controls="home" role="tab" data-toggle="tab">全部商品</a>
+          </li>
+          <li role="presentation">
+            <a ng-click="vm.OnClickTabUp()" href="#profile" aria-controls="profile" role="tab"
+               data-toggle="tab">上架商品</a>
+          </li>
+          <li role="presentation">
+            <a ng-click="vm.OnClickTabDown()" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">下架商品</a>
+          </li>
+          <li role="presentation" style="float:right;">
+            <!--<button class="btn btn-info btn-sm" type="button" disabled>导出Excel</button>-->
+            <div class="form-group">
+              <select ng-model="vm.Goods.SelectedBatchUpOrDownGoods"
+                        ng-change="vm.Goods.OnChangeUpOrDownGoodsModal()"
+                       class="form-control input-sm">
+                <!--ng-change="vm.Goods.OnChangeUpOrDownGoods()"-->
+                <option value="-1">批量操作</option>
+                <option value="1">上架</option>
+                <option value="0">下架</option>
+              </select>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL GOODS: Start -->
+          <div role="tabpanel" class="tab-pane active" id="home">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="vm.Goods.Count"></label>条
+                    </div>
+
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                  <th>
+                    <input ng-model="vm.Goods.CheckedAll" ng-click="vm.Goods.OnCheckedAll()" type="checkbox"
+                           name="goodsCheckAll"/>
+                  </th>
+                  <th>商品编号</th>
+                  <th>商品名称</th>
+                  <!--<th>APP展示名称</th>-->
+                  <th>所属服务商</th>
+                  <th>商品类型</th>
+                  <th>单价</th>
+                  <th>毛利率</th>
+                  <!--<th>总销量</th>
+                  <th>库存</th>-->
+                  <th>添加时间</th>
+                  <th>最后修改时间</th>
+                  <th>当前状态</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.Goods.List">
+                  <td>
+                    <input ng-model="item.Checked" ng-click="vm.Goods.OnCheckedItem(item)" type="checkbox"
+                           name="goodsCheck"/>
+                  </td>
+                  <td ng-bind="item.Id"></td>
+                  <td ng-bind="item.CommonInfo.Name"></td>
+                  <!--<td ng-bind="item.CommonInfo.AppshowName"></td>-->
+                  <td ng-bind="item.CommonInfo.ProviderName"></td>
+                  <td ng-bind="item.CommonInfo.TypeName"></td>
+                  <td>
+                    <label ng-bind="item.CommonInfo.SalePrice"></label>
+                    <sub>
+                      <del ng-bind="item.CommonInfo.OriginPrice"></del>
+                    </sub>
+                  </td>
+                  <td ng-class="{true:'red'}[item.CommonInfo.GrossMargin <= 0]" ng-bind="item.CommonInfo.GrossMargin"></td>
+                  <!--<td>总销量</td>
+                  <td>库存</td>-->
+                  <td ng-bind="item.CommonInfo.CreateTime"></td>
+                  <td ng-bind="item.CommonInfo.LastUpdateTime"></td>
+                  <td>
+                    <button ng-click="vm.Goods.OnDownGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 1">(上架)
+                    </button>
+                    <button ng-click="vm.Goods.OnUpGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 0">(下架)
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.Goods.OnLookupDialog(item)">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs" ng-click="vm.Goods.OnEditDialog(item)">
+                      <span class='glyphicon glyphicon-edit'></span>&nbsp;编辑
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" ng-click="vm.Goods.OnRemoveGoodsDialog(item)">
+                      <span class='glyphicon glyphicon-trash'></span>&nbsp;删除
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- ALL GOODS: End -->
+          <!-- UP GOODS: Start -->
+          <div role="tabpanel" class="tab-pane" id="profile">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="vm.Goods.UpCount"></label>条
+                    </div>
+                    <!--<div class="form-group">-->
+                      <!--<select ng-model="vm.Goods.SelectedBatchUpOrDownGoods"-->
+                              <!--ng-change="vm.Goods.OnChangeUpOrDownGoods()" class="form-control input-sm">-->
+                        <!--<option value="-1">批量操作</option>-->
+                        <!--<option value="1">上架</option>-->
+                        <!--<option value="0">下架</option>-->
+                      <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                      <!--<button class="btn btn-info btn-sm" type="button" disabled>导出Excel</button>-->
+                    <!--</div>-->
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                  <th>
+                    <input ng-model="vm.Goods.CheckedAll" ng-click="vm.Goods.OnCheckedAll()" type="checkbox"
+                           name="goodsCheckAll"/>
+                  </th>
+                  <th>商品编号</th>
+                  <th>商品名称</th>
+                  <th>所属服务商</th>
+                  <th>商品类型</th>
+                  <th>单价</th>
+                  <th>毛利率</th>
+                  <!--<th>总销量</th>
+                  <th>库存</th>-->
+                  <th>添加时间</th>
+                  <th>最后修改时间</th>
+                  <th>当前状态</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.Goods.UpList">
+                  <td>
+                    <input ng-model="item.Checked" ng-click="vm.Goods.OnCheckedItem(item)" type="checkbox"
+                           name="goodsCheck"/>
+                  </td>
+                  <td ng-bind="item.Id"></td>
+                  <td ng-bind="item.CommonInfo.Name"></td>
+                  <td ng-bind="item.CommonInfo.ProviderName"></td>
+                  <td ng-bind="item.CommonInfo.TypeName"></td>
+                  <td>
+                    <label ng-bind="item.CommonInfo.SalePrice"></label>
+                    <sub>
+                      <del ng-bind="item.CommonInfo.OriginPrice"></del>
+                    </sub>
+                  </td>
+                  <td ng-class="{true:'red'}[item.CommonInfo.GrossMargin <= 0]" ng-bind="item.CommonInfo.GrossMargin"></td>
+                  <!--<td ng-bind="item.CommonInfo.GrossMargin"></td>-->
+                  <!--<td>总销量</td>
+                  <td>库存</td>-->
+                  <td ng-bind="item.CommonInfo.CreateTime"></td>
+                  <td ng-bind="item.CommonInfo.LastUpdateTime"></td>
+                  <td>
+                    <button ng-click="vm.Goods.OnDownGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 1">(上架)
+                    </button>
+                    <button ng-click="vm.Goods.OnUpGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 0">(下架)
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.Goods.OnLookupDialog(item)">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs" ng-click="vm.Goods.OnEditDialog(item)">
+                      <span class='glyphicon glyphicon-edit'></span>&nbsp;编辑
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" ng-click="vm.Goods.OnRemoveGoodsDialog(item)"
+                            di>
+                      <span class='glyphicon glyphicon-trash'></span>&nbsp;删除
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- UP GOODS: End -->
+          <!-- DOWN GOODS: Start -->
+          <div role="tabpanel" class="tab-pane" id="messages">
+            <div style="padding: 15px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <div style="margin:0 15px 15px 15px;">
+                <div class="pull-right">
+                  <from class="form-inline">
+                    <div class="form-group">
+                      <label ng-bind="vm.Goods.DownCount"></label>条
+                    </div>
+                    <!--<div class="form-group">-->
+                      <!--<select ng-model="vm.Goods.SelectedBatchUpOrDownGoods"-->
+                              <!--ng-change="vm.Goods.OnChangeUpOrDownGoods()" class="form-control input-sm">-->
+                        <!--<option value="-1">批量操作</option>-->
+                        <!--<option value="1">上架</option>-->
+                        <!--<option value="0">下架</option>-->
+                      <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                      <!--<button class="btn btn-info btn-sm" type="button" disabled>导出Excel</button>-->
+                    <!--</div>-->
+                  </from>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <table class="table">
+                <tr>
+                  <th>
+                    <input ng-model="vm.Goods.CheckedAll" ng-click="vm.Goods.OnCheckedAll()" type="checkbox"
+                           name="goodsCheckAll"/>
+                  </th>
+                  <th>商品编号</th>
+                  <th>商品名称</th>
+                  <th>所属服务商</th>
+                  <th>商品类型</th>
+                  <th>单价</th>
+                  <th>毛利率</th>
+                  <!--<th>总销量</th>
+                  <th>库存</th>-->
+                  <th>添加时间</th>
+                  <th>最后修改时间</th>
+                  <th>当前状态</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat="item in vm.Goods.DownList">
+                  <td>
+                    <input ng-model="item.Checked" ng-click="vm.Goods.OnCheckedItem(item)" type="checkbox"
+                           name="goodsCheck"/>
+                  </td>
+                  <td ng-bind="item.Id"></td>
+                  <td ng-bind="item.CommonInfo.Name"></td>
+                  <td ng-bind="item.CommonInfo.ProviderName"></td>
+                  <td ng-bind="item.CommonInfo.TypeName"></td>
+                  <td>
+                    <label ng-bind="item.CommonInfo.SalePrice"></label>
+                    <sub>
+                      <del ng-bind="item.CommonInfo.OriginPrice"></del>
+                    </sub>
+                  </td>
+                  <td ng-class="{true:'red'}[item.CommonInfo.GrossMargin <= 0]" ng-bind="item.CommonInfo.GrossMargin"></td>
+                  <!--<td ng-bind="item.CommonInfo.GrossMargin"></td>-->
+                  <!--<td>总销量</td>
+                  <td>库存</td>-->
+                  <td ng-bind="item.CommonInfo.CreateTime"></td>
+                  <td ng-bind="item.CommonInfo.LastUpdateTime"></td>
+                  <td>
+                    <button ng-click="vm.Goods.OnDownGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 1">(上架)
+                    </button>
+                    <button ng-click="vm.Goods.OnUpGoodsDialog(item)" type="button" class="btn btn-xs btn-link"
+                            ng-if="item.CommonInfo.State == 0">(下架)
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="vm.Goods.OnLookupDialog(item)">
+                      <span class='glyphicon glyphicon-eye-open'></span>&nbsp;查看
+                    </button>
+                    <button type="button" class="btn btn-warning btn-xs" ng-click="vm.Goods.OnEditDialog(item)">
+                      <span class='glyphicon glyphicon-edit'></span>&nbsp;编辑
+                    </button>
+                    <button type="button" class="btn btn-danger btn-xs" ng-click="vm.Goods.OnRemoveGoodsDialog(item)">
+                      <span class='glyphicon glyphicon-trash'></span>&nbsp;删除
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- DOWN GOODS: End -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 添加或修改体检套餐:START -->
+<div class="modal fade" id="panelAddOrModGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg"  style="width:1200px;">
+    <div class="modal-content " >
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" ng-if="vm.Goods.Current.Id == ''">添加体检套餐</h4>
+        <h4 class="modal-title" ng-if="vm.Goods.Current.Id != ''">编辑体检套餐</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+        <table class="table medicallytable">
+          <tr>
+            <td colspan="8">
+              <strong>基础信息</strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8" >
+              <div ng-repeat="item3 in vm.Goods.Current.BannerUrls" style=" float: left;width: 180px;" >
+                <div style="width:140px; height:140px; position:relative;">
+                  <a href="{{item3}}" target="_blank"><img ng-src="{{ item3 }}" alt="缩略图" class="img-thumbnail" style="width:140px; height:140px; position:absolute;"></a>
+                  <div style="width:25px; height:25px; position:absolute; margin-left: 110px; ">
+                    <button type="button" class="close" ng-click="vm.Goods.OnRemoveModImage(item3)" style=" width: 25px; height: 25px;">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!--<img ng-repeat="item3 in vm.Goods.Current.BannerUrls"  ng-click="vm.Goods.OnRemoveModImage(item3)"/>-->
+              <input onchange="angular.element(this).scope().vm.Goods.OnAddOrModByUploadImage()" id="btnAddOrModFile"
+                     type="file" style="float:left; display:none; "/>
+              <button ng-click="vm.Goods.OnAddOrModByAddImageDialog()" class="btn btn-info" type="button">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>所属服务商:</span>
+            </td>
+            <td colspan="1">
+              <select class="form-control input-sm"
+                      ng-model="vm.Goods.Current.Tag.selectedService"
+                      ng-change="vm.Goods.OnChangeGoodsDept()"
+                      ng-options="s.value as s.text for s in vm.Goods.ServiceDDL" style="width:100%;">
+              </select>
+            </td>
+            <td>
+              <span>第三方机构商品ID:</span>
+            </td>
+            <td colspan="1">
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.ThirdpartGoodsId" maxlength="50"/>
+            </td>
+            <td>
+              <span class="red">*</span><span>商品名称:</span>
+            </td>
+            <td colspan="3">
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.Name" maxlength="50"/>
+            </td>
+            <!--<td>-->
+              <!--<span>APP展示名称:</span>-->
+            <!--</td>-->
+            <!--<td colspan="1">-->
+              <!--<input type="text" class="form-control" ng-model="vm.Goods.Current.AppshowName" maxlength="50"/>-->
+            <!--</td>-->
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>商品分类:</span>
+            </td>
+            <td colspan="3">
+              <select class="form-control input-sm"
+                      ng-model="vm.Goods.Current.Tag.selectedType"
+                      ng-options="s.value as s.text for s in vm.Goods.TypeDDL" style="width:100%;">
+              </select>
+            </td>
+            <td>
+              <span class="red">*</span><span>商品标签:</span>
+            </td>
+            <td colspan="3">
+              <form class="form-inline">
+                <div class="form-group">
+                  <select class="form-control input-sm"
+                          ng-model="vm.Goods.Current.Tag.selectedTag"
+                          ng-change="vm.Goods.OnAddOrModByAddTag()"
+                          ng-options="s.value as s.text for s in vm.Goods.TagDDL" style="width: 100px;">
+                  </select>
+                </div>
+                <div class="form-group">
+                  <div class="btn-group">
+                    <button ng-repeat="item2 in vm.Goods.Current.Tags" class="btn btn-primary btn-sm" type="button">
+                      {{ item2 }} <span class="badge" ng-click="vm.Goods.OnAddOrModByRemoveTag(item2)">&times;</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>市场价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.OriginPrice" maxlength="20"/>
+            </td>
+            <td>
+              <span class="red">*</span><span>特惠价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.SalePrice" maxlength="20"/>
+            </td>
+            <td>
+              <span class="red">*</span><span>进价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.CostPrice" maxlength="20"/>
+            </td>
+            <td>
+              <span>毛利率:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-class="{true:'red'}[vm.Goods.Current.Tag.grossMargin <= 0]" ng-model="vm.Goods.Current.Tag.grossMargin" disabled/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>简要描述:</span>
+            </td>
+            <td colspan="7">
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.BriefDescription" maxlength="50"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>权重:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.OrderIndex"/>
+            </td>
+            <td>
+              <span class="red">*</span><span>库存:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" disabled/>
+            </td>
+            <td>
+              <span class="red">*</span><span>适用人群:</span>
+            </td>
+            <td colspan="3">
+              <label class="checkbox-inline" ng-repeat="item4 in vm.Goods.Current.Tag.crowdTypeDDL">
+                <input type="checkbox" ng-value="item4.value" ng-model="item4.checked"/> {{ item4.text }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>套餐类型:</span>
+            </td>
+            <td>
+              <select class="form-control input-sm"
+              ng-disabled="vm.Goods.Current.Id != ''"
+              ng-model="vm.Goods.Current.RootType"
+              ng-options="s.value as s.text for s in vm.Goods.GoodsTypeDDL">
+              </select>
+            </td> 
+          </tr>
+          <tr>
+            <td colspan="8">
+              <strong>商品详情</strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <div style="height:200px;"
+                   ng-model="vm.Goods.Current.DetailDescription"
+                   contenteditable="true">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <strong>支持的体检中心类型服务商</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>商品详情:</span>
+            </td>
+            <td colspan="2">
+              <select class="form-control" id="selectGoods"  multiple="multiple" >
+              </select>
+            </td>
+            <!-- <td>
+              <button type="button" class="btn btn-success" ng-click="vm.Goods.OnAddQuotaInfo()" style="width:120px;">保存</button>
+            </td> -->
+            <td ><span>套餐项目标签：</span></td>
+            <td colspan="3">
+              <button type="button" ng-repeat="item in vm.Goods.SortedWeightBtns" style="margin-right:20px;margin-top: 5px;"  ng-bind="item.Tag" class="btn btn-info"></button>
+            </td>
+          </tr>
+        </table>
+        <table class="table table-bordered">
+          <tr style="margin-top:5px;">
+            <th style="text-align: center;"><span>项目</span></th>
+            <th style="text-align: center;"><span>内容</span></th>
+            <th style="text-align: center;" colspan="3"><span>意义</span></th>
+            <th style="text-align: center;"><span>类别</span></th>
+          </tr>
+          <tr ng-repeat="item in vm.Goods.Current.CheckIndexList track by $index">
+            <td ng-bind="item.Project"></td>
+            <td ng-bind="item.Content"></td>
+            <td colspan="3" ng-bind="item.Desc"></td>
+            <td ng-bind="item.SexType"></td>
+          </tr>
+        </table>
+        <br/>
+        <div>
+          <strong>支持的体检套餐加项</strong>
+        </div>
+        <br />
+        <div  ng-show="vm.Goods.Current.RootType != -1">
+          <div>
+            <span>项目名称:</span>&nbsp;&nbsp;&nbsp;&nbsp;<select id="goodsIncrease" class="form-control" multiple="multiple"></select>
+          </div>
+          <br/>
+          <table class="table table-bordered">
+            <tr style="margin-top:5px;">
+              <th style="text-align: center;"><span>项目</span></th>
+              <th style="text-align: center;"><span>说明</span></th>
+              <th style="text-align: center;"><span>价格</span></th>
+            </tr>
+            <tr ng-repeat="item in vm.Goods.Current.IncreaseGoods track by $index">
+              <td ng-bind="item.Name"></td>
+              <td ng-bind="item.Description"></td>
+              <td ng-bind="item.SalePrice"></td>
+            </tr>
+          </table>
+        </div>  
+        <br/>
+        <br/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-if="vm.Goods.Current.Id == ''"
+                ng-click="vm.Goods.OnAdd()">保存
+        </button>
+        <button type="button" class="btn btn-success" ng-if="vm.Goods.Current.Id != ''"
+                ng-click="vm.Goods.OnEdit()">保存
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 添加或修改体检套餐:END -->
+
+<!-- 查看体检套餐:START -->
+<div class="modal fade" id="panelPreviewGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">查看体检套餐</h4>
+      </div>
+      <div class="modal-body" style="padding:0 15px;">
+        <table class="table medicallytable">
+          <tr>
+            <td colspan="8">
+              <strong>基础信息</strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <img ng-repeat="item3 in vm.Goods.Current.BannerUrls" ng-src="{{ item3 }}" alt="缩略图" class="img-thumbnail"
+                   style="width:140px; height:140px;"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>所属服务商:</span>
+            </td>
+            <td colspan="1">
+              <select class="form-control input-sm" disabled
+                      ng-model="vm.Goods.Current.Tag.selectedService"
+                      ng-options="s.value as s.text for s in vm.Goods.ServiceDDL" style="width:100%;">
+              </select>
+            </td>
+            <td>
+              <span>第三方机构商品ID:</span>
+            </td>
+            <td colspan="1">
+              <input type="text" class="form-control" disabled ng-model="vm.Goods.Current.ThirdpartGoodsId"
+                     maxlength="50"/>
+            </td>
+            <td>
+              <span class="red">*</span><span>商品名称:</span>
+            </td>
+            <td colspan="3">
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.Name" maxlength="50" disabled/>
+            </td>
+            <!--<td>-->
+              <!--<span>APP展示名称:</span>-->
+            <!--</td>-->
+            <!--<td colspan="1">-->
+              <!--<input type="text" class="form-control" ng-model="vm.Goods.Current.AppshowName" maxlength="50" disabled/>-->
+            <!--</td>-->
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>商品分类:</span>
+            </td>
+            <td colspan="3">
+              <select class="form-control input-sm" disabled
+                      ng-model="vm.Goods.Current.Tag.selectedType"
+                      ng-options="s.value as s.text for s in vm.Goods.TypeDDL" style="width:100%;">
+              </select>
+            </td>
+            <td>
+              <span class="red">*</span><span>商品标签:</span>
+            </td>
+            <td colspan="3">
+              <form class="form-inline">
+                <div class="form-group">
+                  <div class="btn-group">
+                    <button ng-repeat="item2 in vm.Goods.Current.Tags" class="btn btn-primary btn-sm" type="button">
+                      {{ item2 }}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>市场价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.OriginPrice" maxlength="20" disabled/>
+            </td>
+            <td>
+              <span class="red">*</span><span>特惠价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.SalePrice" maxlength="20" disabled/>
+            </td>
+            <td>
+              <span class="red">*</span><span>进价:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.CostPrice" maxlength="20" disabled/>
+            </td>
+            <td>
+              <span>毛利率:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-class="{true:'red'}[vm.Goods.Current.Tag.grossMargin <= 0]" ng-model="vm.Goods.Current.Tag.grossMargin" disabled/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>简要描述:</span>
+            </td>
+            <td colspan="7">
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.BriefDescription" maxlength="50"
+                     disabled/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>权重:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" ng-model="vm.Goods.Current.OrderIndex" disabled/>
+            </td>
+            <td>
+              <span class="red">*</span><span>库存:</span>
+            </td>
+            <td>
+              <input type="text" class="form-control" disabled/>
+            </td>
+            <td>
+              <span class="red">*</span><span>适用人群:</span>
+            </td>
+            <td colspan="3">
+              <label class="checkbox-inline" ng-repeat="item4 in vm.Goods.Current.Tag.crowdTypeDDL">
+                <input type="checkbox" ng-value="item4.value" ng-model="item4.checked" disabled/> {{ item4.text }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>套餐类型:</span>
+            </td>
+            <td>
+              <select class="form-control input-sm"
+              ng-disabled="vm.Goods.Current.Id != ''"
+              ng-model="vm.Goods.Current.RootType"
+              ng-options="s.value as s.text for s in vm.Goods.GoodsTypeDDL">
+              </select>
+            </td> 
+          </tr>
+          <tr>
+            <td colspan="8">
+              <strong>商品详情</strong>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <div ng-model="vm.Goods.Current.DetailDescription" preview="true"
+                   contenteditable="true">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="8">
+              <strong>支持的体检中心类型服务商</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="">服务商:</label>
+            </td>
+            <td>
+              <select class="form-control" disabled></select>
+            </td>
+            <td colspan="6"></td>
+          </tr>
+          <tr>
+            <td>
+              <span class="red">*</span><span>商品详情:</span>
+            </td>
+            <td colspan="2">
+              <select class="form-control" id="disableSelectGoods" multiple="multiple" ng-options="item for item in vm.Goods.Current.CheckIndexList" >
+              </select>
+            </td>
+             <td>
+              <button type="button" class="btn btn-success" ng-click="vm.Goods.OnOutCSV()" style="width:120px;">导出Excel</button>
+            </td> 
+            <td ><span>套餐项目标签：</span></td>
+            <td colspan="3">
+              <button type="button" ng-repeat="item in vm.Goods.SortedWeightBtns"  style="margin-right:20px;margin-top: 5px;" ng-bind="item.Tag" class="btn btn-info">
+                
+              </button>
+            </td>
+          </tr>
+        </table>
+        <table class="table table-bordered">
+          <tr style="margin-top:5px;">
+            <th style="text-align: center;"><span>项目</span></th>
+            <th style="text-align: center;"><span>内容</span></th>
+            <th style="text-align: center;" colspan="3"><span>意义</span></th>
+            <th style="text-align: center;"><span>类别</span></th>
+          </tr>
+          <tr ng-repeat="item in vm.Goods.Current.CheckIndexList track by $index">
+            <td ng-bind="item.Project"></td>
+            <td ng-bind="item.Content"></td>
+            <td colspan="3" ng-bind="item.Desc"></td>
+            <td ng-bind="item.SexType"></td>
+          </tr>
+        </table>
+        <br/>
+        <div>
+          <strong>支持的体检套餐加项</strong>
+        </div>
+        <br />
+        <div>
+          <span>项目名称:</span>&nbsp;&nbsp;&nbsp;&nbsp;<select id="goodsIncreasePreview" disabled class="form-control" multiple="multiple"></select>
+        </div>
+        <br/>
+        <table class="table table-bordered">
+          <tr style="margin-top:5px;">
+            <th style="text-align: center;"><span>项目</span></th>
+            <th style="text-align: center;"><span>说明</span></th>
+            <th style="text-align: center;"><span>价格</span></th>
+          </tr>
+          <tr ng-repeat="item in vm.Goods.Current.IncreaseGoods track by $index">
+            <td ng-bind="item.Name"></td>
+            <td ng-bind="item.Description"></td>
+            <td ng-bind="item.SalePrice"></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 查看体检套餐:END -->
+
+<!-- 上架商品:START -->
+<div class="modal fade" id="panelUpGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding inform-h3">商品已下架，确定要改为上架吗？</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.Goods.OnUpGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- 上架商品:END -->
+
+<!-- 下架商品:START -->
+<div class="modal fade" id="panelDownGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding inform-h3">商品已上架，确定要改为下架吗？</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.Goods.OnDownGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 下架商品:END -->
+
+<!-- 删除商品:START -->
+<div class="modal fade" id="panelConfirmRemoveGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding inform-h3">商品已上架，请下架后再删除！</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 删除商品:END -->
+
+<!-- 删除商品:START -->
+<div class="modal fade" id="panelRemoveGoods" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <h3 class="ng-binding inform-h3">您确定要删除本商品吗？删除后将不可逆转</h3>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-click="vm.Goods.OnRemoveGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 删除商品:END -->
+
+<!--下架model-->
+<div class="modal fade" id="goodsOffsaleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要下架这些商品吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.Goods.OnDownGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--上架model-->
+<div class="modal fade" id="goodsOnsaleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">确定要上架这些商品吗？</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.Goods.OnUpGoods()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

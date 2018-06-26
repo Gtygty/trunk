@@ -1,0 +1,143 @@
+<section class=" banner-pic order">
+    <div class="panel panel-default banner-paneller">
+  
+      <div class="panel-heading">
+        <div class="pull-left">
+          <ol class="breadcrumb">
+            <li><a href="javascript:void(0);">掌上体检 </a></li>
+            <li class="active">电话预约</li>
+          </ol>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+  
+      <div class="panel-body panel-up">
+        <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+          <div class="clearfix">
+            <form class="form-inline pull-left" role="form">
+                <div class="form-group form-group-sm input-margin">
+                  <span>申请时间:</span>
+                  <div class="input-group">
+                    <input type="text" class="form-control input-sm" id="startDate" ng-model="vm.telAppointment.data.params.StartTime" placeholder="请输入日期"
+                           style="width: 160px; border-right: 0;"/>
+                    <div class="input-group-addon">~</div>
+                    <input type="text" class="form-control input-sm" id="endDate" ng-model="vm.telAppointment.data.params.EndTime" placeholder="请输入日期"
+                           style="width: 160px; border-left: 0;"/>
+                  </div>
+                </div>
+              <div class="form-group">
+                <span>客户姓名:</span>
+                <input class="form-control input-sm" ng-model="vm.telAppointment.data.params.CustomerName" placeholder="请输入客户姓名" maxlength="30"/>
+              </div>
+              <div class="form-group input-margin">
+                <span>客户手机号:</span>
+                <input class="form-control input-sm" ng-model="vm.telAppointment.data.params.CustomerPhone" placeholder="请输入客户手机号" maxlength="11"/>
+              </div>
+            </form>
+            <div class="pull-right">
+              <button type="button" class="btn btn-success btn-sm" ng-click="vm.telAppointment.getList()">
+                <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+              </button>
+              <button type="button" class="btn btn-info btn-sm" ng-click="vm.telAppointment.reSetSearchParams()">
+                <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+              </button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+  
+        <div class="tab-content answers_pane">
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active " id="All">
+              <div>
+                <div style="margin:0 15px 15px 15px;">
+                  <div class="clearfix"></div>
+                </div>
+                <table class="table table-bordered">
+                  <tr>
+                    <th style="width:14%">申请时间</th>
+                    <th style="width:14%">姓名</th>
+                    <th style="width:14%">手机号</th>
+                    <th style="width:14%">所在城市</th>
+                    <th style="width:30%">备注</th>
+                    <th style="width:14%">操作</th>
+                  </tr>
+                  <tr ng-repeat="item in vm.telAppointment.data.telAppointmentList">
+                    <td ng-bind="item.CreateTime"></td>
+                    <td ng-bind="item.CustomerName"></td>
+                    <td ng-bind="item.CustomerPhone"></td>
+                    <td>{{item.AMapProvinceName}}-{{item.AMapCityName}}</td>
+                    <td ng-bind="item.Remark" style="text-align: left;word-wrap: break-word;word-break: break-all;"></td>
+                    <td>
+                      <button type="button" class="btn btn-sm btn-success" ng-if="item.State==0" ng-click="vm.telAppointment.onServiceAppointment(item)">待服务</button>
+                      <button type="button" class="btn btn-sm" disabled ng-if="item.State==1">已完成</button>
+                      <button type="button" class="btn btn-sm btn-warning" ng-click="vm.telAppointment.onModifyRemarkDialog(item)">备注</button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              <br/>
+              <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+            </div>
+            <!-- ALL Appointment: End -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 服务完成弹框 -->
+  <div class="modal fade" id="completeTelAppointmentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content disable">
+        <div class="modal-body text-center">
+          <h4 class="ng-binding inform-h3">您确定当前用户已服务完成？</h4>
+          <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.telAppointment.completeTelAppointment()">确定</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- 备注 -->
+  <div class="modal fade" id="RemarkDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title">备注</h4>
+        </div>
+        <div class="modal-body" style="padding:0 15px;">
+          <div class="tab-content answers_pane">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane tabPan active" id="tabone">
+                  <div style="padding: 8px 0; border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+                    <div style="margin:0 8px 8px 8px;">
+                      <div class="pull-right">
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                      <table class="table medicallytable" style="width:520px;margin:0 20px;">
+                        <tr>
+                          <td>
+                              <div class="input-group">
+                                <textarea class="form-control" cols="30" rows="10" maxlength="500" placeholder="请输入备注（500字以内）" ng-model="vm.telAppointment.data.Remark" style="width:815px;border-radius:5px;"></textarea>
+                              </div>
+                          </td>
+                        </tr>
+                      </table>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-success" ng-click="vm.telAppointment.onModifyRemark()">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,135 @@
+<section class=" banner-pic">
+    <div class="panel panel-default banner-paneller">
+        <div class="panel-heading">
+            <ol class="breadcrumb pull-left">
+                <li><a href="javascript:void(0);">掌上体检 </a></li>
+                <li class="active">信息管理列表</li>
+
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+        <div class="panel-body panel-up">
+            <div class="form-inline down-div">
+                <span class="text-descript">描述:</span>
+                <input class="input-sm des-input" type="text" ng-model="vm.data.searchInfo.Description" placeholder="请输入描述性文案">
+                <button class='btn btn-default input-sm' ng-click="vm.SearchInforma()">搜索</button>
+                <p class="pull-right text-descript2" data-toggle="modal" ng-click="vm.AddInit()" data-target="#addInformationModel">添加</p>
+                <div class="clearfix"></div>
+            </div>
+            <div class="information-list">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>描述</th>
+                            <th>URL</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="item in vm.data.initData">
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td>{{item.Description}}</td>
+                            <td>{{item.LinkUrl}}</td>
+                            <td>
+                                <span class="cursorFont" ng-click="vm.EditInforma(item)" data-toggle="modal" data-target="#editInformationModel">编辑</span>
+                                <span class="cursorFont" ng-click="vm.DetailInforma(item,$index)" data-toggle="modal" data-target="#deleteModel">删除</span>
+                                <span class="cursorFont"  data-toggle="modal" data-target="#prevPhoneModel" ng-click="vm.PrevInforma(item)">预览</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--添加图文的model-->
+<div class="modal fade bs-example-modal-lg" id="addInformationModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="banner-close pull-right " data-dismiss="modal">关闭</span>
+                <h4 class="modal-title" id="myModalLabel">添加图文内容</h4>
+            </div>
+            <div class="modal-body model-informe clearfix">
+               <div class="informa-des">
+                   <span class="text-descript">描述：</span>
+                   <input type="text" class="des-input" ng-model="vm.data.addData.Description" placeholder="请输入描述性文案">
+               </div>
+               <div class="informa-textarea">
+               <div style="height:400px;width:850px;padding:0 20px;"
+                     ng-model="addEditorHTML"  id="contenteditableOne"
+                    contenteditable="true"></div>
+                    <!--<textarea class="form-control" id="add-editor"  style="width: 100%; height:510px; max-height:510px;">-->
+                    <!--</textarea>-->
+               </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="vm.AddInforma()" ng-disabled="vm.data.IsableClick">保存</button>
+                <button type="button" class="btn btn-default" ng-click="vm.PrevAddInforma()" data-toggle="modal" data-target="#prevPhoneModel">预览</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑的model-->
+<div class="modal fade bs-example-modal-lg" id="editInformationModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="banner-close pull-right " data-dismiss="modal">关闭</span>
+                <h4 class="modal-title" id="myModalLabel">编辑图文内容</h4>
+            </div>
+            <div class="modal-body model-informe clearfix">
+               <div class="informa-des">
+                   <span class="text-descript">描述：</span>
+                   <input type="text" ng-model="vm.data.editData[0].Description" class="des-input" placeholder="请输入描述性文案">
+               </div>
+               <div class="informa-textarea">
+                 <div style="height:400px;width:850px;padding:0 20px;"
+                      ng-model="editEditorHTML"  id="contenteditableOne"
+                      contenteditable="true">
+                    <!--<textarea class="form-control" id="edit-editor" style="width: 100%; height:510px; max-height:510px;">-->
+                    <!--</textarea>-->
+                 </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" ng-click="vm.EditSureInforma()" ng-disabled="vm.data.IsableClick">保存</button>
+                  <button type="button" class="btn btn-default" ng-click="vm.PrevEditInforma()" data-toggle="modal" data-target="#prevPhoneModel">预览</button>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<!--预览的model-->
+<div class="modal fade" id="prevPhoneModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog text-center phone-model">
+         <div class="prevPhone">
+             <img class="phone-image" src="img/u19959.png" alt="">
+             <div class="text-content">
+                 <!--<div class="textContent-header">
+                     <span ng-bind="vm.data.prevData.Description"></span>
+                 </div>-->
+                 <div class="textContent-content">
+                     <p ng-bind-html="vm.data.prevData.SimpleContent"></p>
+                 </div>
+              </div>
+             <button type="button" class="phone-btn" data-dismiss="modal">关闭预览</button>
+         </div>
+    </div>
+</div>
+
+<!--删除model-->
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog" >
+    <div class="modal-dialog">
+        <div class="modal-content disable">
+            <div class="modal-body text-center">
+                <h3 class="ng-binding inform-h3">确定要删除吗？</h3>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" ng-click="vm.DeleteInformaSure()" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

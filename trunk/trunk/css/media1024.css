@@ -1,0 +1,21 @@
+/* 问答圈 部分样式 */
+.answer .pass:after{
+  content: '通过'
+}
+.answer .topass:after{
+  content: '已通过'
+}
+.answer .ng:after{
+  content: '拒绝'
+}
+.answer .tong:after{
+  content: '被拒绝'
+}
+.answer .code:after{
+  content: '查看二维码'
+}
+
+/* 活动群组 部分样式 */
+.activitygroup .code:after{
+  content: '转成短码'
+}

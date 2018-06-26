@@ -1,0 +1,206 @@
+<section class=" banner-pic activitygroup dspPictureManage">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ol class="breadcrumb">
+				<li><a href="javascript:void(0);">掌上体检 </a></li>
+				<li class="active">图片维护</li>
+			</ol>
+		</div>
+        <div class="panel-body panel-up">
+            <div class="form-inline" style="margin-top: 5px; padding: 15px 35px;">
+                <div class="clearfix">
+                    <form class="form-inline pull-left" role="form">
+                        <div class="form-group">
+                            <span>相关机构：</span>
+                             <select class="form-control input-sm"
+                                    ng-model="vm.pmCollection.Search.ServiceDeptID"
+                                    ng-options="s.value as s.text for s in vm.Common.Depts"
+                                    style="width:220px;">
+                             </select>
+                        </div>
+                        <div class="form-group input-margin">
+                            <span> 图片名称：</span>
+                            <input class="form-control input-sm" ng-model="vm.pmCollection.Search.Name" style="width:220px;" placeholder="请输入名称检索" maxlength="40" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success btn-sm" ng-click="vm.pmCollection.OnSearch()">
+                                <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+                            </button>
+                        </div>
+                    </form>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-info btn-sm" ng-click="vm.pmCollection.OnAddDialog()">
+                            <span class='glyphicon glyphicon-plus'  ></span>&nbsp;添加
+                        </button>
+                    </div>
+                </div>
+            </div>
+        <section class="content"  style="margin-top: -15px;" >
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-zd group" ng-repeat="listItem in vm.pmCollection.List" >
+						<div class="panel panel-default" >
+							<img ng-src="{{listItem.ImageUrl}}" alt="图片" class="img-thumbnail imagefilter" />
+              <div class="panel-top"></div>
+              <div class="span" ng-bind="listItem.ImageName | stringSub:10" ng-attr-title="{{ listItem.ImageName }}"></div>
+              <div class="panel-body picbutton">
+                <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#lookPicture" ng-click="vm.pmCollection.delPicture(listItem)">
+                  预览</button>
+                <button  type="button" class="btn btn-info btn-xs" ng-click="vm.pmCollection.OnModifyDialog(listItem)">
+                  编辑</button>
+                <button type="button" class="btn btn-danger btn-xs" ng-click="vm.pmCollection.OnDeleteDialog(listItem)">
+                  删除</button>
+              </div>
+						</div>
+					</div>
+				</div>
+		  </section>
+    </div>
+	</div>
+</section>
+<!--groupAdd-->
+<div class="modal fade" id="groupAdd" tabindex="-1" role="dialog">
+  <div class="modal-dialog Adding" style="width:540px;">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myListAddLabel">添加图片</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table medicallytable">
+            <tr ng-show="vm.pmCollection.Current.ImageType ==1">
+                <td width='80'><span class="red">*</span><span>机构：</span></td>
+                <td colspan="2">
+                    <select id="SelectAddDeptDDL" class="multipleSelect" multiple="multiple" ng-model="vm.pmCollection.Search.ServiceDeptIds"></select>
+                </td>
+            </tr>
+            <tr>
+              <td><span class="red">*</span><span>图片:</span></td>
+              <td>
+                <div class="input-group input-group-sm">
+                  <input type="file" class="form-control" id="inputAddReportItemSrc" placeholder="请录入图标"
+                         ng-model="vm.pmCollection.ImageCurrent.ImageUrl" />
+                  <span class="input-group-btn">
+                      <button class="btn btn-info" type="button" ng-click="vm.pmCollection.OnUploadAddImage()">
+                      <span class='glyphicon glyphicon-eject'></span>&nbsp;上传图像</button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                  <div class ="adding" ng-repeat="imageItem in vm.pmCollection.Current.Images">
+                      <div ><img class="form-control"  ng-src="{{imageItem.ImageUrl}}"/></div>
+                      <div><input class="form-control input-sm adding"  placeholder="请输入图片名称" ng-model="imageItem.ImageName"  maxlength="80" /></div>
+                  </div>
+                  <div class="comcolor">注：120*120px，100kb以内，PNG格式的图片</div>
+              </td>
+            </tr>
+			      <tr>
+                <td width='150'><span class="red">*</span><span>所有机构使用：</span></td>
+                <td colspan="2">
+									<div class="btn-group">
+										<button type="button" class="btn btn-default"
+                    ng-class="{ 'btn-danger': vm.pmCollection.Current.ImageType ==2 }"
+                    ng-click="vm.pmCollection.OnClickChangeCurrentState(2)">是</button>
+										<button type="button" class="btn btn-default"
+                      ng-class="{ 'btn-danger': vm.pmCollection.Current.ImageType ==1 }"
+                    ng-click="vm.pmCollection.OnClickChangeCurrentState(1)">否</button>
+									</div>
+                </td>
+           </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-click="vm.pmCollection.OnAdd()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--groupEdit-->
+<div class="modal fade" id="groupEdit" tabindex="-1" role="dialog">
+  <div class="modal-dialog Adding" style="width:540px;">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myListAddLabel">添加图片</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table medicallytable">
+          <tr ng-show="vm.pmCollection.Current.ImageType ==1">
+						<td width='80'><span class="red">*</span><span>机构：</span></td>
+						<td colspan="2">
+              <select id="SelectEditDeptDDL" class="multipleSelect" multiple="multiple" ng-model="vm.pmCollection.Search.ServiceDepts"></select>
+						</td>
+          </tr>
+          <tr>
+						<td><span class="red">*</span><span>图片:</span></td>
+						<td>
+							<div class="input-group input-group-sm">
+							<input type="file" class="form-control" id="inputEditReportItemSrc" placeholder="请录入图标"
+								   ng-model="vm.pmCollection.Current.ImageUrl"	/>
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button" ng-click="vm.pmCollection.OnUploadEditImage()">
+								<span class='glyphicon glyphicon-eject'></span>&nbsp;上传图像</button>
+							</span>
+							</div>
+						</td>
+          </tr>
+          <tr>
+						<td></td>
+						<td>
+							<div class="adding">
+								<img class="form-control" ng-src="{{vm.pmCollection.Current.ImageUrl}}"  />
+							</div>
+							<div class="adding">
+							<input class="form-control input-sm"  placeholder="请输入图片名称" ng-model="vm.pmCollection.Current.ImageName"  style="width:200px" maxlength="80" />
+							</div>
+              <div class="comcolor">注：120*120px，100kb以内，PNG格式的图片</div>
+						</td>
+          </tr>
+			    <tr>
+						<td width='150'><span class="red">*</span><span>所有机构使用：</span></td>
+						<td colspan="2">
+							<div class="btn-group">
+								<button type="button" class="btn btn-default"
+                ng-class="{ 'btn-danger': vm.pmCollection.Current.ImageType ==2 }"
+                ng-click="vm.pmCollection.OnClickChangeCurrentState(2)">是</button>
+								<button type="button" class="btn btn-default"
+                ng-class="{ 'btn-danger': vm.pmCollection.Current.ImageType ==1 }"
+                ng-click="vm.pmCollection.OnClickChangeCurrentState(1)" >否</button>
+							</div>
+             </td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-click="vm.pmCollection. OnModify()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--删除-->
+<div class="modal fade" id="delPicture" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确定要删除吗？</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal"   ng-click="vm.pmCollection.OnDelete()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--图片预览-->
+<div class="modal fade" id="lookPicture" tabindex="-1" role="dialog">
+  <div class="modal-dialog Adding" style="width:540px;">
+    <div class="modal-content"><img ng-src="{{vm.pmCollection.Current.ImageUrl}}" style="width:100%;height:450px;"/></div>
+  </div>
+</div>

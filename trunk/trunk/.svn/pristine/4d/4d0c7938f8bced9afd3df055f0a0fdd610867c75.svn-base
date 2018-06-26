@@ -1,0 +1,365 @@
+﻿<section class=" banner-pic">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ol class="breadcrumb">
+				<li><a href="javascript:void(0);">掌上体检 </a></li>
+				<li class="active">评论管理</li>
+			</ol>
+		</div>
+		<div class="panel-body">
+      <ul class="nav nav-tabs nav-banner" role="tablist">
+        <li href="#selfcomment" role="comment" data-toggle="tab" class="active"><a href="#">手动评价</a></li>
+        <li href="#customcomment" role="comment" data-toggle="tab" ><a href="#">客户评价</a></li>
+      </ul>
+      <div class="tab-content deptTabs">
+          <div role="comment" class="tab-pane active" id="selfcomment">
+            <div class="clearfix">
+              <form class="form-inline pull-left" role="form">
+                <div class="form-group">
+                  <span>开始时间:</span>
+                  <input id="startSelfDate" type="text"
+                        class="form-control input-sm"
+                        placeholder="请选择开始时间"
+                        ng-model="vm.commentCollection.SelfList.SelfCurrent.startDate" >
+                </div>
+                <div class="form-group ml">
+                  <span>结束时间:</span>
+                  <input id="endSelfDate" type="text"
+                        class="form-control input-sm"
+                        placeholder="请选择结束时间"
+                        ng-model="vm.commentCollection.SelfList.SelfCurrent.endDate" >
+                </div>
+                <div class="form-group ml">
+                  <button class="btn btn-primary btn-sm" ng-click="vm.commentCollection.List.OnClick(2)">
+                    <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+                  </button>
+                </div>
+              </form>
+              <div class="pull-right">
+                <span class="comheader"><span ng-bind='vm.commentCollection.SelfList.selfCount'></span>条</span>
+                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myListAdd" ng-click="vm.commentCollection.Add.OnOpenDialog()">
+                      <span class='glyphicon glyphicon-plus'></span>&nbsp;增加
+                </button>
+                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myUpdateDate">
+                      <span class='glyphicon glyphicon-calendar'></span>&nbsp;更新评论时间
+                </button>
+              </div>
+            </div>
+            <div class="BMS_table_left upload_table pt">
+              <table class="table mt">
+                <tr>
+                  <th>姓名</th>
+                  <th>内容</th>
+                  <th>评价</th>
+                  <th>时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat='listItem in vm.commentCollection.SelfList.Data'>
+                  <td>{{ listItem.UserName }}</td>
+                  <td>
+                    <div class="widthContent">
+                        {{ listItem.Content }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="starcheck">
+                      <span ng-repeat="starlist in listItem.star"
+                            ng-class='starlist.name'>
+                      </span>
+                    </div>
+                  </td>
+                  <td>{{ listItem.CreateDate }}</td>
+                  <td>
+                      <button type="button"
+                              class="btn btn-success btn-sm"
+                              data-toggle="modal"
+                              data-target="#myListEdit"
+                              ng-show="(listItem.UserType == 2)?true:false"
+                              ng-click="vm.commentCollection.Edit.OnOpenDialog(listItem)" title="修改">
+                              修改
+                      </button>
+                      <button type="button"
+                              class="btn btn-danger btn-sm"
+                              data-toggle="modal"
+                              data-target="#myListDel"
+                              ng-show="(listItem.UserType == 2)?true:false"
+                              ng-click="vm.commentCollection.Del.OnOpenDialog(listItem)" title="删除">
+                              删除
+                      </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div role="comment" class="tab-pane" id="customcomment">
+            <div class="clearfix">
+              <form class="form-inline pull-left" role="form">
+                <div class="form-group">
+                  <span>服务机构:</span>
+                  <select type="text"
+                          class="form-control input-sm"
+                          ng-model="vm.commentCollection.List.Current.DepartCode"
+                          ng-options="x.DepartCode as x.Name for x in vm.commentCollection.Departs.Data">
+                  </select>
+                </div>
+                <div class="form-group ml">
+                  <span>开始时间:</span>
+                  <input id="startNextDate" type="text"
+                        class="form-control input-sm"
+                        placeholder="请选择开始时间"
+                        ng-model="vm.commentCollection.SelfList.Current.startDate" >
+                </div>
+                <div class="form-group ml">
+                  <span>结束时间:</span>
+                  <input id="endNextDate" type="text"
+                         class="form-control input-sm"
+                         placeholder="请选择结束时间"
+                         ng-model="vm.commentCollection.SelfList.Current.endDate" >
+                </div>
+                <div class="form-group ml">
+                  <span>类型:</span>
+                  <select class="form-control input-sm"
+                          ng-model='vm.commentCollection.List.Current.Sta'
+                          ng-options="x.value as x.text for x in vm.commentCollection.List.val">
+                  </select>
+                </div>
+                <div class="form-group ml">
+                  <button class="btn btn-primary btn-sm" ng-click="vm.commentCollection.List.OnClick(1)">
+                    <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+                  </button>
+                </div>               
+              </form>
+              <div class="pull-right">
+                  <span class="comheader"><span ng-bind='pageConfig.totalItems'>2017</span>条</span>                
+              </div>
+            </div>
+            <div class="BMS_table_left upload_table pt">
+              <table class="table mt">
+                <tr>
+                  <th>
+                    <input type="checkbox"
+                            ng-model="vm.commentCollection.Check.Current.Box"
+                            ng-click="vm.commentCollection.Check.OnAllCheckedBox()"
+                            style='margin-left:-3px;'>
+                  </th>
+                  <th>机构</th>
+                  <th>姓名</th>
+                  <th>内容</th>
+                  <th>评价</th>
+                  <th>时间</th>
+                  <th>操作</th>
+                </tr>
+                <tr ng-repeat='listItem in vm.commentCollection.List.Data'>
+                  <td><input type="checkbox" ng-model='listItem.Checked'></td>
+                  <td>{{ listItem.Name }}</td>
+                  <td>{{ listItem.UserName }}</td>
+                  <td>
+                    <div class="widthContent">
+                        {{ listItem.Content }}
+                    </div>
+                  </td>
+                  <td>
+                    <div class="starcheck">
+                      <span ng-repeat="starlist in listItem.star"
+                            ng-class='starlist.name'>
+                      </span>
+                    </div>
+                  </td>
+                  <td>{{ listItem.CreateDate }}</td>
+                  <td>
+                      <button type="button"
+                              class="btn btn-warning btn-sm"
+                              ng-show="listItem.Status == 1" title="下架"
+                              ng-click="vm.commentCollection.Enabled.OnDownClick(listItem)">
+                              下架
+                      </button>
+                      <button type="button"
+                              class="btn btn-info btn-sm"
+                              ng-show="listItem.Status == 0" title="上架"
+                              ng-click="vm.commentCollection.Enabled.OnUpClick(listItem)">
+                              上架
+                      </button>
+                  </td>
+                </tr>
+              </table>
+              <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+              <div style="width: 100%;height: 30px;"></div>
+              <br /><br />
+              <div class="commendfooter">
+                <button class="btn btn-info btn-sm"
+                        ng-click="vm.commentCollection.Enabled.OnOpenDialog(1)">
+                  <span class='glyphicon glyphicon-open'></span>&nbsp;上架
+                </button>
+                <button class="btn btn-warning btn-sm"
+                        ng-click="vm.commentCollection.Enabled.OnOpenDialog(2)">
+                  <span class='glyphicon glyphicon-save'></span>&nbsp;下架
+                </button>
+              </div>
+            </div>
+          </div>
+      </div>
+
+		</div>
+	</div>
+</section>
+
+
+
+<!-- myListAdd -->
+<div class="modal fade" id="myListAdd" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content Adding">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+        <h4 class="modal-title">添加评论</h4>
+      </div>
+      <div class="modal-body">
+        <div class="BMS_table_border Upload_td">
+           <table class="table">
+              <tr>
+                <td width='90'><span class="red">*</span><span>姓名：</span></td>
+                <td colspan="2">
+                  <input class="form-control input-sm" ng-model="vm.commentCollection.Add.Current.UserName" />
+                </td>
+              </tr>
+              <tr>
+                <td><span class="red">*</span><span>评价：</span></td>
+                <td colspan="2">
+                  <div class="starcheck cursor">
+                      <span ng-repeat="item in vm.commentCollection.Add.param"
+                            ng-class='item.name'
+                            ng-click=vm.commentCollection.Add.OnStarClick(item)>
+                      </span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-align: top"><span class="red">*</span><span>内容：</span></td>
+                <td colspan="2">
+                  <textarea rows="3" class="form-control input-sm" ng-model="vm.commentCollection.Add.Current.Content"></textarea>
+                </td>
+              </tr>
+           </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.Add.OnClearContent()"><span class='glyphicon glyphicon-remove'></span>&nbsp; 取消 </button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.commentCollection.Add.OnClick()"><span class='glyphicon glyphicon-ok'></span>&nbsp; 保存 </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- myListEidt -->
+<div class="modal fade" id="myListEdit" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content Adding">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+        <h4 class="modal-title">修改评论</h4>
+      </div>
+      <div class="modal-body">
+        <div class="BMS_table_border Upload_td">
+           <table class="table">
+              <tr>
+                <td width='90'><span class="red">*</span><span>姓名：</span></td>
+                <td colspan="2">
+                  <input class="form-control input-sm" ng-model="vm.commentCollection.Edit.Current.UserName" disabled />
+                </td>
+              </tr>
+              <tr>
+                <td><span class="red">*</span><span>评价：</span></td>
+                <td colspan="2">
+                  <input class="form-control input-sm" ng-model="vm.commentCollection.Edit.Current.Level" disabled />
+                </td>
+              </tr>
+              <tr>
+                <td style="vertical-align: top"><span class="red">*</span><span>内容：</span></td>
+                <td colspan="2">
+                  <textarea rows="3" class="form-control input-sm" ng-model="vm.commentCollection.Edit.Current.Content" /></textarea>
+                </td>
+              </tr>
+           </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp; 取消 </button>
+        <button type="button" class="btn btn-success btn-sm" ng-click="vm.commentCollection.Edit.OnClick()"><span class='glyphicon glyphicon-ok'></span>&nbsp; 保存 </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- myListUp -->
+<div class="modal fade" id="myListUp" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">确定上架？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">
+          <span class='glyphicon glyphicon-remove'></span>&nbsp;取消
+        </button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.Enabled.OnUpClick()">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+	  </div>
+	</div>
+  </div>
+</div>
+<!-- myListDown -->
+<div class="modal fade" id="myListDown" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">确定下架？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">
+          <span class='glyphicon glyphicon-remove'></span>&nbsp;取消
+        </button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.Enabled.OnDownClick()">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<!-- myListDel -->
+<div class="modal fade" id="myListDel" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">您确定要删除此条评论吗？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.Del.OnClick(0)"><span class='glyphicon glyphicon-ok'></span>&nbsp;确定</button>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<!-- myUpdateDate -->
+<div class="modal fade" id="myUpdateDate" tabindex="-1" role="dialog" aria-labelledby="myUpdateDateLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">您确定要更新所有系统评价时间吗？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.SelfList.OnClickUpdateDate()"><span class='glyphicon glyphicon-ok'></span>&nbsp;确定</button>
+	  </div>
+	</div>
+  </div>
+</div>
+
+<!-- myListAllDel -->
+<div class="modal fade" id="myListAllDel" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">您确定要删除全部吗？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="vm.commentCollection.Del.OnClick(1)"><span class='glyphicon glyphicon-ok'></span>&nbsp;确定</button>
+	  </div>
+	</div>
+  </div>
+</div>
+
+</div>
+

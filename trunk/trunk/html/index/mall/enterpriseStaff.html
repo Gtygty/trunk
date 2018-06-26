@@ -1,0 +1,186 @@
+<section class=" banner-pic appointment">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <div class="pull-left">
+        <ol class="breadcrumb">
+          <li><a href="javascript:void(0);">商城管理 </a></li>
+          <li class="active">团检企业用户管理</li>
+        </ol>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="panel-body panel-up">
+      <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+        <div class="clearfix">
+          <form class="form-inline pull-left" role="form">
+            <div class="form-group">
+              <span>姓名:</span>
+              <input class="form-control input-sm" ng-model="vm.EnterpriseStaff.data.searchParams.Name" 
+              placeholder="请输入姓名" maxlength="50"/>
+            </div>
+            <div class="form-group input-margin">
+              <span>手机号:</span>
+              <input class="form-control input-sm" ng-model="vm.EnterpriseStaff.data.searchParams.Mobile"
+              placeholder="请输入手机号" maxlength="50"/>
+            </div>
+            <div class="form-group">
+              <span>身份证号:</span>
+              <input class="form-control input-sm" ng-model="vm.EnterpriseStaff.data.searchParams.IdCard" 
+              placeholder="请输入身份证号" maxlength="50"/>
+            </div>
+            <div class="form-group input-margin">
+              <span>性别:</span>
+              <select class="form-control input-sm"  ng-model="vm.EnterpriseStaff.data.searchParams.Gender"
+                      ng-options="s.Value as s.Text for s in vm.EnterpriseStaff.const.SexList">
+                      <option ng-if=false></option>
+              </select>
+            </div>
+            <div class="form-group">
+              <span>婚否:</span>
+              <select class="form-control input-sm"  ng-model="vm.EnterpriseStaff.data.searchParams.Married"
+                      ng-options="s.Value as s.Text for s in vm.EnterpriseStaff.const.MarryList">
+                      <option ng-if=false></option>
+              </select>
+            </div>
+          </form>
+          <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" ng-click="vm.EnterpriseStaff.OnSearch()">
+              <span class='glyphicon glyphicon-search' ></span>&nbsp;搜索
+            </button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="vm.EnterpriseStaff.Onclear()">
+              <span class='glyphicon glyphicon-plus'></span>&nbsp;清除
+            </button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <div class="tab-content answers_pane">
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- ALL Appointment: Start -->
+          <div style="margin:0 15px 15px 15px;">
+            <div class="pull-right">
+              <from class="form-inline">
+                <div class="form-group">
+                  <button class="btn btn-sm btn-info">
+                    <a style="color: white;" href="http://zhangshangtijian.b0.upaiyun.com/default/XlsTemplate/%E6%8E%8C%E4%B8%8A%E4%BD%93%E6%A3%80%E5%9B%A2%E6%A3%80%E5%91%98%E5%B7%A5%E5%AF%BC%E5%85%A5%E6%A8%A1%E6%9D%BF.xls" target="_blank">模版下载</a>
+                  </button>
+                </div>
+                <div class="form-group" style="margin-top:5px;margin-right: 3px;">
+                  <label ng-bind="pageConfig.totalItems"></label>条
+                </div>
+                <div class="input-group" style="width: 192px;margin-right: 56px;">
+                  <input type="file" class="form-control input-sm" id="xlsFile" placeholder="请选择你的文件">
+                  <span class="input-group-btn" style="padding:0;border:none;display:block;">
+                    <button type="button" class="btn btn-success btn-sm" 
+                    ng-click="vm.EnterpriseStaff.OnInCSV()">批量导入</button>
+                  </span>
+                </div>
+                <button class="btn btn-info btn-sm" type="button" ng-click="vm.EnterpriseStaff.OnOutCSV()">批量导出</button>
+            </from>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div role="tabpanel" class="tab-pane active " id="All">
+            <div style="border: 1px #ddd solid; border-top: 0; border-radius:0 0 4px 4px;">
+              <table class="table table-bordered">
+                <tr>
+                  <th>
+                    <input ng-model="vm.EnterpriseStaff.data.checkedAll" ng-click="vm.EnterpriseStaff.OnCheckedAll()" type="checkbox"
+                           name="AppointmentCheckAll"/>
+                  </th>
+                  <th style="width:20%;">客户信息</th>
+                  <th style="width:20%;">基础资料</th>
+                  <th style="width:20%;">APP预约信息</th>
+                  <th style="width:10%;">预约时间</th>
+                  <th style="width:10%;">预约状态</th>
+                  <th style="width:10%;">导入时间</th>
+                  <!--<th style="width:8%;">备注</th>-->
+                  <th style="width:10%;">操作</th>
+                </tr>
+                <tr  ng-repeat="item in vm.EnterpriseStaff.appointmentList track by $index">
+                  <td>
+                    <input ng-model="item.isChecked" ng-click="vm.EnterpriseStaff.OnCheckedItem(item)" type="checkbox"
+                           name="AppointmentCheck"/>
+                  </td>
+                  <td style="width:20%;">
+                      <pre class="enterpriseAppointment_pre">{{item.customerInfo}}</pre>
+                  </td>
+                  <td style="width:20%;">
+                      <pre class="enterpriseAppointment_pre">{{item.commonData}}</pre>
+                  </td>
+                  <td style="width:20%;">
+                      <pre class="enterpriseAppointment_pre">{{item.appData}}</pre>
+                  </td>
+                  <td style="width:10%;">
+                      {{item.appointTime}}
+                  </td>
+                  <td style="width:10%;">
+                      {{item.appointState}}
+                  </td>
+                  <td style="width:10%;">
+                      {{item.importTime}}
+                  </td>
+                  <!--<td style="width:8%;">
+                      {{item.Remark}}
+                  </td>-->
+                  <td style="width:10%;">
+                      <button type="button" class="btn btn-danger btn-xs" 
+                              ng-click="vm.EnterpriseStaff.OnShowDeleteEmployeeDialog(item)">
+                      <span class="glyphicon glyphicon-trash"></span>&nbsp;删除
+                      </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <br/>
+            <tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+          </div>
+          <!-- ALL Appointment: End -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<div class="modal fade" id="deleteEnterpriseAppointment" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">删除</h4>
+      </div>
+      <div class="modal-body text-center">
+        <p>确定要删除当前团检企业客户吗？</p>
+        <p style="color: red;"><br/>提示：删除后没法直接找回，只能重新添加！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;取消</button>
+        <button type="button" class="btn btn-success btn-sm" 
+                ng-click="vm.EnterpriseStaff.OnDeleteEmployee()">
+                <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cannotDeleteEnterpriseAppointment" tabindex="-1" role="dialog" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">删除</h4>
+      </div>
+      <div class="modal-body text-center">
+        <p><br/>客户已申请/已预约/已到检，不可删除！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal"><span class='glyphicon glyphicon-remove'></span>&nbsp;确定</button>
+      </div>
+    </div>
+  </div>
+</div>

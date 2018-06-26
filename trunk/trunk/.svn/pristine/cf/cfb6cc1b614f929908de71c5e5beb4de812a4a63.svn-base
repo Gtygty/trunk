@@ -1,0 +1,154 @@
+<section class=" banner-pic activitygroup">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ol class="breadcrumb">
+				<li><a href="javascript:void(0);">掌上体检 </a></li>
+				<li class="active">活动群组</li>
+			</ol>
+		</div>
+        <div class="panel-body panel-up">
+            <div class="form-inline" style="margin-top: 5px;padding: 15px 0;">
+                <div class="clearfix">
+                    <form class="form-inline pull-left" role="form">
+                        <div class="form-group">
+                            <span>企业名称：</span>
+                            <input class="form-control input-sm" ng-model="vm.activityGroup.Search.GroupName"  placeholder="请输入企业名称">
+                        </div>
+                        <div class="form-group input-margin">
+                            <span>企业负责人：</span>
+                            <input class="form-control input-sm" ng-model="vm.activityGroup.Search.CompanyOwner" placeholder="请输入企业负责人">
+                        </div>
+                        <div class="form-group">
+                            <span>好卓对接人：</span>
+                            <input class="form-control input-sm"  ng-model="vm.activityGroup.Search.HZOwner"  placeholder="请输入好卓对接人">
+                        </div>
+                        <div class="form-group input-margin">
+                            <span>时间：</span>
+                            <div class="input-group input-group-sm">
+                              <input id="startSelfDate" type="text" class="form-control" placeholder="请选择起始时间" style="width:110px; border-right:0;" />
+                              <span class="input-group-addon">-</span>
+                              <input id="endSelfDate" type="text" class="form-control" placeholder="请选择结束时间" style="width:110px; border-left:0;" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="vm.activityGroup.OnSearch()">
+                            <span class='glyphicon glyphicon-search'></span>&nbsp;搜索
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm"   ng-click="vm.activityGroup.OnAddDialog()">
+                            <span class='glyphicon glyphicon-plus'></span>&nbsp;添加
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content answers_pane">
+                <!--分组列表展示-->
+                <table class="table table-bordered">
+                    <tr>
+                        <th>企业名称</th>
+                        <th>logo</th>
+                        <th>企业负责人</th>
+                        <th>手机号</th>
+                        <th>好卓对接人（城市经理）</th>
+                        <th>企业二维码</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-repeat='(index,listItem) in vm.activityGroup.List'>
+                        <td>{{ listItem.GroupName }}</td>
+                        <td><a href="{{listItem.ImageUrl }}" target="_blank"><img ng-src="{{listItem.ImageUrl }}" alt="图片" style="width:40px;height:40px;"></a></td>
+                        <td>{{listItem.CompanyOwner }}</td>
+                        <td>{{listItem.CompanyMobile }}</td>
+                        <td>{{listItem.HZOwner }}</td>
+                        <td>
+                            <span ng-attr-title="{{ listItem.twoDimensionCode }}">{{listItem.twoDimensionCode | stringSub:30 }}</span>
+                            <button title="转成短码" class="btn btn-xs btn-info code" style="float:right;"   ng-click="vm.activityGroup.OnGetShortLink(index,listItem)" type="button">
+                              <i class="glyphicon glyphicon-qrcode"></i>
+                            </button>
+                        </td>
+                        <td>{{listItem.LastUpdateTime }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myListEdit"   ng-click="vm.activityGroup.OnModifyDialog(listItem)" type="button">
+                              <i class="glyphicon glyphicon-edit"></i>
+                              编辑
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+	</div>
+</section>
+
+<!-- 添加和修改 -->
+<div class="modal fade" id="myListAdd" tabindex="-1" role="dialog">
+  <div class="modal-dialog Adding">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myListAddLabel">添加企业</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table medicallytable">
+            <tr>
+                <td width='120'><span class="red">*</span><span>企业名称：</span></td>
+                <td colspan="2">
+                    <input class="form-control input-sm" ng-model="vm.activityGroup.Current.GroupName" />
+                </td>
+            </tr>
+            <tr>
+              <td><span class="red">*</span><span>logo:</span></td>
+              <td>
+                <div class="input-group input-group-sm">
+                  <input type="file" class="form-control" id="inputAddReportItemSrc" placeholder="请录入图标"
+                         ng-model="vm.activityGroup.Current.ImageUrl">
+                  <span class="input-group-btn">
+                      <button class="btn btn-info" type="button" ng-click="vm.activityGroup.OnUploadImage()">
+                      <span class='glyphicon glyphicon-eject'></span>&nbsp;上传图像</button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                  <div class="mb">
+                    <img class="form-control"
+                         style="width:80px; height: 80px; padding-top: 10px;"
+                         ng-src="{{ vm.activityGroup.Current.ImageUrl }}" />
+                  </div>
+                  <span class="comcolor">注：120*120px，100kb以内，PNG格式的图片</span>
+              </td>
+            </tr>
+            <tr>
+                <td width='120'><span class="red">*</span><span>企业负责人：</span></td>
+                <td colspan="2">
+                    <input class="form-control input-sm" ng-model="vm.activityGroup.Current.CompanyOwner" />
+                </td>
+            </tr>
+            <tr>
+                <td width='120'><span class="red">*</span><span>负责人手机号：</span></td>
+                <td colspan="2">
+                    <input class="form-control input-sm" ng-model="vm.activityGroup.Current.CompanyMobile" />
+                </td>
+            </tr>
+            <tr>
+                <td width='120'><span class="red">*</span><span>好卓对接人：</span></td>
+                <td colspan="2">
+                    <input class="form-control input-sm" ng-model="vm.activityGroup.Current.HZOwner" />
+                </td>
+            </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" ng-if="vm.activityGroup.Current.ID == ''"
+                ng-click="vm.activityGroup.OnAdd()" >保存</button>
+        <button type="button" class="btn btn-success" ng-if="vm.activityGroup.Current.ID != ''"
+                ng-click="vm.activityGroup.OnModify()" >保存</button>
+      </div>
+    </div>
+  </div>
+</div>

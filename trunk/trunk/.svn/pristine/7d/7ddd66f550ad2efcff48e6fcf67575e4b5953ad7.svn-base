@@ -1,0 +1,262 @@
+<section class=" banner-pic">
+  <div class="panel panel-default banner-paneller">
+
+    <div class="panel-heading">
+      <ol class="breadcrumb pull-left">
+        <li><a href="javascript:void(0);">掌上体检 </a></li>
+        <li class="active">机构信息维护</li>
+      </ol>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="panel-body panel-up">
+
+      <!-- 侧边栏 -->
+      <aside id="sidebar-menu" class="pull-left">
+        <ul class="nav hos-list" ng-repeat="item in vm.ServerListCollention.data.serverList">
+          <li ng-click="vm.ServerDetailCollection.GetServerDetail(item)">
+            <div>
+              <span class="iconfont">&#xe711;</span><span class="sidebar-text" ng-bind="item.DeptName"></span>
+              <img class="show" ng-src="{{item.ImgUrl}}"/>
+            </div>
+          </li>
+        </ul>
+      </aside>
+
+      <div class="localBanner" ng-show="vm.ServerDetailCollection.data.currentServer!=null">
+        <div class="container-fluid">
+
+          <!-- 机构头部信息 -->
+          <aside class="localHos" style="font-size:16px;">
+						<span class="localHosName"
+                  ng-bind="vm.ServerDetailCollection.data.currentServer.DeptName + '(' +vm.ServerDetailCollection.data.currentServer.DeptCodeASSIC + ')&nbsp&nbsp&nbsp'">
+						</span><span class="localHosName">(是否推广</span>
+            <div id="div1"
+                 ng-class="{true:'open1',false:'open2'}[vm.ServerDetailCollection.data.currentServer.IsAppOpen]"
+                 ng-click="vm.ServerDetailCollection.data.currentServer.IsAppOpen = !vm.ServerDetailCollection.data.currentServer.IsAppOpen">
+              <div id="div2"
+                   ng-class="{true:'open2',false:'open1'}[vm.ServerDetailCollection.data.currentServer.IsAppOpen]"></div>
+            </div>
+
+            <span class="localHosName" ng-bind=""></span><span class="localHosName">)&nbsp&nbsp&nbsp(是否可看pdf</span>
+            <div id="div3"
+                 ng-class="{true:'open1',false:'open2'}[vm.ServerDetailCollection.data.currentServer.IsHavePDF]"
+                 ng-click="vm.ServerDetailCollection.data.currentServer.IsHavePDF = !vm.ServerDetailCollection.data.currentServer.IsHavePDF">
+              <div id="div4"
+                   ng-class="{true:'open2',false:'open1'}[vm.ServerDetailCollection.data.currentServer.IsHavePDF]"></div>
+            </div>
+            <span class="localHosName">)&nbsp&nbsp&nbsp机构地推链接：</span><span class="localHosName"
+                                                                           ng-bind="vm.ServerDetailCollection.data.currentServerShortLink"></span>
+
+            <button type="button" class="btn btn-success" ng-click="vm.ServerDetailCollection.ModifyServerDetail()">保存
+            </button>
+            <button class="btn btn-success" ng-click="vm.ServerDetailCollection.ShowWeChatQrcode()">二维码链接
+            </button>
+          </aside>
+
+          <!-- 机构详情 -->
+          <hr class="hr" style="width:1100px;margin-left:0;">
+
+          <div>
+            <table class="recommend_tab">
+              <!-- 预约挂号地址 -->
+              <tr>
+                <td colspan="1">
+                  <div class="recommendtop" style="width:108px;"><span>挂号预约地址：</span></div>
+                </td>
+                <td colspan="2">
+                  <input type="text" class="form-control" id="name" placeholder="请输入地址"
+                         ng-model="vm.ServerDetailCollection.data.currentServer.AppointmentURL"
+                         style="width:350px;">
+                </td>
+              </tr>
+
+              <!-- 地推LOGO -->
+              <tr>
+                <td colspan="1">
+                  <div class="recommendtop"><span class="red">*</span><span>医院地推logo:</span></div>
+                </td>
+                <td colspan="2">
+                  <div class="input-group input-group-sm">
+                    <a href='javascript:void(0);' class="blueButton">选择文件</a>
+                    <input type="file" id='PushLogoSrc' class="form-control myFileUpload"
+                           onchange="angular.element(this).scope().vm.ServerDetailCollection.OnUpLoadImg(angular.element(this)[0],
+                           angular.element(this).scope().GLOBALDATA.uploadImgPath.PushLogoPath,
+                           angular.element(this).scope().vm.ServerDetailCollection.PushLogoCallBack,
+                           ['png'], null, 570, 150,
+                           'logo_'+angular.element(this).scope().vm.ServerDetailCollection.data.currentServer.DepartCode)">
+                  </div>
+                  <div class="banner_up_img">
+                    <div class="banner_Url"><img
+                      ng-attr-src='{{ vm.ServerDetailCollection.data.currentServer.pushLogo }}' alt=''></div>
+                    <p>注：570*150px， PNG格式的图片</p>
+                  </div>
+                  <div class="form-group form-group-sm mt">
+                    <input class="form-control" ng-model='vm.ServerDetailCollection.data.currentServer.pushLogo.split("?")[0]' readonly
+                           style="width:350px;">
+                  </div>
+                </td>
+
+              </tr>
+              <tr>
+                <td colspan="1">
+                  <div class="recommendtop" style="width:108px;"><span class="red">*</span><span>医院地推宣传图:</span></div>
+                </td>
+                <td colspan="2">
+                  <div class="input-group input-group-sm">
+                    <a href='javascript:void(0);' class="blueButton">选择文件</a>
+                    <input type="file" id='PushBgSrc' class="form-control myFileUpload"
+                           onchange="angular.element(this).scope().vm.ServerDetailCollection.OnUpLoadImg(angular.element(this)[0],
+                           angular.element(this).scope().GLOBALDATA.uploadImgPath.PushBgPath,
+                           angular.element(this).scope().vm.ServerDetailCollection.PushBgCallBack,
+                           ['jpg'], null, 750, 580,
+                           'bg_'+angular.element(this).scope().vm.ServerDetailCollection.data.currentServer.DepartCode)">
+                  </div>
+                  <div class="banner_up_img">
+                    <div class="banner_Url">
+                      <img id='banner_url_bg' ng-attr-src='{{ vm.ServerDetailCollection.data.currentServer.pushBg }}' alt=''>
+                    </div>
+                    <p>注：750*580px，JPG格式的图片</p>
+                  </div>
+                  <div class="form-group form-group-sm mt">
+                    <input class="form-control"
+                           ng-model='vm.ServerDetailCollection.data.currentServer.pushBg.split("?")[0]' readonly
+                           style="width:350px;">
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 体检报告LOGO -->
+              <tr>
+                <td colspan="1" >
+                  <div class="recommendtop"><span class="red">*</span><span>体检报告logo：</span></div>
+                </td>
+                <td colspan="2">
+                  <div class="input-group input-group-sm">
+                    <a href='javascript:void(0);' class="blueButton">选择文件</a>
+                    <input type="file" id='ReportLogoSrc' class="form-control myFileUpload"
+                           onchange="angular.element(this).scope().vm.ServerDetailCollection.OnUpLoadImg(angular.element(this)[0],
+                           angular.element(this).scope().GLOBALDATA.uploadImgPath.ReportLogoPath,
+                           angular.element(this).scope().vm.ServerDetailCollection.ImgUpLoadCallBack,
+                           ['png','jpg','jpeg'], 100, 120, 120)"/>
+                  </div>
+                  <div class="banner_up_img">
+                    <div class="banner_Url"><img ng-attr-src='{{ vm.ServerDetailCollection.data.currentServer.ImageSrc }}' alt=''></div>
+                    <p>注：120*120px，100kb以内，PNG、jpg、jpeg格式的图片</p>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- 地推宣传背景 -->
+              <!--<tr>-->
+                <!--<td width='150'>-->
+                  <!--<div class="recommendtop"><span class="red">*</span><span>医院地推宣传图:</span></div>-->
+                <!--</td>-->
+                <!--<td>-->
+                  <!--<div class="input-group input-group-sm">-->
+                    <!--<a href='javascript:void(0);' class="blueButton">选择文件</a>-->
+                    <!--<input type="file" id='PushBgSrc' class="form-control myFileUpload"-->
+                           <!--onchange="angular.element(this).scope().vm.ServerDetailCollection.OnUpLoadImg(angular.element(this)[0], angular.element(this).scope().GLOBALDATA.uploadImgPath.PushBgPath, angular.element(this).scope().vm.ServerDetailCollection.PushBgCallBack,'bg_'+angular.element(this).scope().vm.ServerDetailCollection.data.currentServer.DepartCode)">-->
+                  <!--</div>-->
+                  <!--<div class="banner_up_img">-->
+                    <!--<div class="banner_Url">-->
+                      <!--<img id='banner_url_bg' ng-attr-src='{{ vm.ServerDetailCollection.data.currentServer.pushBg }}' alt=''>-->
+                    <!--</div>-->
+                    <!--<p>注：750*580px，JPG格式的图片</p>-->
+                  <!--</div>-->
+                  <!--<div class="form-group form-group-sm mt">-->
+                    <!--<input class="form-control"-->
+                           <!--ng-model='vm.ServerDetailCollection.data.currentServer.pushBg.split("?")[0]' readonly>-->
+                  <!--</div>-->
+                <!--</td>-->
+
+              <!--</tr>-->
+
+              <!-- 机构Banner -->
+              <tr>
+                <td width='150'>
+                  <div class="recommendtop"><span class="red">*</span><span>机构Banner：</span></div>
+                </td>
+                <td>
+                  <div class="input-group input-group-sm">
+										<span class="input-group-btn"
+                          ng-click='vm.ServerDetailCollection.data.currentServer.BannerList.unshift({})'>
+											<button class="btn btn-info" type="button">
+											<span class='glyphicon glyphicon-eject'></span>&nbsp;添加</button>
+										</span>
+                  </div>
+
+                  <div class="panel panel-default banner-panel"
+                       ng-repeat="item in vm.ServerDetailCollection.data.currentServer.BannerList track by $index">
+                    <div class="panel-heading">
+                      <sapn class="banner-title"></sapn>
+                      <span class="banner-delete pull-right" data-toggle="modal" data-target="#deleteBannerModel"
+                            ng-click="vm.ServerDetailCollection.data.currentServer.BannerList.remove(item)">删除</span>
+                      <!-- <span class="banner-edit pull-right" data-toggle="modal" data-target="#editBannerModel" ng-click="vm.editBannerBtn(item)">编辑</span> -->
+                      <img ng-hide="$index == 0" ng-click="vm.ServerDetailCollection.BannerListSort($index,$index-1)"
+                           class="up-image pull-right" src="../img/u1737.png" alt="">
+                      <img ng-hide="$index == vm.ServerDetailCollection.data.currentServer.BannerList.length-1"
+                           ng-click="vm.ServerDetailCollection.BannerListSort($index,$index+1)"
+                           class="down-image pull-right" src="../img/u1737.png" alt="">
+                    </div>
+                    <div class="panel-body">
+                      <form class="form-horizontal" role="form">
+                        <div class="input-group input-group-sm ">
+
+                          <a href='javascript:void(0);' class="blueButton">选择文件</a>
+                          <input type="file" id='BannerInput_{{$index}}' class="form-control myFileUpload"
+                                 onchange="angular.element(this).scope().GLOBALDATA.currentBannerIndex = parseInt(this.id.split('_')[1]);
+                                 angular.element(this).scope().vm.ServerDetailCollection.OnUpLoadImg(angular.element(this)[0],
+                                 angular.element(this).scope().GLOBALDATA.uploadImgPath.BannerPath,
+                                 angular.element(this).scope().vm.ServerDetailCollection.BannerCallBack,
+                                 ['png'], null, 750, 480)">
+                        </div>
+                        <div class="banner_up_img">
+                          <div class="banner_Url"><img ng-attr-src='{{ item.ImageUrl }}' alt=''></div>
+                          <p>注：750*480px，PNG格式的图片</p>
+                        </div>
+                        <div class="form-group">
+                          <label class="col-sm-2" style="width:21%;">推广链接：</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control" ng-model="item.LinkUrl" style="width:350px;">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<div class="modal fade" id="wechatQrcode" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+        </button>
+        <h4 class="modal-title">微信机构二维码</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table medicallytable">
+          <tr>
+            <td style="width:100px;"><span class="input-sm">二维码连接：</span></td>
+            <td><input class="form-control input-sm" type="text" ng-model="vm.WeChatQrcodeUrl" /></td>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="input-sm btn-warning" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>

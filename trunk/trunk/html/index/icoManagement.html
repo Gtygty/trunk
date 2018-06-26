@@ -1,0 +1,263 @@
+﻿<section class=" banner-pic">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ol class="breadcrumb">
+				<li><a href="javascript:void(0);">掌上体检 </a></li>
+				<li class="active">图标维护</li>
+			</ol>
+		</div>
+		<div class="panel-body">
+      <div class="clearfix">
+        <form class="form-inline pull-left" role="form">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control input-sm" placeholder="请录入您要搜索的图标名称" ng-model="vm.icoManagementCollection.Search.Param.ReportItemName">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" type="button" ng-click="vm.icoManagementCollection.Search.OnClick()"><span class='glyphicon glyphicon-search'></span>&nbsp;搜索</button>
+            </span>
+          </div>
+        </form>
+        <div class="pull-right">
+            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myListAdd" ng-click="vm.icoManagementCollection.Add.OnOpenDialog()">
+               <span class='glyphicon glyphicon-plus'></span>&nbsp;增加
+            </button>
+        </div>
+      </div>
+      <div class="BMS_table upload_table pt">
+        <table class="table mt">
+          <tr>
+            <!--<th><input type="checkbox"></th>-->
+            <th>设为默认</th>
+            <th>图标</th>
+            <th>名称</th>
+            <th>操作</th>
+          </tr>
+          <tr>
+            <!--<td><input type="checkbox"></td>-->
+        <tr ng-repeat='listItem in vm.icoManagementCollection.List.Data'>
+            <td>
+              <span class="glyphicon glyphicon-ok alert-success" ng-show="listItem.ReportItemSrcState" title="默认值"></span>
+              <span class="glyphicon glyphicon-remove alert-danger" ng-show="!listItem.ReportItemSrcState" title="非默认值"></span>
+            </td>
+            <td>
+              <img style="width:45px; height: 45px;" ng-src="{{ listItem.ReportItemSrc }}" />
+            </td>
+            <td>
+              <!--<span  ng-repeat='nameItem in listItem.Tags'>{{ nameItem }}</span>-->
+                <span class="instition-list" ng-repeat=" nameItem in listItem.Tags  track by $index" style="padding:5px 10px;">
+                      <span>{{ nameItem }}</span>
+                </span> 
+            </td>
+            <td>
+               <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myListEdit" ng-click="vm.icoManagementCollection.Edit.OnOpenDialog(listItem)"><span class='glyphicon glyphicon-pencil'></span>&nbsp;修改</button>
+               <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myListDel" ng-click="vm.icoManagementCollection.Del.OnOpenDialog(listItem)"><span class='glyphicon glyphicon-trash'></span>&nbsp;删除</button>
+            </td>
+        </tr>
+          </tr>
+        </table>
+      </div>
+		</div>
+	</div>
+</section>
+
+<!-- myListAdd -->
+<div class="modal fade" id="myListAdd" tabindex="-1" role="dialog" aria-labelledby="myListAddLabel" aria-hidden="true">
+  <div class="modal-dialog Modeltable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="myListAddLabel">添加图标</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table tableaccount">
+            <tr>
+              <th width='100'><span>名称:</span></th>
+              <td>
+                  <div class="instition-IsShow" ng-if="vm.icoManagementCollection.Add.IsShowName">
+                    <a href="javascript:void(0);"                    
+                       ng-click="vm.icoManagementCollection.Add.OnClickAddName()">添加名称+</a>
+                  </div>
+                  <div class="input-group" ng-if="!vm.icoManagementCollection.Add.IsShowName">
+                    <input type="text" class="form-control input-sm" placeholder="请输入名称" 
+                           ng-model="vm.icoManagementCollection.Add.SelectName">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-sm" 
+                                ng-click="vm.icoManagementCollection.Add.OnClickSaveName()">确定</button>
+                        <button type="button" class="btn btn-default btn-sm"
+                                data-toggle="modal" data-target="#prevPhoneModel"
+                                ng-click="vm.icoManagementCollection.Add.OnClickCancelName()">取消</button>
+                    </div>
+                  </div>                
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                <span class="instition-list" ng-repeat="item in vm.icoManagementCollection.Add.CurrentTagList  track by $index">
+                      <span ng-bind="item.name"></span>
+                      <span class="glyphicon glyphicon-remove institionremove" 
+                            ng-click="vm.icoManagementCollection.Add.OnClickRemoveName(item)"></span>
+                </span>                
+              </td>
+            </tr>
+            <tr>
+              <th><span>图标:</span></th>
+              <td>
+                <div class="input-group input-group-sm">             
+                  <input type="file" class="form-control" id="inputAddReportItemSrc" placeholder="请录入图标" 
+                         ng-model="vm.icoManagementCollection.Add.UploadSrc">
+                  <span class="input-group-btn">
+                      <button class="btn btn-info" type="button" ng-click="vm.icoManagementCollection.Add.OnClickUploadImage()">
+                      <span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                  <div class="mb">
+                    <img style="width:80px; height: 80px;" 
+                         ng-src="{{ vm.icoManagementCollection.Add.Current.ReportItemSrc }}" />  
+                  </div>
+                  <span class="comcolor">注：92*92px，100kb以内，PNG格式的图片</span> 
+              </td>
+            </tr>
+            <tr>
+              <th><span>设为默认:</span></th>
+              <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-success btn-sm" type="button" 
+                            ng-class="{ 'btn-danger': vm.icoManagementCollection.Add.Current.ReportItemSrcState }" 
+                            ng-click="vm.icoManagementCollection.Add.OnClickChangeCurrentState(true)">是</button>
+                    <button class="btn btn-success btn-sm" type="button" 
+                            ng-class="{ 'btn-danger': !vm.icoManagementCollection.Add.Current.ReportItemSrcState }" 
+                            ng-click="vm.icoManagementCollection.Add.OnClickChangeCurrentState(false)">否</button>
+                  </div>
+              </td>
+            </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          <span class='glyphicon glyphicon-remove'></span>&nbsp;关闭
+        </button>
+        <button type="button" class="btn btn-primary" ng-click="vm.icoManagementCollection.Add.OnClick()">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;保存
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- myListEdit -->
+<div class="modal fade" id="myListEdit" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content Modeltable">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myListEditLabel">修改图标</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table tableaccount">
+            <tr>
+              <th width='100'><span>名称:</span></th>
+              <td>
+                  <div class="instition-IsShow" ng-if="vm.icoManagementCollection.Edit.IsShowName">
+                    <a href="javascript:void(0);"                    
+                       ng-click="vm.icoManagementCollection.Edit.OnClickAddName()">添加名称+</a>
+                  </div>
+                  <div class="input-group" ng-if="!vm.icoManagementCollection.Edit.IsShowName">
+                    <input type="text" class="form-control input-sm" placeholder="请输入名称" 
+                           ng-model="vm.icoManagementCollection.Edit.SelectName">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-sm" 
+                                ng-click="vm.icoManagementCollection.Edit.OnClickSaveName()">确定</button>
+                        <button type="button" class="btn btn-default btn-sm"
+                                data-toggle="modal" data-target="#prevPhoneModel"
+                                ng-click="vm.icoManagementCollection.Edit.OnClickCancelName()">取消</button>
+                    </div>
+                  </div>                
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                <span class="instition-list" ng-repeat="item in vm.icoManagementCollection.Edit.CurrentTagList track by $index">
+                      <span ng-bind="item.name"></span>
+                      <span class="glyphicon glyphicon-remove institionremove" 
+                            ng-click="vm.icoManagementCollection.Edit.OnClickRemoveName(item)"></span>
+                </span>                
+              </td>
+            </tr>
+            <tr>
+              <th><span>图标:</span></th>
+              <td>
+                <div class="input-group input-group-sm">             
+                  <input type="file" class="form-control" id="inputEditReportItemSrc" placeholder="请录入图标" 
+                         ng-model="vm.icoManagementCollection.Edit.UploadSrc">
+                  <span class="input-group-btn">
+                      <button class="btn btn-info" type="button" ng-click="vm.icoManagementCollection.Edit.OnClickUploadImage()">
+                      <span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+                  </span>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td>
+                  <div class="mb">
+                    <img style="width:80px; height: 80px;" 
+                         ng-src="{{ vm.icoManagementCollection.Edit.Current.ReportItemSrc }}" />  
+                  </div>
+                  <span class="comcolor">注：92*92px，100kb以内，PNG格式的图片</span> 
+              </td>
+            </tr>
+            <tr>
+              <th><span>设为默认:</span></th>
+              <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-success btn-sm" type="button" 
+                            ng-class="{ 'btn-danger': vm.icoManagementCollection.Edit.Current.ReportItemSrcState }" 
+                            ng-click="vm.icoManagementCollection.Edit.OnClickChangeCurrentState(true)">是</button>
+                    <button class="btn btn-success btn-sm" type="button" 
+                            ng-class="{ 'btn-danger': !vm.icoManagementCollection.Edit.Current.ReportItemSrcState }" 
+                            ng-click="vm.icoManagementCollection.Edit.OnClickChangeCurrentState(false)">否</button>
+                  </div>
+              </td>
+            </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal"
+                ng-click="vm.icoManagementCollection.Edit.OnCancelClick()">
+          <span class='glyphicon glyphicon-remove'></span>&nbsp;关闭
+        </button>
+        <button type="button" class="btn btn-primary" 
+                ng-click="vm.icoManagementCollection.Edit.OnClick()">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;保存
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- myListDel -->
+<div class="modal fade" id="myListDel" tabindex="-1" role="dialog" aria-labelledby="myListEditLabel" aria-hidden="true">
+  <div class="modal-dialog">
+	<div class="modal-content clonzing">
+	  <div class="modal-body text-center">
+		<h3 class="ng-binding">您确定要删除吗？</h3>
+        <button type="button" class="btn btn-warning btn-sm" data-dismiss="modal">
+          <span class='glyphicon glyphicon-remove'></span>&nbsp;取消
+        </button>
+        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" 
+                ng-click="vm.icoManagementCollection.Del.OnClick()">
+          <span class='glyphicon glyphicon-ok'></span>&nbsp;确定
+        </button>
+	  </div>
+	</div>
+  </div>
+</div>
+</div>
+

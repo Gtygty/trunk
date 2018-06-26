@@ -1,0 +1,458 @@
+#sidebar-menu {
+    border-right: none;
+}
+
+    #sidebar-menu .input-group,
+    #sidebar-menu .nav {
+        border-right: 1px solid #DDD;
+    }
+
+.sidebar-nav {
+    width: 540px;
+    height: auto;
+    position: relative;
+}
+
+    .sidebar-nav .nav {
+        width: 240px;
+    }
+
+.clickbtn {
+    border-bottom: 2px solid #ff9900;
+    font-weight: bold;
+}
+
+.clickbtncolor {
+    color: #ff9900;
+}
+
+#serviceMain input[type=checkbox] {
+    width: 16px;
+    height: 16px;
+}
+.Messdropdown{
+	width: 220px;
+	height: 90px;
+	padding: 10px;
+	text-align: center;
+}
+.Messdropdown h3{
+	margin-top: 15px; 
+	margin-bottom: 15px;
+	font-size: 12px;
+	font-weight: lighter;
+}
+.Messdropdown .btn{
+    width: 46px;
+	height: 22px;
+	padding: 0 10px;
+}
+/*---------关联root页面选型卡---------*/
+#massageList .panel-body .clickspan,
+ .roottablist li.active {
+    font-size: 18px;
+    font-weight: bold;
+    position: relative;
+    top: -2px;
+    z-index: 2;
+    height: 50px;
+    line-height: 50px;
+}
+
+#massageList .panel {
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+#massageList .panel-body {
+    padding: 8px;
+}
+    /*---------关联root页面选型卡---------*/
+    #massageList .panel-body > span,
+   .roottablist li {
+        display: inline-block;
+        border: 1px solid #ddd;
+        border-bottom: 1px solid #fff;
+        margin-right: -5px;
+        color: #339900;
+        width: 150px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-bottom: -3px;
+        cursor: pointer;
+    }
+
+.tableup {
+    min-width: 883px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.tableup .form-inline > div {
+	margin-bottom: 10px;
+}
+
+/*修改的css*/
+.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    z-index: 2;
+    margin-left: -21px;
+}
+
+.tableup .form-inline .input-group {
+	margin-right: 15px;
+	width: 194px;
+ }
+
+#inlines2 .multiselect,
+#inlines .multiselect{
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    width: 153px;
+}
+
+.tableup .table-bordered th {
+    text-align: center;
+    background: #66CC00;
+    color: #fff;
+    font-size: 16px;
+}
+
+.tableup .table-bordered a {
+    cursor: pointer;
+    color: red;
+    text-decoration: underline;
+}
+
+.notes img {
+    width: 18px;
+}
+
+.checks input[type=checkbox] {
+    visibility: hidden;
+}
+/*------------notes except------------*/
+#mess_modal_ck .btn{
+    width: 70px;
+	padding: 5px;
+}
+#messageAdd .modal-body {
+    padding: 20px 30px;
+}
+#createFirstPlan th,#createFirstPlan td,
+#createSecondPlan th,#createSecondPlan td{
+	border: none;
+}
+.notes .modal-dialog {
+    width: 400px;
+}
+
+.notes .modal-body {
+    padding: 15px;
+    height: 400px;
+    overflow-y: auto;
+}
+
+.notes table td {
+    text-align: left;
+}
+
+    .notes table td .clearfix {
+        height: 100%;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+        .notes table td .clearfix div {
+            display: inline-block;
+            vertical-align: middle;
+            width: 300px;
+        }
+
+        .notes table td .clearfix span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+#except .modal-body {
+    padding: 30px;
+}
+
+    #except .modal-body h4 {
+        margin: 20px;
+    }
+
+#plan th, #plan td {
+    border: none;
+}
+
+#plan .input-group {
+    width: 192px;
+}
+
+#plan .dropdown {
+    width: 192px;
+    margin-left: -158px;
+}
+
+#plan th {
+    width: 120px;
+}
+
+    #plan th span,
+    #colored {
+        color: red;
+    }
+
+.tableup .form-inline .hide-native-select {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.multiselect-container {
+    max-height: 180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: 0px;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > .active > a:hover {
+    background: #F5F5F5;
+    color: #000;
+}
+.mess-col{
+    color: red;
+}
+/**********************************/
+input.ng-pristine
+,textarea.ng-pristine
+,select.ng-pristine
+{
+    /*从未输入过*/
+    background-color: white;
+}
+
+input.ng-dirty {
+    /*输入过*/
+    /*background-color: lightyellow;*/
+    background-color: white;
+}
+
+input.ng-valid {
+    /*有效的*/
+    /*background-color: lightgreen;*/
+    background-color: white;
+}
+
+input.ng-invalid
+,textarea.ng-invalid
+,select.ng-invalid
+,button.ng-invalid
+,div.ng-invalid
+{
+    /*无效的*/
+    /*background-color: pink;*/
+    /*border-color: #f05050;*/
+}
+
+#inlines2 .btn-group .multiselect-selected-text,
+#inlines .btn-group .multiselect-selected-text{
+        display:inline-block;
+        margin-right:5px;
+        max-width: 165px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        float:left;
+}
+
+#inlines2 .btn-group .btn,
+#inlines .btn-group .btn{
+        text-align:right;
+}
+
+
+/*-----自动发送短信table样式------*/
+
+#fdw-pricing-table {
+		margin:0 auto;
+		text-align: center;		
+		zoom: 1;
+		width: 100%;
+		border-top: 1px solid #ddd;
+		padding-top: 10px;
+	}
+
+	#fdw-pricing-table:before, #fdw-pricing-table:after {
+	  content: "";
+	  display: table
+	}
+
+	#fdw-pricing-table:after {
+	  clear: both
+	}
+
+	/* --------------- */	
+
+	#fdw-pricing-table .plan {
+		font: 13px 'Lucida Sans', 'trebuchet MS', Arial, Helvetica;     
+		background: #fff;      
+		border: 1px solid #ddd;
+		color: #333;
+		padding: 20px;
+		width: 200px;
+		height: 430px;
+		float: left;
+		_display: inline; /* IE6 double margin fix */
+		position: relative;
+		margin: 5px;
+		-moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+		-webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+		box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);		
+	}
+
+	#fdw-pricing-table .plan:after {
+	  z-index: -1; 
+	  position: absolute; 
+	  content: "";
+	  bottom: 10px;
+	  right: 4px;
+	  width: 80%; 
+	  top: 80%; 
+	  -webkit-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);   
+	  -moz-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+	  box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+	  -webkit-transform: rotate(3deg);    
+	  -moz-transform: rotate(3deg);   
+	  -o-transform: rotate(3deg);
+	  -ms-transform: rotate(3deg);
+	  transform: rotate(3deg);	
+	}	
+	
+	#fdw-pricing-table .popular-plan {
+		top: -20px;
+		padding: 40px 20px;   
+	}
+	
+	/* --------------- */	
+
+	#fdw-pricing-table .header {
+		position: relative;
+		font-size: 20px;
+		font-weight: normal;
+		text-transform: uppercase;
+		padding: 15px;
+		margin: -20px -20px 20px -20px;
+		border-bottom: 2px solid;
+		background-color: #eee;
+		background-image: -moz-linear-gradient(#fff,#eee);
+		background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));    
+		background-image: -webkit-linear-gradient(#fff, #eee);
+		background-image: -o-linear-gradient(#fff, #eee);
+		background-image: -ms-linear-gradient(#fff, #eee);
+		background-image: linear-gradient(#fff, #eee);
+	}
+
+	#fdw-pricing-table .header:after {
+		position: absolute;
+		bottom: -8px; left: 0;
+		height: 3px; width: 100%;
+		content: '';
+		background-image: url(images/bar.png);
+	}
+	
+	#fdw-pricing-table .popular-plan .header {
+		margin-top: -40px;
+		padding-top: 60px;		
+	}
+
+	#fdw-pricing-table .plan1 .header{
+		border-bottom-color: #83c327;
+	}		
+	
+	/* --------------- */
+
+	#fdw-pricing-table .price{
+		font-size: 32px;
+	}
+
+	#fdw-pricing-table .monthly{
+		font-size: 13px;
+		margin-bottom: 20px;
+		text-transform: uppercase;
+		color: #999;
+		overflow: hidden;
+		white-space: nowrap;
+		width: 100%;
+		text-overflow:ellipsis; 
+		-o-text-overflow:ellipsis; 
+		-moz-text-overflow: ellipsis; 
+		-webkit-text-overflow: ellipsis; 
+	}
+
+	/* --------------- */
+
+	#fdw-pricing-table ul {
+		margin: 20px 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	#fdw-pricing-table li {
+		padding: 10px 0;
+	}
+
+	.fdw-plan{
+		overflow : hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		min-height: 33px;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+	}
+	
+	/* --------------- */
+		
+	#fdw-pricing-table .signup,
+	#fdw-pricing-table .signdown {
+		position: relative;
+		padding: 10px 20px;
+		color: #fff;
+		font: bold 14px Arial, Helvetica;
+		text-transform: uppercase;
+		text-decoration: none;
+		display: inline-block;       
+		background-color: #72ce3f;
+		-moz-border-radius: 3px;
+		-webkit-border-radius: 3px;
+		border-radius: 3px;     
+		text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+		opacity: .9;       
+	}
+
+	#fdw-pricing-table .signup:hover {
+		opacity: 1;       
+	}
+
+	#fdw-pricing-table .signup:active {
+		-moz-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+		-webkit-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+		box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;       
+	}			
+
+	#fdw-pricing-table .plan1 .signup{
+		background: #83c327;
+		cursor: pointer;
+	}
+
+	#fdw-pricing-table .plan1 .signdown{
+		background: #c2ccd0;
+		color: #fff;
+		margin-bottom: 0;
+	}
+	
+	/* end --------------- */

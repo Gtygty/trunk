@@ -1,0 +1,48 @@
+# logs version 1.14.0  短信计划分类
+- 机构中添加【短信计划分类】
+- 短信推广中添加【体检者分类】
+
+
+
+# logs version 1.12.1 添加验证的相关基类
+使用方法如下:
+```javascript
+var rule = {
+  isNoEmpty, 
+  isSelectNoEmpty, 
+  isMobile,
+  minLength: number,
+  maxLength: number,
+  integer
+}
+```
+```javascript
+var valid = new Validation();
+valid.add(param.GroupName, 'isNoEmpty', '企业名称不能为空！');
+valid.add(param.GroupName, 'maxLength:40', '企业名称不能大于40个字符！');
+valid.add(param.CompanyMobile, 'isMobile');
+
+var errorMsg = valid.start();
+if(errorMsg){
+    util.showFade(errorMsg);
+    return false;
+}
+return true;
+```
+
+
+
+
+# logs version 1.12.0 问卷功能完善
+- 1. 在【添加基本信息】中，添加【问卷分类】，其中【问卷分类】包含[评测类型]和[非评测类型]
+- 2. 添加【评测结果及建议】，GURD功能
+- 3. 选择【问卷分类】为[评测类型]的问卷，需要添加【评测结果及建议】页并在【预览问卷】之后跳转到【评测结果展示页】
+
+
+
+
+# logs version 1.4.0
+- 添加 评论管理 功能
+- 添加 服务管理 功能
+- 修改 服务机构 中的添加人员管理中的服务类型等功能。
+ 

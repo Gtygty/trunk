@@ -1,0 +1,128 @@
+<section class=" banner-pic">
+  <div class="panel panel-default banner-paneller">
+    <div class="panel-heading">
+      <ol class="breadcrumb pull-left">
+        <li><a href="javascript:void(0);">掌上体检 </a></li>
+        <li class="active">套餐标签</li>
+      </ol>
+      <div class="clearfix"></div>
+    </div>
+    <div class="add_btn panel-body panel-up">
+        <button type="button" class="btn pull-left  btn-primary " data-toggle="modal" data-target="#addInformationModel" ng-click="vm.Init.InitAddPage()">添加</button>
+      </div>
+      <div class="information-list">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>分类名称</th>
+              <th>标签</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody ng-repeat="item in vm.data.packageLabelInfo.packageLabels">
+            <tr>
+              <td class="text-descript" ng-bind="item.Name"></td>
+              <td class="col-sm-9 col-sm-offset-1 instition-Lable" id="instition-list">
+                <span ng-repeat="i in item.Combos">
+                   <p ng-bind="i.ComboName"></p>
+                </span>
+              </td>
+              <td>
+                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editInformationModel" ng-click="vm.Init.InitEditPage(item.Id)">编辑</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<!--添加图文的model-->
+<div class="modal fade bs-example-modal-lg" id="addInformationModel" tabindex="-1" role="dialog">
+  <div class="modal-parent modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="banner-close pull-right " data-dismiss="modal" ng-click="vm.Init.CloseItem()">关闭</span>
+        <h4 class="modal-title" id="myModalLabel">添加套餐标签</h4>
+      </div>
+      <div class="modal-body model-informe clearfix">
+        <div class="form-group">
+          <div class="modal-body model-informe clearfix">
+            <div class="informa-des">
+              <span class="text-descript">分类名称：</span>
+              <select class="des-input" ng-change="vm.Init.InitAddPage()" ng-model="vm.data.packageLabelInfo.currId" ng-options="s.Id as s.Name for s in vm.data.packageLabelInfo.packageNames"></select>
+            </div>
+            <div class="informa-des">
+              <span class="text-descript">标&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp签：</span>
+              <a ng-if="vm.data.packageLabelAddInfo.addBtn" ng-click="vm.Init.AddLabelBtn()">添加标签+</a>
+              <span ng-if="!vm.data.packageLabelAddInfo.addBtn">
+                 <input type="text" class="des-input" placeholder="请输入标签名称" ng-model="vm.data.packageLabelAddInfo.addPackageName">
+                 <button type="button" class="btn btn-primary" ng-click="vm.Init.AddLabelCommit()">确定</button>
+                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#prevPhoneModel" ng-click="vm.Init.AddLabelBtn()">取消</button>
+              </span>
+
+              <div class="col-sm-11 col-sm-offset-1 instition-Lable" id="instition-list">
+                <span ng-repeat="item in vm.data.packageLabelAddInfo.addPackageLabels">
+
+                   <p ng-bind="item.ComboName" ></p>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--编辑的model-->
+<div class="modal fade bs-example-modal-lg" id="editInformationModel" tabindex="-1" role="dialog">
+  <div class="modal-parent modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="banner-close pull-right " ng-click="vm.Init.CloseItem()" data-dismiss="modal">关闭</span>
+        <h4 class="modal-title" id="myModalLabel">编辑套餐标签</h4>
+      </div>
+      <div class="modal-body model-informe clearfix">
+        <div class="form-group">
+          <div class="modal-body model-informe clearfix">
+            <div class="informa-des">
+              <span class="text-descript">分类名称:</span>
+
+              <select class="des-input" ng-change="vm.Init.InitAddPage()" ng-model="vm.data.packageLabelInfo.currId" ng-options="s.Id as s.Name for s in vm.data.packageLabelInfo.packageNames"></select>
+            </div>
+            <div class="informa-des">
+              <span class="text-descript">标&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp签:</span>
+
+              <span ng-if="!vm.data.packageLabelAddInfo.addBtn">
+                <input type="text" class="des-input" placeholder="请输入标签名称" ng-model="vm.data.packageLabelAddInfo.addPackageName">
+                <button type="button" class="btn btn-primary" ng-click="vm.Init.AddLabelCommit()">确定</button>
+                <button type="button" class="btn btn-default" ng-click="vm.Init.AddLabelBtn()" data-toggle="modal" data-target="#prevPhoneModel">取消</button>
+              </span>
+              <!--<div class="instition-Lable" id="instition-list2">-->
+                <span class="instition-list" ng-repeat="item in vm.data.packageLabelAddInfo.addPackageLabels" style="position:relative;">
+                   <span ng-bind="item.ComboName"></span>
+                   <img ng-click="vm.Init.DelPage(item)" data-toggle="modal" data-target="#deleteModel" style="width: 20px;height: 20px;" src="./img/p_close.png"></img>
+                </span>
+                <!--</br>-->
+                <a ng-if="vm.data.packageLabelAddInfo.addBtn" ng-click="vm.Init.AddLabelBtn()">添加标签+</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--删除model-->
+<div class="modal fade" id="deleteModel" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable1">
+      <div class="modal-body text-center" ng-repeat="item in vm.data.packageLabelDelInfo">
+        <h3 class="ng-binding inform-h3">确定要删除“<span ng-bind="item.ComboName"></span>”标签吗？</h3>
+        <button type="button" class="disable_button btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="disable_button btn btn-success" data-dismiss="modal" ng-click="vm.Init.DelPageCommit()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>

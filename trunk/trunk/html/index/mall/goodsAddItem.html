@@ -1,0 +1,168 @@
+<section class="goodsAddItem">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ul class="breadcrumb">
+				<li><a href="#">掌上体检</a></li>
+				<li class="active">体检加项管理</li>
+			</ul>
+		</div>
+		<div class="panel-body answers_pane">
+			<div class="clearfix">
+				<div class="form-inline">
+					<form class="form-inline pull-left">
+						<div class="form-group">
+							<span>服务商：</span>
+							<select id="supplierSelect" class="form-control" ></select>
+						</div>
+						<div class="form-group input-margin">
+							<span>项目名称：</span>
+							<input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.Search.Name" placeholder="请输入项目名称" />
+						</div>
+					</form>
+					<div class="pull-right">
+						<label ng-bind="pageConfig.totalItems"></label>条
+						<button class="btn btn-sm btn-info" ng-click="vm.goodsAddItem.OnSearch()">
+							搜索
+						</button>
+						<button class="btn btn-sm btn-warning" ng-click="vm.goodsAddItem.OnShowAddDialog()">
+							添加项目
+						</button>
+					</div>
+				</div>
+			</div>
+			<br/>
+			<!-- table -->
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>服务商</th>
+						<th>项目名称</th>
+						<th>三方商品ID</th>
+						<th>说明</th>
+						<th>原价</th>
+						<th>售价</th>
+						<th>类别</th>
+						<th>权重</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in vm.goodsAddItem.data.AddItemList">
+						<td style="width:15%;">{{item.SupplierName}}</td>
+						<td style="width:10%;">{{item.Name}}</td>
+						<td style="width:10%;">{{item.ThirdDepartGoodsId}}</td>
+						<td style="text-align:left;width:20%;">{{item.Description}}</td>
+						<td style="width:10%;">{{item.OriginPrice}}</td>
+						<td style="width:10%;">{{item.SalePrice}}</td>
+						<td style="width:10%;">
+							<span ng-repeat="cItem in item.CrowdTypes">
+								<span ng-if="cItem == 0">男性</span>
+								<span ng-if="cItem == 1">&nbsp;&nbsp;女性已婚</span>
+								<span ng-if="cItem == 2">&nbsp;&nbsp;女性未婚</span>
+							</span>
+						</td>
+						<td style="width:5%;">{{item.OrderIndex}}</td>
+						<td style="width:10%;">
+							<button class="btn btn-sm btn-info" ng-click="vm.goodsAddItem.OnShowModifyDialog(item)">
+								编辑
+							</button>
+							<button class="btn btn-sm btn-danger" ng-click="vm.goodsAddItem.OnShowDeleteDialog(item)">
+								删除
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<br/>
+			<tm-pagination class="pull-right" conf="pageConfig"></tm-pagination>
+		</div>
+	</div>
+</section>
+
+<!-- 添加或修改弹框 -->
+<div class="modal fade" id="addOrModifyGoodsAddItem" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" ng-if="vm.goodsAddItem.data.params.Id == undefined">添加项目</h4>
+				<h4 class="modal-title" ng-if="vm.goodsAddItem.data.params.Id != undefined">编辑项目</h4>
+			</div>
+			<div class="modal-body BMS_table_border">
+				<table class="table">
+					<tr>
+						<td style="width:130px;"><span class="red">*</span>服务商：</td>
+						<td colspan="3" style="text-align:left;">
+							<select id="addOrModifySupplierSelect" class="form-control"></select>
+						</td>
+					</tr>
+					<tr>
+						<td>三方商品id：</td>
+						<!-- <td colspan="3" style="text-align:left;"> -->
+							<!-- <select id="goodsSelect" class="form-control" ></select> -->
+						<!-- </td> -->
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.ThirdDepartGoodsId"  maxlength="60" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>名称：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.Name"  maxlength="60" placeholder="请输入" ng-disabled="vm.goodsAddItem.data.params.Id != undefined" /></td>
+					</tr>
+					<tr>
+						<td style="vertical-align: top"><span class="red">*</span>说明：</td>
+						<td colspan="3"><textarea  rows="3" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.Description"  maxlength="500" placeholder="请输入" ></textarea></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>原价：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.OriginPrice" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>售价：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.SalePrice" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>权重：</td>
+						<td colspan="3"><input type="text" class="form-control input-sm" ng-model="vm.goodsAddItem.data.params.OrderIndex" placeholder="请输入" /></td>
+					</tr>
+					<tr>
+						<td><span class="red">*</span>类别：</td>
+						<td>
+							<label class="form-inline pull-left">
+								<label><input type="checkbox" class="form-control" ng-model="vm.goodsAddItem.data.SexTypes[0].checked" />&nbsp;男</label>
+								<label><input type="checkbox" class="form-control" ng-model="vm.goodsAddItem.data.SexTypes[1].checked" />&nbsp;女已婚</label>
+								<label><input type="checkbox" class="form-control" ng-model="vm.goodsAddItem.data.SexTypes[2].checked" />&nbsp;女未婚</label>
+							</label>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-sm btn-warning" data-dismiss="modal">
+					取消
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.goodsAddItem.data.params.Id == undefined" ng-click="vm.goodsAddItem.AddEvent()">
+					保存
+				</button>
+				<button class="btn btn-sm btn-info" ng-if="vm.goodsAddItem.data.params.Id != undefined" ng-click="vm.goodsAddItem.ModifyEvent()">
+					保存
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- endAddOrModifyQuota -->
+
+<!-- deleteEventQuotaModal -->
+<div class="modal fade" id="deleteEventQuotaModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content disable">
+      <div class="modal-body text-center">
+        <h4 class="ng-binding inform-h3">是否确定要删除，删除后前端客户将不可再购买当前加项</h4>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.goodsAddItem.DeleteEventQuota()">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- deleteEventQuotaModal -->

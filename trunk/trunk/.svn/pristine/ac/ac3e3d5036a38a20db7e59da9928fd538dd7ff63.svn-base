@@ -1,0 +1,676 @@
+<section class=" banner-pic">
+	<div class="panel panel-default banner-paneller">
+		<div class="panel-heading">
+			<ol class="breadcrumb pull-left">
+				<li><a href="javascript:void(0);">掌上体检 </a></li>
+				<li class="active">机构信息维护</li>
+
+			</ol>
+			<span class="pull-right add-banner" data-toggle="modal" data-target="#addBannerModel" ng-click="vm.AddBannerBtn()">+添加Banner</span>
+			<div class="clearfix"></div>
+		</div>
+		<div class="panel-body panel-up">
+			
+			<aside id="sidebar-menu" class="pull-left">
+				<ul class="nav hos-list" ng-repeat="item in vm.data.serverLists">
+					<li ng-click="vm.ServerBannerClick(item)">
+						<div>
+							<span class="iconfont">&#xe711;</span><span class="sidebar-text" ng-bind="item.DeptName"></span>
+							<!--<span ng-bind="vm.data.ImgUrl"></span>-->
+							<img class="show" ng-src="{{item.ImgUrl}}"/>
+						</div>
+					</li>
+				</ul>
+			</aside>
+
+			<div class="localBanner">
+				<div class="container-fluid">
+					<aside class="localHos" style="font-size:16px;">
+						<span class="localHosName" ng-bind="vm.data.currServerClick.DeptName + '(' +vm.data.currServerClick.DeptCodeASSIC + ')&nbsp&nbsp&nbsp'">
+						</span><span class="localHosName">(是否推广</span>
+						<!--<div id="div1" ng-class="{true:'open1',false:'open2'}[vm.data.currServerClick.IsClick]" ng-click="vm.openZSTjClick()">
+							<div id="div2" ng-class="{true:'open2',false:'open1'}[vm.data.currServerClick.IsClick]"></div>
+						</div>-->
+                        <div id="div1" ng-class="{true:'open1',false:'open2'}[vm.data.switchInfo]" ng-click="vm.openZSTjClick()">
+							<div id="div2" ng-class="{true:'open2',false:'open1'}[vm.data.switchInfo]"></div>
+						</div>
+
+						<span class="localHosName" ng-bind=""></span><span class="localHosName">)&nbsp&nbsp&nbsp(是否可看pdf</span>
+                        <div id="div3" ng-class="{true:'open1',false:'open2'}[vm.data.IsHavePDF]" ng-click="vm.openZSTJPdf()">
+							<div id="div4" ng-class="{true:'open2',false:'open1'}[vm.data.IsHavePDF]"></div>
+						</div>
+
+						<span class="localHosName">)&nbsp&nbsp&nbsp机构地推链接：</span><span class="localHosName" ng-bind="vm.data.currServerClick.ShortLink"></span>
+					</aside>
+					
+					<hr class="hr" style="width:1000px;margin-left:0;">
+					<div class="banner-list">
+                         <!-- Nav tabs -->
+						<ul class="nav nav-tabs nav-banner" id='banner_nav' role="tablist">
+							<li role="presentation">
+								<a href="#banner" role="tab" data-toggle="tab" ng-click='vm.OnClickBanner()'>banner图</a>
+							</li>
+							<li role="presentation"  class="active">
+								<a href="#medically" role="tab" data-toggle="tab" ng-click='vm.MedicalCenter.Init()'>体检中心</a>
+							</li>
+							<li role="presentation">
+								<a href="#package" role="tab" data-toggle="tab" ng-click='vm.ComboInfo.Init()'>套餐信息</a>
+							</li>
+							<li role="presentation">
+								<a href="#recommend" role="tab" data-toggle="tab" ng-click='vm.RecommendURL.Init()'>h5图片</a>
+							</li>
+							<li role="presentation">
+								<a href="#register" role="tab" data-toggle="tab" ng-click='vm.AppointmentURL.Init()'>挂号预约</a>
+							</li>
+						</ul>
+
+						<!-- Tab panes -->
+						<div class="tab-content deptTabs">
+
+							<div role="tabpanel" class="tab-pane banner_Tabs" id="banner">
+                                <div class="panel panel-default banner-panel" ng-repeat="item in vm.data.BannerListInfo">
+									<div class="panel-heading">
+										<sapn class="banner-title" ng-bind="item.BannerName"></sapn>&emsp;&emsp;
+										<span class="banner-time" ng-bind="item.BannerCreateDate"></span>
+										<span class="banner-delete pull-right" data-toggle="modal" data-target="#deleteBannerModel" ng-click="vm.deleteBannerBtn(item)">删除</span>
+										<span class="banner-edit pull-right" data-toggle="modal" data-target="#editBannerModel" ng-click="vm.editBannerBtn(item)">编辑</span>
+										<img ng-show="item.OrderTop" ng-click="vm.OrderTop(item)" class="up-image pull-right" src="../img/u1737.png" alt="">
+										<img ng-show="item.OrderDown" ng-click="vm.OrderDown(item)" class="down-image pull-right" src="../img/u1737.png" alt="">
+									</div>
+									<div class="panel-body">
+										<form class="form-horizontal" role="form">
+											<div class="form-group">
+												<label for="" class="col-sm-2 control-label">banner图：</label>
+												<div class="col-sm-9">
+													<input type="email" class="form-control" ng-model="item.BannerImageUrl" readonly>													
+												</div>
+												<div class="col-sm-1">
+													<img ng-show="!item.IsChecked" ng-click="vm.ClickPrev(item)" class="banner-previmage" src="../img/u1743.png" title="开启预览">
+													<img ng-show="item.IsChecked" ng-click="vm.ClickPrev(item)" class="banner-previmage" src="../img/u1809.png" title="关闭预览">
+												</div>
+											</div>
+											<div ng-show="item.IsChecked">
+												<div class="col-sm-2 "></div>
+												<div class="col-sm-10">
+													<!--<img class="banner-aftimage" ng-src="{{item.BannerImageUrl}}" alt="">-->
+													<div class="banner_up_img">
+														<div class="banner_Url"><img ng-src="{{ item.BannerImageUrl }}" ></div>
+														<p>注：750*480px，PNG格式的图片</p>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="" class="col-sm-2 control-label">推广链接：</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" ng-model="item.BannerLinkUrl" readonly>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="" class="col-sm-2 control-label">服务机构：</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" ng-model="item.ServerInput" readonly>
+
+													</select>
+												</div>
+											</div>
+
+										</form>
+									</div>
+								</div>
+							</div>
+
+							<div role="tabpanel" class="tab-pane banner_Tabs active" id="medically">
+								<h4 class="mt">体检中心信息</h4>
+								<table class="table medicallytable">
+									<tr>
+										<td width='150'><span><span class='red'>*</span>LOGO：</span></td>
+										<td>
+											 <div class="input-group">
+												<input type="file" class="form-control input-sm" style='display:inline-block' id="inputDepartIco" placeholder="请选择机构图标" ng-model="vm.DepartIco.ImageSrc" />
+												<span class="input-group-btn">
+													<button type="button" class="btn btn-success btn-sm" ng-click="vm.DepartIco.OnClickByUpload()">上传图标</button>
+												</span>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td></td>
+										<td>
+											<div class="mb">
+												<img class="form-control" style="width:80px; height: 80px; padding-top: 10px;" ng-src="{{ vm.DepartIco.ImageLink }}" alt="" />
+											</div>
+											<span class="comcolor">注：120*120px，100kb以内，PNG、jpg、jpeg格式的图片</span>
+										</td>
+									</tr>
+                                    <tr>
+										<td><span><span class='red'>*</span>名称：</span></td>
+										<td><input type="text" class="form-control input-sm" ng-model="vm.MedicalCenter.data.MECName"></td>
+									</tr>
+									<tr>
+										<td><span><span class='red'>*</span>地址：</span></td>
+										<td><input type="text" class="form-control input-sm" ng-model="vm.MedicalCenter.data.MECAddress"></input></td>
+									</tr>
+									<tr>
+										<td><span><span class='red'>*</span>预约时间：</span></td>
+										<td><input type="text" class="form-control input-sm" ng-model="vm.MedicalCenter.data.AppointmentTime"></td>
+									</tr>
+									<tr>
+										<td><span><span class='red'>*</span>电话：</span></td>
+										<td><input type="text" class="form-control input-sm" ng-model="vm.MedicalCenter.data.AppointmentPhone"></td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<div class="text-center">
+												<button class="btn btn-info btn-sm" ng-click="vm.MedicalCenter.DecideMedical()">保存</button>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+
+							<div role="tabpanel" class="tab-pane banner_Tabs" id="package">
+								<ul class="nav nav-tabs nav-banner" role="tablist">
+									<li role="presentation" ng-class="{true:'active',false:'inactive'}[vm.ComboInfo.state]" ng-click="vm.ComboInfo.clearAll()"><a href="#ban" role="tab" data-toggle="tab">上架套餐</a></li>
+									<li role="presentation" ng-class="{true:'inactive',false:'active'}[vm.ComboInfo.state]" ng-click="vm.ComboInfo.clearAll()"><a href="#med" role="tab" data-toggle="tab">套餐</a></li>
+								</ul>
+								<div class="tab-content comboTabs">
+									<div role="tabpanel" class="tab-pane" id="ban" ng-class="{true:'active',false:'inactive'}[vm.ComboInfo.state]">
+										<div>
+                                            <div class="form-inline pull-right">
+												<div class="input-group">
+													<input type="text" class="form-control" ng-model="vm.ComboInfo.SearchName" ng-keyup="vm.ComboInfo.SearchList($event)">
+													<span class="input-group-btn" ng-click="vm.ComboInfo.GetList(vm.ComboInfo.SearchName)">
+														<button class="btn btn-default" type="button">
+															<span class="glyphicon glyphicon-search"></span>
+														</button>
+													</span>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+										<table class="table packagetle">
+                                             <tr>
+												 <th><input type="checkbox" ng-model="vm.ComboInfo.SelectAll" ng-click="vm.ComboInfo.selectAll(1)"></th>
+												 <th><span>商品</span></th>
+												 <th><span>标签</span></th>
+												 <th><span>日期</span></th>
+												 <th><span>排序</span></th>
+											 </tr>
+<!--|orderBy: 'Index':false"-->
+											 <tr ng-repeat="comboItem in vm.ComboInfo.ComboList.OnSaleList">
+												 <td><input type="checkbox" ng-checked="vm.ComboInfo.SelectAll" ng-model="comboItem.Checked">
+												 	<!--<span ng-bind="comboItem.Index"></span>-->
+												</td>
+												 <td>
+													 <div>
+														 <div class="divinline"><img width="80" height="60" src="{{comboItem.ImageUrl}}"></div>
+														 <div class="divinline">
+															 <h4 ng-bind="comboItem.Name"></h4>
+															 <span ng-bind="comboItem.Price"></span>
+															 <span class="underprice" ng-bind="comboItem.OldPrice"></span>
+														 </div>
+													 </div>
+												 </td>
+												 <td width='220'>
+													 <div class="panelpan">
+                                                        <span ng-repeat="comboTag in comboItem.ComboTags track by $index" ng-bind="comboTag.ComboName"></span>
+													 </div>
+												 </td>
+												 <td>
+													 <div ng-bind="comboItem.CreateTime"></div>
+												 </td>
+												 <td>
+													 <div>
+														 <span class="glyphicon glyphicon-circle-arrow-up" ng-hide="$index==0" ng-click="vm.ComboInfo.Sort(vm.ComboInfo.ComboList.OnSaleList[$index-1],comboItem,$index)"></span>
+														 <span class="glyphicon glyphicon-circle-arrow-down" ng-hide="$index==(vm.ComboInfo.ComboList.OnSaleList.length-1)" ng-click="vm.ComboInfo.Sort(comboItem,vm.ComboInfo.ComboList.OnSaleList[$index+1],$index)"></span>
+														 <span class="glyphicon glyphicon-arrow-up" ng-hide="$index==0" ng-click="vm.ComboInfo.SortToTopOrBottom(comboItem.ID, 1)"></span>
+														 <span class="glyphicon glyphicon-arrow-down" ng-hide="$index==(vm.ComboInfo.ComboList.OnSaleList.length-1)" ng-click="vm.ComboInfo.SortToTopOrBottom(comboItem.ID, 2)"></span>
+												 </td>
+											 </tr>
+										</table>
+										<div class="footerinfo"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#undModel" >下架</button></div>
+									</div>
+									<div role="tabpanel" class="tab-pane" id="med" ng-class="{true:'inactive',false:'active'}[vm.ComboInfo.state]">
+										<div>
+											<button class="btn btn-default btn-sm" ng-click="vm.ComboInfo.ResetComboParams()">添加</button>
+                                            <div class="form-inline pull-right">
+												<div class="input-group">
+													<input type="text" class="form-control" ng-model="vm.ComboInfo.SearchName" ng-keyup="vm.ComboInfo.SearchList($event)">
+													<span class="input-group-btn" ng-click="vm.ComboInfo.GetList(vm.ComboInfo.SearchName)">
+														<button class="btn btn-default" type="button">
+															<span class="glyphicon glyphicon-search"></span>
+														</button>
+													</span>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+										<table class="table packagetle">
+                                             <tr>
+												 <th><input type="checkbox" ng-model="vm.ComboInfo.SelectAll" ng-click="vm.ComboInfo.selectAll(0)"></th>
+												 <th><span>商品</span></th>
+												 <th><span>标签</span></th>
+												 <th><span>日期</span></th>
+												 <th><span>排序</span></th>
+												 <th><span>操作</span></th>
+											 </tr>
+											 <!--|orderBy:'Index':false"-->
+											 <tr ng-repeat="comboItem in vm.ComboInfo.ComboList.OutOfSaleList " >
+												 <td><input type="checkbox" ng-checked="vm.ComboInfo.SelectAll" ng-model="comboItem.Checked" >
+													<!--<span ng-bind="comboItem.Index"></span>
+													<span ng-bind="comboItem.ID"></span>-->
+												 </td>
+												 <td>
+													 <div>
+														 <div class="divinline"><img width="80" height="60" src="{{comboItem.ImageUrl}}"></div>
+														<div class="divinline">
+															 <h4 ng-bind="comboItem.Name"></h4>
+															 <span ng-bind="comboItem.Price"></span>
+															 <span class="underprice" ng-bind="comboItem.OldPrice"></span>
+														 </div>
+													 </div>
+												 </td>
+												 <td width='220'>
+													 <div class="panelpan">
+                                                         <span ng-repeat="comboTag in comboItem.ComboTags track by $index" ng-bind="comboTag.ComboName"></span>
+													 </div>
+												 </td>
+												 <td>
+													 <div ng-bind="comboItem.CreateTime"></div>
+												 </td>
+												 <td>
+													 <div>
+														 <span class="glyphicon glyphicon-circle-arrow-up" ng-hide="$index==0" ng-click="vm.ComboInfo.Sort(vm.ComboInfo.ComboList.OutOfSaleList[$index-1],comboItem,$index)"></span>
+														 <span class="glyphicon glyphicon-circle-arrow-down" ng-hide="$index==(vm.ComboInfo.ComboList.OutOfSaleList.length-1)" ng-click="vm.ComboInfo.Sort(comboItem,vm.ComboInfo.ComboList.OutOfSaleList[$index+1],$index)"></span>
+														 <span class="glyphicon glyphicon-arrow-up" ng-hide="$index==0" ng-click="vm.ComboInfo.SortToTopOrBottom(comboItem.ID, 1)"></span>
+														 <span class="glyphicon glyphicon-arrow-down" ng-hide="$index==(vm.ComboInfo.ComboList.OutOfSaleList.length-1)" ng-click="vm.ComboInfo.SortToTopOrBottom(comboItem.ID, 2)"></span>
+													 </div>
+												 </td>
+												 <td>
+													 <div>
+														 <button class="btn btn-default btn-sm" ng-click="vm.ComboInfo.ResetComboParams(comboItem)">编辑</button>
+														 <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#delModel" ng-click="vm.ComboInfo.tagOnClick(comboItem)">删除</button>
+													 </div>
+												 </td>
+											 </tr>
+										</table>
+										<div class="footerinfo">
+											<button class="btn btn-default btn-sm" data-toggle="modal" data-target="#upModel">上架</button>
+
+											<button class="btn btn-default btn-sm" data-toggle="modal" data-target="#delModel">删除</button>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+							<div role="tabpanel" class="tab-pane banner_Tabs" id="recommend">
+								<table class="recommend_tab">
+									<tr>
+										<td width='100'><div class="recommendtop"><span class="red">*</span><span>医院logo:</span></div></td>
+										<td>
+											<div class="input-group input-group-sm">             
+												<input type="file" id='RecommendLogoSrc' class="form-control"  placeholder="请录入图标">
+												<span class="input-group-btn" ng-click='vm.RecommendURL.OnClickRecLogo()'>
+													<button class="btn btn-info" type="button" >
+													<span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+												</span>
+											</div>
+											<div class="form-group form-group-sm mt">             
+												<input class="form-control" ng-model='vm.RecommendURL.data.RecommendImgLogo.AImageUrl' readonly>
+											</div>
+											<div class="banner_up_img">
+												<div class="banner_Url"><img id='banner_url_logo' ng-attr-src='{{ vm.RecommendURL.data.RecommendImgLogo.ImageUrl }}' alt=''></div>
+												<p>注：570*150px， PNG格式的图片</p>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><div class="recommendtop"><span class="red">*</span><span>医院宣传图:</span></div></td>
+										<td>
+											<div class="input-group input-group-sm">             
+												<input type="file" id='RecommendConductSrc' class="form-control"  placeholder="请录入图标">
+												<span class="input-group-btn" ng-click='vm.RecommendURL.OnClickRecCon()'>
+													<button class="btn btn-info" type="button" >
+													<span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+												</span>
+											</div>
+											<div class="form-group form-group-sm mt">             
+												<input class="form-control" ng-model='vm.RecommendURL.data.RecommendImgConduct.AImageUrl' readonly>
+											</div>
+											<div class="banner_up_img">
+												<div class="banner_Url"><img id='banner_url_bg' ng-attr-src='{{ vm.RecommendURL.data.RecommendImgConduct.ImageUrl }}' alt=''></div>
+												<p>注：750*580px，JPG格式的图片</p>
+											</div>
+										</td>
+									</tr>
+								</table>			
+							</div>
+
+							<div role="tabpanel" class="tab-pane banner_Tabs" id="register">
+								<div class="form-inline text-center registerform" role="form">
+									<div class="form-group">
+										<span>挂号预约地址：</span>
+										<input type="text" class="form-control" id="name" placeholder="请输入地址" ng-model="vm.AppointmentURL.data.AppointmentURL">
+									</div>
+									<button type="button" class="btn btn-success" ng-click="vm.AppointmentURL.OnSaveAppointment()">保存</button>
+								</div>								
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<!--添加Banner的model-->
+<div class="modal fade bs-example-modal-lg" id="addBannerModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="banner-close pull-right" id="addBannerColse" data-dismiss="modal">关闭</span>
+				<h4 class="modal-title" id="myModalLabel">添加Banner</h4>
+			</div>
+			<div class="modal-body banner-model">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">名称</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="" placeholder="请输入名称" ng-model="vm.data.addBannerData.addBannerInfo.BannerName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2 control-label">Banner图</label>
+						<div class="col-sm-10">
+							<!--<input type="text" class="form-control" id="" 
+							       placeholder="请输入banner图链接地址，图片大小为750px*400px，100kb以内" 
+							       ng-model="vm.data.addBannerData.addBannerInfo.ImageUrl">-->
+							<div class="input-group input-group-sm">             
+								<input type="file" id='BannerAddItemSrc'
+								       class="form-control"  placeholder="请录入图标">
+								<span class="input-group-btn" ng-click='vm.OnClickBanimgadd()'>
+									<button class="btn btn-info" type="button" >
+									<span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+								</span>
+							</div>
+							<div class="banner_up_img">
+								<div class="banner_Url"><img ng-attr-src='{{vm.data.addBannerData.addBannerInfo.ImageUrl}}'></div>
+								<p>注：750*480px，PNG格式的图片</p>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2 control-label">推广链接</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="" placeholder="请输入推广链接地址" ng-model="vm.data.addBannerData.addBannerInfo.LinkUrl">
+						</div>
+					</div>
+					<div class="form-group">
+						<input type="text" class="col-sm-10 col-sm-offset-1 text-center" id="instition-choose" placeholder="请选择您要添加的机构" readonly>
+						<div class="instition-Lable col-sm-11 col-sm-offset-1" id="instition-list">
+							<span ng-repeat="item in vm.data.serverLists">
+                                  <p ng-class="{true:'inst-checked',false:''}[item.IsClick]" ng-bind="item.DeptName" ng-click="vm.ServerOptionsClick(item)"></p>
+                                  </span>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" ng-click="vm.AddBannerSubmit()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--编辑Banner的model-->
+<div class="modal fade bs-example-modal-lg" id="editBannerModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<span class="banner-close pull-right " id="editBannerColse" data-dismiss="modal">关闭</span>
+				<h4 class="modal-title" id="myModalLabel">编辑Banner</h4>
+			</div>
+			<div class="modal-body banner-model">
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">名称</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="" ng-model="vm.data.editBannerData.editBannerInfo.BannerName">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2 control-label">Banner图</label>
+						<div class="col-sm-10">
+							<!--<input type="text" class="form-control" id="" ng-model="vm.data.editBannerData.editBannerInfo.ImageUrl">-->
+							<div class="input-group input-group-sm">             
+								<input type="file" id='BannerEditItemSrc' class="form-control"  placeholder="请录入图标">
+								<span class="input-group-btn" ng-click='vm.OnClickBanimgedit()'>
+									<button class="btn btn-info" type="button" >
+									<span class='glyphicon glyphicon-eject'></span>&nbsp;上传</button>
+								</span>
+							</div>	
+							<div class="banner_up_img">
+								<div class="banner_Url"><img ng-src="{{ vm.data.editBannerData.editBannerInfo.ImageUrl }}" ></div>
+								<p>注：750*480px，PNG格式的图片</p>
+							</div>		
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2 control-label">推广链接</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="" ng-model="vm.data.editBannerData.editBannerInfo.LinkUrl">
+						</div>
+					</div>
+					<div class="form-group">
+						<input type="text" class="col-sm-10 col-sm-offset-1 text-center" id="instition-choose" placeholder="请选择您要添加的机构" readonly>
+						<div class="instition-Lable col-sm-11 col-sm-offset-1" id="instition-list">
+							<span ng-repeat="item in vm.data.serverLists">
+                                  <p ng-class="{true:'inst-checked',false:''}[item.IsClick]" ng-bind="item.DeptName" ng-click="vm.ServerOptionsClick(item)"></p>
+                                  </span>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" ng-click="vm.editBannerSubmit()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--删除Banner的model-->
+<div class="modal fade" id="deleteBannerModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3" ng-bind="vm.data.deleteBannerData"></h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.deleteBannerSubmit()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--保存Medical的model-->
+<div class="modal fade" id="SaveMedicalModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确定是否保存</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.MedicalCenter.OnSaveMedical()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--套餐添加package的model-->
+<div class="modal fade" id="AddpackageModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog Modeltable">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">套餐信息</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table tableaccount">
+					<tr>
+						<th width='100'><span class="red">*</span><span>套餐名称：</span></th>
+						<td><input type="text" class="form-control" ng-model="vm.ComboInfo.ComboParams.Name"></td>
+					</tr>
+					<tr>
+						<th><span class="red">*</span><span>套餐说明：</span></th>
+						<td><input type="text" class="form-control" ng-model="vm.ComboInfo.ComboParams.Description"></td>
+					</tr>
+					<tr>
+						<th><span class="red">*</span><span>价格：</span></th>
+						<td>
+							<div class="form-inline">
+                                <div class="input-group inputwidth">
+									<span class="input-group-addon">¥</span>
+									<input type="text"  class="form-control" ng-model="vm.ComboInfo.ComboParams.Price">
+								</div>
+								<div class="input-group inputwidth">
+									<span class="input-group-addon">¥</span>
+									<input type="text" class="form-control" placeholder="原价" ng-model="vm.ComboInfo.ComboParams.OldPrice">
+									<!--<input type="text" onkeydown="value=value.replace(/[^\d.]/g,'')" class="form-control" placeholder="原价" ng-model="vm.ComboInfo.ComboParams.OldPrice">-->
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th><span>套餐图片：</span></th>
+						<td>
+							<input type="file" id="file" accept="image/png,image/jpeg" style="display: inline-block">
+							<button class="btn btn-default btn-sm" ng-click="vm.ComboInfo.UploadImg()">上传图片</button>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<span class="imgavater" >
+								<img src="{{vm.ComboInfo.ComboParams.ImageUrl}}">
+							</span>
+						</td>
+					</tr>
+					<tr>
+						<th></th>
+						<td>
+							<span>注：260*260px，500kb以内，JPG.PNG格式的图片</span>
+						</td>
+					</tr>
+					<tr>
+						<th><span>套餐标签：</span></th>
+						<td>
+							<div class="oblongList">
+                                <div>
+									<lable class="stylecolor">性别</lable>
+									<div class="rectangle">
+										<span ng-repeat="item in vm.ComboInfo.TagList"
+											  ng-if="item.ComboType == 1"
+											  ng-click="vm.ComboInfo.tagOnClick(item)"
+										      ng-class="{true:'Rechecked',false:'Unchecked'}[item.Checked]"
+											  ng-bind='item.ComboName'>
+										</span>
+									</div>
+								</div>
+								<div>
+									<lable class="stylecolor">类型</lable>
+									<div class="rectangle">
+										<span ng-repeat="item in vm.ComboInfo.TagList"
+											  ng-if="item.ComboType == 2"
+											  ng-click="vm.ComboInfo.tagOnClick(item)"
+										      ng-class="{true:'Rechecked',false:'Unchecked'}[item.Checked]"
+											  ng-bind='item.ComboName'>
+									   </span>
+									</div>
+								</div>
+								<div>
+									<lable class="stylecolor">价格</lable>
+									<div class="rectangle">
+										<span ng-repeat="item in vm.ComboInfo.TagList"
+										      ng-if="item.ComboType == 3"
+										      ng-click="vm.ComboInfo.tagOnClick(item)"
+										      ng-class="{true:'Rechecked',false:'Unchecked'}[item.Checked]"
+											  ng-bind='item.ComboName'>
+										</span>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th><span class="red">*</span><span>套餐项目：</span></th>
+						<td>
+
+							<input type="file" id="excelFile" accept="application/vnd.ms-excel" style="margin-bottom: 10px;margin-top: 4px;"/>
+							<button class="btn btn-default btn-sm" ng-click="vm.ComboInfo.OnClickExportExcel()">导出Excel模板</button>
+							<button class="btn btn-default btn-sm" ng-click="vm.ComboInfo.OnClickImportExcel()">导入Excel</button>
+						</td>
+					</tr>
+					<tr ng-show="vm.ComboInfo.ComboParams.ComboDetails.length>0">
+						<th></th>
+						<td>
+							<table class="table table-bordered">
+                                <tr>
+									<td colspan="2">项目详情</td>
+								</tr>
+								<tr ng-repeat="comboInfoItem in vm.ComboInfo.ComboParams.ComboDetails track by $index">
+									<td ng-bind="comboInfoItem.Name"></td>
+									<td ng-bind="comboInfoItem.Content"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" ng-click="vm.ComboInfo.AddOrModify()" >确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--下架的model-->
+<div class="modal fade" id="undModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确认是否下架</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.ComboInfo.Soldout()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--上架的model-->
+<div class="modal fade" id="upModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确认是否上架</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal"  ng-click="vm.ComboInfo.PutAway()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--删除的model-->
+<div class="modal fade" id="delModel" tabindex="-1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content disable">
+			<div class="modal-body text-center">
+				<h3 class="ng-binding banner-h3">确认是否删除</h3>
+				<button type="button" class="btn btn-warning" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="vm.ComboInfo.RemoveCombo()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
